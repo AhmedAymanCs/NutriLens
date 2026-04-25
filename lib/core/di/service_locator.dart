@@ -14,7 +14,7 @@ import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 
 final getIt = GetIt.instance;
 
-void intitSetupLocator() {
+void initSetupLocator() {
   _setupFirestoreServiceLocator();
   _setupSecureStorageServiceLocator();
   _setupAuthRepositoryLocator();

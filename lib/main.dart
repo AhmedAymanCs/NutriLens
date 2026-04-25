@@ -16,6 +16,7 @@ void main() async {
   await Future.wait([
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]);
+  initSetupLocator();
   runApp(const MyApp());
 }
 
@@ -31,15 +32,17 @@ class MyApp extends StatelessWidget {
             designSize: const Size(360, 690),
             minTextAdapt: true,
             splitScreenMode: true,
-            child: MaterialApp(
-              title: StringManager.appName,
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.lightTheme,
-              themeMode: themeMode,
-              debugShowCheckedModeBanner: false,
-              onGenerateRoute: AppRouter.onGenerateRoute,
-              initialRoute: Routes.login,
-            ),
+            builder: (context, _) {
+              return MaterialApp(
+                title: StringManager.appName,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.lightTheme,
+                themeMode: themeMode,
+                debugShowCheckedModeBanner: false,
+                onGenerateRoute: AppRouter.onGenerateRoute,
+                initialRoute: Routes.login,
+              );
+            },
           );
         },
       ),

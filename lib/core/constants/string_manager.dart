@@ -1,8 +1,10 @@
 class StringManager {
   static const String appName = 'NutriLens';
-  static const String appDiscription = 'App Discription';
+  static const String appDescription = 'App Description';
   //Auth pages
-  static const String subTitleLoginPage = 'Sign in to continue';
+  static const String subTitleLoginPage1 = 'Welcome back.';
+  static const String subTitleLoginPage2 = 'Mindful nutrition to lead a healthy lifestyle.';
+  static const String subTitleLoginPage3 = 'Sign in to continue';
   static const String subTitleRegisterPage = 'Sign up to start ';
   static const String name = 'Full name';
   static const String nameHint = 'Enter your full name';

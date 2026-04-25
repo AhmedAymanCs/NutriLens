@@ -6,7 +6,7 @@ import 'package:nutrilens/core/constants/font_manager.dart';
 class CustomFormField extends StatelessWidget {
   final String? title;
   final String hint;
-  final IconData? preicon;
+  final IconData? preIcon;
   final VoidCallback? onPressed;
   final TextInputType? keyboardType;
   final bool obscure;
@@ -19,7 +19,7 @@ class CustomFormField extends StatelessWidget {
     super.key,
     this.title,
     required this.hint,
-    this.preicon,
+    this.preIcon,
     this.onPressed,
     this.keyboardType,
     this.obscure = false,
@@ -53,8 +53,8 @@ class CustomFormField extends StatelessWidget {
           cursorColor: ColorsManager.primary,
           keyboardType: keyboardType,
           decoration: InputDecoration(
-            prefixIcon: preicon != null
-                ? Icon(preicon, color: ColorsManager.gray500)
+            prefixIcon: preIcon != null
+                ? Icon(preIcon, color: ColorsManager.gray500)
                 : null,
             suffixIcon: onPressed != null
                 ? IconButton(
