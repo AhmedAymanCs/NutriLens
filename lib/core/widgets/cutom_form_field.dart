@@ -47,6 +47,7 @@ class CustomFormField extends StatelessWidget {
         TextFormField(
           onChanged: onChanged,
           onSaved: onSubmitted,
+          onTapOutside: (_) => FocusScope.of(context).unfocus(),
           controller: controller,
           validator: validator,
           obscureText: obscure,
