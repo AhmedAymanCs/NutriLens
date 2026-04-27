@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/router/routes.dart';
 
 class HaveAnAccount extends StatelessWidget {
   const HaveAnAccount({super.key, this.haveAccount = false});
@@ -12,20 +14,15 @@ class HaveAnAccount extends StatelessWidget {
         children: [
           Text(
             haveAccount
-                ? "Already have an account? "
-                : "Don't have an account yet? ",
-            // style: AppTextStyle.font11Black600.copyWith(
-            //   fontWeight: FontWeight.normal,
-            // ),
+                ? StringManager.alreadyHaveAccount
+                : StringManager.dontHaveAccount,
           ),
           TextButton(
-            // onPressed: () => context.pushNamed(AppRouter.signUpScreen),
-            onPressed: () {},
+            onPressed: () => haveAccount
+                ? Navigator.of(context).pop()
+                : Navigator.of(context).pushNamed(Routes.register),
             child: Text(
-              haveAccount ? "Login" : "Sign up",
-              // style: AppTextStyle.font13primaryColor400.copyWith(
-              //   fontWeight: FontWeight.bold,
-              // ),
+              haveAccount ? StringManager.login : StringManager.signUp,
             ),
           ),
         ],

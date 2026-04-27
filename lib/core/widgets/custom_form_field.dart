@@ -7,6 +7,7 @@ class CustomFormField extends StatelessWidget {
   final String? title;
   final String hint;
   final IconData? preIcon;
+  final Color? preIconColor;
   final VoidCallback? onPressed;
   final TextInputType? keyboardType;
   final bool obscure;
@@ -27,6 +28,7 @@ class CustomFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onSubmitted,
+    this.preIconColor,
   });
 
   @override
@@ -55,13 +57,13 @@ class CustomFormField extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             prefixIcon: preIcon != null
-                ? Icon(preIcon, color: ColorsManager.gray500)
+                ? Icon(preIcon, color: preIconColor ?? ColorsManager.gray500)
                 : null,
             suffixIcon: onPressed != null
                 ? IconButton(
                     onPressed: onPressed,
                     icon: Icon(
-                      obscure ? Icons.visibility : Icons.visibility_off,
+                      obscure ? Icons.visibility_off : Icons.visibility,
                       color: ColorsManager.gray500,
                     ),
                   )
@@ -73,19 +75,19 @@ class CustomFormField extends StatelessWidget {
               fontWeight: FontWeightManager.regular,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               borderSide: BorderSide(color: ColorsManager.primary),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               borderSide: BorderSide(color: ColorsManager.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               borderSide: BorderSide(color: ColorsManager.error),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               borderSide: BorderSide(color: ColorsManager.gray500),
             ),
           ),

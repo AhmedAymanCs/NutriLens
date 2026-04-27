@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/image_manager.dart';
+import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 
 class LoginWithSocialMedia extends StatelessWidget {
@@ -15,12 +17,14 @@ class LoginWithSocialMedia extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: 70.w,
+              width: 50.w,
               child: Divider(color: ColorsManager.textSecondary),
             ),
-            Text("Or sign in with", ), // style: AppTextStyle.font13Grey400
+            Text(
+              StringManager.orContinueWith,
+            ), // style: AppTextStyle.font13Grey400
             SizedBox(
-              width: 70.w,
+              width: 50.w,
               child: const Divider(color: ColorsManager.textSecondary),
             ),
           ],
@@ -41,45 +45,19 @@ class LoginWithSocialMedia extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "Continue with Google",
-                //style: AppTextStyle.font16PrimaryBold,
+                StringManager.continueWithGoogle,
+                style: AppTextStyle.font16PrimaryBold,
               ),
               Spacer(),
               Image.asset(
                 ImageManager.authGoogleIcon,
-                width: 20.w,
-                height: 20.h,
-                fit: BoxFit.cover,
+                width: 25.w,
+                height: 25.h,
+                fit: BoxFit.contain,
               ),
             ],
           ),
         ),
-        // Center(
-        //   child: SizedBox(
-        //     width: 280.w,
-        //     child: Text.rich(
-        //       TextSpan(
-        //         text: "By logging, you agree to our ",
-        //         style: AppTextStyle.font13Grey400.copyWith(fontSize: 11.sp),
-        //         children: [
-        //           TextSpan(
-        //             text: " Terms & Conditions",
-        //             style: AppTextStyle.font11Black600,
-        //           ),
-        //           TextSpan(
-        //             text: " and ",
-        //             style: AppTextStyle.font13Grey400.copyWith(fontSize: 11.sp),
-        //           ),
-        //           TextSpan(
-        //             text: " PrivacyPolicy.",
-        //             style: AppTextStyle.font11Black600,
-        //           ),
-        //         ],
-        //       ),
-        //       textAlign: TextAlign.center,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

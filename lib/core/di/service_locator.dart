@@ -41,6 +41,7 @@ void _setupAuthRepositoryLocator() {
     () => AuthRemoteDataSourceImpl(
       getIt<FirebaseAuth>(),
       getIt<FirebaseFirestore>(),
+      getIt<SecureStorageHelper>(),
     ),
   );
   getIt.registerLazySingleton<AuthRepository>(

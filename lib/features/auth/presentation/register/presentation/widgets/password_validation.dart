@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 
@@ -30,13 +31,22 @@ class PasswordValidation extends StatelessWidget {
         buildRowPasswordValidation("At Least 1 Number", hasANumber),
         buildRowPasswordValidation("At Least 8 Characters", hasCharacterLength),
         buildRowPasswordValidation(
-            "At Least 1 Lowercase Letter", hasLowerLetter),
+          "At Least 1 Lowercase Letter",
+          hasLowerLetter,
+        ),
         buildRowPasswordValidation(
-            "At Least 1 Special Character", hasSpecialCharacter),
+          "At Least 1 Special Character",
+          hasSpecialCharacter,
+        ),
         buildRowPasswordValidation(
-            "At Least 1 Uppercase Letter", hasUpperLetter),
+          "At Least 1 Uppercase Letter",
+          hasUpperLetter,
+        ),
         isSignUpScreen && hasMatchedPassword != null
-            ? buildRowPasswordValidation("Matched Password", hasMatchedPassword!)
+            ? buildRowPasswordValidation(
+                "Matched Password",
+                hasMatchedPassword!,
+              )
             : const SizedBox.shrink(),
       ],
     );
@@ -46,20 +56,20 @@ class PasswordValidation extends StatelessWidget {
 Row buildRowPasswordValidation(String text, bool hasValidation) {
   return Row(
     children: [
-      CircleAvatar(
-        backgroundColor: ColorsManager.overlayBlack10,
-        radius: 3.w,
-      ),
+      hasValidation
+          ? Icon(Icons.check, size: 20.sp, color: ColorsManager.primary)
+          : CircleAvatar(
+              backgroundColor: ColorsManager.overlayBlack10,
+              radius: 3.w,
+            ),
       widthSpace(8.w),
       Text(
         text,
-        // style: AppTextStyle.font11Black600.copyWith(
-        //   fontSize: 13.sp,
-        //   fontWeight: FontWeight.w400,
-        //   decoration: hasValidation ? TextDecoration.lineThrough : null,
-        //   decorationColor: hasValidation ? AppColors.kSuccessColor : null,
-        //   decorationThickness: hasValidation ? 2.w : null,
-        // ),
+        style: AppTextStyle.font13GreyW400.copyWith(
+          decoration: hasValidation ? TextDecoration.lineThrough : null,
+          decorationColor: hasValidation ? ColorsManager.success : null,
+          decorationThickness: hasValidation ? 2.w : null,
+        ),
       ),
     ],
   );
