@@ -1,6 +1,6 @@
 part of 'cubit.dart';
 
-enum RegisterStatus { initial, loading, success, failure }
+enum RegisterStatus { initial, loading, success, failure, passwordObscure }
 
 class RegisterState extends Equatable {
   final RegisterStatus status;

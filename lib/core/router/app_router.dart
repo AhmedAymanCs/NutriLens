@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
+import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/presentation/screens/onboarding_after_register.dart';
 import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
@@ -20,7 +21,12 @@ class AppRouter {
       //         SplashScreen(secureStorageHelper: getIt<SecureStorageHelper>()),
       //   );
       case Routes.login:
-        return MaterialPageRoute(builder: (_) => LoginPage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<LoginCubit>(
+            create: (context) => LoginCubit(getIt<AuthRepository>()),
+            child: LoginPage(),
+          ),
+        );
       case Routes.register:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<RegisterCubit>(

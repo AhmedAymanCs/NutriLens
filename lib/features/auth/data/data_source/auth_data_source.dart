@@ -5,12 +5,13 @@ import 'package:nutrilens/core/database/local/secure_storage/secure_storage_help
 import 'package:nutrilens/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
+  Future<void> signIn({required String email, required String password});
+
   Future<UserCredential> signUp({
     required String email,
     required String password,
     required String name,
   });
-  Future<void> signIn({required String email, required String password});
   Future<void> addDataToFirestore({required User? user});
   // Future<void> addUserSession({required String userSession,
   //   required User user,
@@ -27,6 +28,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     this.firestore,
     this.secureStorageHelper,
   );
+
+  @override
+  Future<void> signIn({required String email, required String password}) async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
   Future<UserCredential> signUp({
@@ -59,15 +72,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             .doc(user.uid);
         await userDoc.set(UserDataModel.fromFirebaseUser(user).toJson());
       }
-    } catch (e) {
-      rethrow;
-    }
-  }
-  
-  @override
-  Future<void> signIn({required String email, required String password}) async {
-    try {
-      await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       rethrow;
     }

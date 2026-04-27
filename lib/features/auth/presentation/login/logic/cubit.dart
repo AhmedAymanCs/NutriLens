@@ -8,7 +8,16 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authRepository) : super(LoginState());
 
   void changePasswordVisible() {
-    emit(state.copyWith(passwordObscure: !state.passwordObscure));
+    emit(state.copyWith(status: LoginStatus.passwordObscure, passwordObscure: !state.passwordObscure));
+  }
+
+  Future<void> signIn({required String email, required String password}) async {
+    emit(state.copyWith(status: LoginStatus.loading));
+    final response = await _authRepository.signIn(email: email, password: password);
+    response.fold(
+      (error) => emit(state.copyWith(status: LoginStatus.failure)),
+      (success) => emit(state.copyWith(status: LoginStatus.success)),
+    );
   }
 
   void changeRememberMe(bool value) {

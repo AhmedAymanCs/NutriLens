@@ -12,7 +12,9 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: AuthBackground(
-          child: Column(children: [LoginLogoAndTitle(), LoginCardFields()]),
+          child: SingleChildScrollView(
+            child: Column(children: [LoginLogoAndTitle(), LoginCardFields()]),
+          ),
         ),
       ),
     );
