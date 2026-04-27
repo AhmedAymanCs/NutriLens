@@ -30,6 +30,15 @@ class StringManager {
   static const String continueWithGoogle = 'Continue with Google';
 
   //home
+  static const String homeSubTitle = 'TRACK SMARTER. EAT BETTER.';
+  static const String remaining = 'Remaining';
+  static const String kcal = 'kcal';
+  static const String consumed = 'Consumed';
+  static const String goal = 'Goal';
+  static const String protein = 'Protein';
+  static const String carbs = 'Carbs';
+  static const String fat = 'Fat';
+  static const String todaysMeals = "Today's Meals";
 
   //profile
   static const String profile = 'Profile';

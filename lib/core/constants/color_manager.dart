@@ -16,6 +16,7 @@ class ColorsManager {
   static const Color textHeading = Color(0xFF2B352F);
   static const Color textMuted = Color(0xFF9AA09C);
   static const Color textLight = Color(0xFFFFFFFF);
+  static const Color textBlack = Color(0xFF191C1D);
 
   // Grays
   static const Color gray200 = Color(0xFFE0E4E1);
@@ -30,4 +31,8 @@ class ColorsManager {
   // Misc
   static const Color divider = Color(0xFFE0E4E1);
   static const Color overlayBlack10 = Color(0x1A000000);
+
+  // macro progress colors
+  static const Color protein = Color(0xff884F47);
+  static const Color carbs = Color(0xFF4C6456);
 }
