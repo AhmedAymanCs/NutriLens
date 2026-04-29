@@ -29,11 +29,11 @@ class LoginCardFields extends StatelessWidget {
       child: Column(
         children: [
           heightSpace(10),
-          LoginValidation(),
+          const LoginValidation(),
           heightSpace(10),
-          LoginWithSocialMedia(),
+          const LoginWithSocialMedia(),
           heightSpace(10),
-          HaveAnAccount(),
+          const HaveAnAccount(),
         ],
       ),
     );

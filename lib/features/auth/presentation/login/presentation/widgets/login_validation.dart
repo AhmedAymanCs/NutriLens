@@ -46,7 +46,7 @@ class _LoginValidationState extends State<LoginValidation> {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.failure) {
-            customSnackBar(context: context, message: state.errorMessage!);
+            customSnackBar(context: context, message: state.errorMessage);
           }
           if (state.status == LoginStatus.success) {
             customSnackBar(
@@ -54,8 +54,14 @@ class _LoginValidationState extends State<LoginValidation> {
               message: "Login Successfully",
               isErrorMessage: false,
             );
-            Navigator.pushReplacementNamed(context, Routes.onBoarding);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.home,
+              (route) => false,
+              arguments: state.userModel,
+            );
           }
+          
         },
 
         builder: (context, state) {
@@ -67,9 +73,6 @@ class _LoginValidationState extends State<LoginValidation> {
                 validator: (email) {
                   if (email == null || email.isEmpty) {
                     return StringManager.emailEmpty;
-                  }
-                  if (!PasswordAndEmailValidations.isValidEmail(email: email)) {
-                    return StringManager.emailInvalid;
                   }
                   return null;
                 },
@@ -97,20 +100,32 @@ class _LoginValidationState extends State<LoginValidation> {
                 onPressed: () =>
                     context.read<LoginCubit>().changePasswordVisible(),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed(Routes.forgetPassword),
-                  child: Text(
-                    StringManager.forgotPassword,
-                    style: AppTextStyle.font13PrimaryW400.copyWith(
-                      decoration: TextDecoration.underline,
-                      decorationThickness: 1.5,
-                      decorationColor: ColorsManager.primary,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    value: state.rememberMe,
+                    onChanged: (value) {
+                      context.read<LoginCubit>().changeRememberMe();
+                      if (value == true) {
+                        context.read<LoginCubit>().getUserSession();
+                      }
+                    },
+                  ),
+                  Text(
+                    StringManager.rememberMe,
+                    style: AppTextStyle.font13GreyW400,
+                  ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, Routes.forgetPassword),
+                    child: Text(
+                      StringManager.forgotPassword,
+                      style: AppTextStyle.font13GreyW400,
                     ),
                   ),
-                ),
+                ],
               ),
               heightSpace(10),
               state.status == LoginStatus.loading

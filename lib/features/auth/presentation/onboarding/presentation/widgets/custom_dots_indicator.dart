@@ -17,7 +17,7 @@ class CustomDotsIndicator extends StatelessWidget {
       dotsCount: dotsCount,
       position: position,
       animate: true,
-      animationDuration: Duration(milliseconds: 300),
+      animationDuration: const Duration(milliseconds: 300),
       decorator: DotsDecorator(
         activeColor: ColorsManager.primary,
         size: const Size.square(10.0),

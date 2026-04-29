@@ -98,7 +98,11 @@ class _SignUpValidationState extends State<SignUpValidation> {
               message: "Welcome ${_nameController.text}",
               isErrorMessage: false,
             );
-            Navigator.pushReplacementNamed(context, Routes.onBoarding);
+            Navigator.pushReplacementNamed(
+              context,
+              Routes.onBoarding,
+              arguments: _nameController.text.trim(),
+            );
           }
         },
         builder: (context, state) {
@@ -190,17 +194,13 @@ class _SignUpValidationState extends State<SignUpValidation> {
                   ? customLoading()
                   : CustomButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          Routes.onBoarding,
-                        );
-                        // if (_formKey.currentState!.validate()) {
-                        //   context.read<RegisterCubit>().signUp(
-                        //     email: _emailController.text,
-                        //     password: _passwordController.text,
-                        //     name: _nameController.text,
-                        //   );
-                        // }
+                        if (_formKey.currentState!.validate()) {
+                          context.read<RegisterCubit>().signUp(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            name: _nameController.text,
+                          );
+                        }
                       },
                       text: StringManager.signUp,
                     ),

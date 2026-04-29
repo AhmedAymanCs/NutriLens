@@ -29,7 +29,7 @@ void customSnackBar({
             color: ColorsManager.backgroundWhite,
           ),
           widthSpace(10),
-          Expanded(child: Text(message, style: AppTextStyle.font14WhiteW400)),
+          Expanded(child: Text(message, style: AppTextStyle.font16WhiteW600)),
         ],
       ),
     ),

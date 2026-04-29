@@ -18,9 +18,9 @@ class LoginWithSocialMedia extends StatelessWidget {
           children: [
             SizedBox(
               width: 50.w,
-              child: Divider(color: ColorsManager.textSecondary),
+              child: const Divider(color: ColorsManager.textSecondary),
             ),
-            Text(
+            const Text(
               StringManager.orContinueWith,
             ), // style: AppTextStyle.font13Grey400
             SizedBox(
@@ -48,7 +48,7 @@ class LoginWithSocialMedia extends StatelessWidget {
                 StringManager.continueWithGoogle,
                 style: AppTextStyle.font16PrimaryBold,
               ),
-              Spacer(),
+              const Spacer(),
               Image.asset(
                 ImageManager.authGoogleIcon,
                 width: 25.w,

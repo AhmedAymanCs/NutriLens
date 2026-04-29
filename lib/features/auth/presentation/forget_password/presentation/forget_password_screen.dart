@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/image_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
+import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
@@ -39,11 +42,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         width: double.infinity,
         height: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: const [0.2, 0.9],
+            stops: [0.2, 0.9],
             colors: [ColorsManager.primaryLight, ColorsManager.backgroundWhite],
           ),
         ),
@@ -105,13 +108,33 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               ),
             ),
             heightSpace(50),
-            CustomButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // if (_formKey.currentState!.validate()) {
-                // }
+            BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
+              listener: (context, state) {
+                if (state.status == ForgetPasswordStatus.failure) {
+                  customSnackBar(context: context, message: state.errorMessage!);
+                }
+                if (state.status == ForgetPasswordStatus.success) {
+                  customSnackBar(
+                    context: context,
+                    message: StringManager.resetPasswordSuccess,
+                    isErrorMessage: false,
+                  );
+                  Navigator.pop(context);
+                }
               },
-              text: StringManager.resetPassword,
+              
+              builder: (context, state) {
+                return CustomButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      context.read<ForgetPasswordCubit>().resetPassword(
+                        email: _emailController.text.trim(),
+                      );
+                    }
+                  },
+                  text: StringManager.resetPassword,
+                );
+              },
             ),
           ],
         ),

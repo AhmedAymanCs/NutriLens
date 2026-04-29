@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/features/auth/data/models/user_model.dart';
+import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
 
 abstract class AuthRemoteDataSource {
   Future<void> signIn({required String email, required String password});
@@ -12,10 +15,13 @@ abstract class AuthRemoteDataSource {
     required String password,
     required String name,
   });
-  Future<void> addDataToFirestore({required User? user});
-  // Future<void> addUserSession({required String userSession,
-  //   required User user,
-  // });
+  Future<void> addDataToFirestore({
+    required OnboardingState state,
+    required String name,
+  });
+  Future<void> addUserSession({required UserDataModel userModel});
+  Future<UserDataModel> getUserSession();
+  Future<void> resetPassword({required String email});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -64,45 +70,69 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> addDataToFirestore({required User? user}) async {
+  Future<void> addDataToFirestore({
+    required OnboardingState state,
+    required String name,
+  }) async {
     try {
+      final user = firebaseAuth.currentUser;
       if (user != null) {
+        final userModel = UserDataModel(
+          uid: user.uid,
+          name: name,
+          email: user.email ?? "",
+          photoURL: user.photoURL,
+          gender: state.selectedGenderValue ?? "",
+          goal: state.selectedGoalValue ?? "",
+          age: state.selectedAgeValue ?? 0,
+          height: state.selectedHeightValue ?? "",
+          weight: state.selectedWeightValue ?? "",
+        );
         DocumentReference userDoc = FirebaseFirestore.instance
             .collection(AppConstants.userCollectionName)
             .doc(user.uid);
-        await userDoc.set(UserDataModel.fromFirebaseUser(user).toJson());
+        await userDoc.set(userModel.toJson());
+        await addUserSession(userModel: userModel);
+        
       }
     } catch (e) {
       rethrow;
     }
   }
 
-  // @override
-  // Future<void> addUserSession({required String userSession, required User user}) async {
-  //   try {
-  //     await secureStorageHelper.clearAll();
-  //     await secureStorageHelper.saveUserData(userSession);
-  //     await secureStorageHelper.saveData(key: AppConstants.uid, value: user.uid);
-  //     await secureStorageHelper.saveData(key: AppConstants.email, value: user.email ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.name, value: user.displayName ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.photoURL, value: user.photoURL ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.gender, value: user. ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.goal, value: user.photoURL ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.age, value: user.photoURL ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.height, value: user.photoURL ?? "");
-  //     await secureStorageHelper.saveData(key: AppConstants.weight, value: user.photoURL ?? "");
+  @override
+  Future<UserDataModel> addUserSession({
+    required UserDataModel userModel,
+  }) async {
+    try {
+      await secureStorageHelper.saveUserData(jsonEncode(userModel.toJson()));
+      await secureStorageHelper.saveData(
+        key: AppConstants.userTempSession,
+        value: jsonEncode(userModel.toJson()),
+      );
+      return userModel;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
+  @override
+  Future<void> resetPassword({required String email}) async {
+    await firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 
-  // ServerResponse<Unit> login() async {
-  //   try {
-  //     await firebaseAuth.signInAnonymously();
-  //     return const Right(unit);
-  //   } catch (e) {
-  //     return Left(e.toString());
-  //   }
-  // }
+  @override
+  Future<UserDataModel> getUserSession() async {
+    try {
+      final userSession = await secureStorageHelper.getData(
+        key: AppConstants.userTempSession,
+      );
+      UserDataModel userModel = UserDataModel.fromJson(
+        jsonDecode(userSession!),
+      );
+      return userModel;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

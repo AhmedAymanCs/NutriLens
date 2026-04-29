@@ -12,22 +12,6 @@ class LoginLogoAndTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Container(
-        //   width: 60.w,
-        //   height: 50.h,
-        //   padding: EdgeInsets.symmetric(horizontal: 10.w),
-        //   margin: EdgeInsets.only(top: 20.h),
-        //   decoration: BoxDecoration(
-        //     color: ColorsManager.backgroundWhite,
-        //     borderRadius: BorderRadius.circular(15.r),
-        //   ),
-        //   child: Image.asset(
-        //     ImageManager.authLogoIcon,
-        //     fit: BoxFit.contain,
-        //     width: 30.w,
-        //     height: 30.h,
-        //   ),
-        // ),
         Image.asset(
           ImageManager.logo,
           width: 100.w,

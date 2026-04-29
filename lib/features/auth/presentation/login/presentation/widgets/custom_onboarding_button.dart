@@ -4,8 +4,9 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 
 class CustomOnboardingButton extends StatelessWidget {
-  const CustomOnboardingButton({super.key, required this.onPressed});
-  final VoidCallback onPressed;
+  const CustomOnboardingButton({super.key, this.onPressed, required this.text});
+  final VoidCallback? onPressed;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +15,17 @@ class CustomOnboardingButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         shadowColor: ColorsManager.primary,
         elevation: 10,
-        minimumSize: Size(double.infinity, 50),
+        minimumSize: const Size(double.infinity, 50),
         backgroundColor: ColorsManager.primary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       ),
       child: Row(
         children: [
           Text(
-            "Continue",
+            text,
             style: AppTextStyle.font16WhiteW600.copyWith(fontSize: 20.sp),
           ),
-          Spacer(),
+          const Spacer(),
           Icon(
             Icons.arrow_forward_ios,
             color: ColorsManager.backgroundWhite,

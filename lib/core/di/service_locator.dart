@@ -25,7 +25,7 @@ void initSetupLocator() {
 
 void _setupSecureStorageServiceLocator() {
   getIt.registerLazySingleton<FlutterSecureStorage>(
-    () => FlutterSecureStorage(
+    () => const FlutterSecureStorage(
       aOptions: AndroidOptions(),
       iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
     ),

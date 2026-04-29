@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/font_manager.dart';
@@ -15,6 +16,7 @@ class CustomFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
   final void Function(String?)? onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomFormField({
     super.key,
@@ -28,7 +30,7 @@ class CustomFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onSubmitted,
-    this.preIconColor,
+    this.preIconColor, this.inputFormatters,
   });
 
   @override
@@ -47,6 +49,8 @@ class CustomFormField extends StatelessWidget {
           SizedBox(height: 5.h),
         ],
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          inputFormatters: inputFormatters,
           onChanged: onChanged,
           onSaved: onSubmitted,
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
@@ -76,19 +80,19 @@ class CustomFormField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),
-              borderSide: BorderSide(color: ColorsManager.primary),
+              borderSide: const BorderSide(color: ColorsManager.primary),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),
-              borderSide: BorderSide(color: ColorsManager.error),
+              borderSide: const BorderSide(color: ColorsManager.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),
-              borderSide: BorderSide(color: ColorsManager.error),
+              borderSide: const BorderSide(color: ColorsManager.error),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),
-              borderSide: BorderSide(color: ColorsManager.gray500),
+              borderSide: const BorderSide(color: ColorsManager.gray500),
             ),
           ),
         ),

@@ -48,6 +48,11 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle font16WhiteWBold = TextStyle(
+    color: ColorsManager.textLight,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle font14WhiteW400 = TextStyle(
     color: ColorsManager.textLight,
     fontSize: 14.sp,

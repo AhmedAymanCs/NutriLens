@@ -1,7 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
+import 'package:nutrilens/features/auth/data/models/user_model.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
+import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/presentation/screens/onboarding_after_register.dart';
 import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
@@ -22,26 +25,48 @@ class AppRouter {
       //   );
       case Routes.login:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<LoginCubit>(
-            create: (context) => LoginCubit(getIt<AuthRepository>()),
-            child: LoginPage(),
-          ),
+          builder: (_) {
+            return BlocProvider<LoginCubit>(
+              create: (context) => LoginCubit(getIt<AuthRepository>()),
+              child: const LoginPage(),
+            );
+          },
         );
       case Routes.register:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<RegisterCubit>(
             create: (context) => RegisterCubit(getIt<AuthRepository>()),
-            child: RegisterPage(),
+            child: const RegisterPage(),
           ),
         );
       case Routes.forgetPassword:
-        return MaterialPageRoute(builder: (_) => ForgetPasswordPage());
+        return MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider<ForgetPasswordCubit>(
+              create: (context) => ForgetPasswordCubit(getIt<AuthRepository>()),
+              child: const ForgetPasswordPage(),
+            );
+          },
+        );
       case Routes.onBoarding:
-        return MaterialPageRoute(builder: (_) => OnboardingAfterRegister());
+        return MaterialPageRoute(
+          builder: (_) {
+            final name = settings.arguments as String;
+            return BlocProvider<OnboardingCubit>(
+              create: (context) => OnboardingCubit(getIt<AuthRepository>()),
+              child: OnboardingAfterRegister(userName: name),
+            );
+          },
+        );
       case Routes.home:
-        return MaterialPageRoute(builder: (_) => HomePage());
+        return MaterialPageRoute(
+          builder: (_) {
+            UserDataModel userModel = settings.arguments as UserDataModel;
+            return HomePage(userModel: userModel);
+          },
+        );
       case Routes.profile:
-        return MaterialPageRoute(builder: (_) => ProfilePage());
+        return MaterialPageRoute(builder: (_) => const ProfilePage());
 
       default:
         return MaterialPageRoute(

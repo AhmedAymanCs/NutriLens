@@ -5,7 +5,7 @@ part 'states.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
   final AuthRepository _authRepository;
-  RegisterCubit(this._authRepository) : super(RegisterState());
+  RegisterCubit(this._authRepository) : super(const RegisterState());
 
   void changePasswordVisible() {
     emit(

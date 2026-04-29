@@ -24,7 +24,7 @@ class CustomOnboardingButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Continue", style: AppTextStyle.font16WhiteW600),
-          Spacer(flex: 3),
+          const Spacer(flex: 3),
           Icon(
             Icons.arrow_forward_ios,
             color: ColorsManager.backgroundWhite,

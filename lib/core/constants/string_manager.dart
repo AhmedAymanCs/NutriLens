@@ -41,8 +41,12 @@ class StringManager {
   static const String alreadyHaveAccount = 'Already have an account?';
   static const String orContinueWith = 'OR CONTINUE WITH';
   static const String continueWithGoogle = 'Continue with Google';
+  static const String resetPasswordSuccess = 'Reset Your password successfully';
 
   // onboarding pages
+  static const String continueButton = "Continue";
+  static const String letStartButton = "Let's Start";
+
   // 1. Gender Page:
   static const String genderTitle = "What's your\ngender?";
   static const String genderSubTitle = "This helps us calculate your personalized nutritional needs and daily calorie goals more accurately.";
