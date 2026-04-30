@@ -30,4 +30,11 @@ class ColorsManager {
   // Misc
   static const Color divider = Color(0xFFE0E4E1);
   static const Color overlayBlack10 = Color(0x1A000000);
+
+    // Dark Mode Colors
+  static const Color darkBackground = Color(0xFF121412); // أسود مائل للأخضر الغامق جداً
+  static const Color darkSurface = Color(0xFF1C201D);    // لون الكروت في الوضع الليلي
+  static const Color darkInput = Color(0xFF252A26);      // لون الحقول
+  static const Color darkGrey = Color(0xFF2C2C2C);     
+  static const Color lighterGrey = Color(0xFFEDF0F2);
 }

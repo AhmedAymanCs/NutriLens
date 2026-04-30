@@ -50,6 +50,9 @@ dependencies:
   # Auth packages
   dots_indicator: ^4.0.1
   scroll_wheel_selector: ^0.0.4
+  firebase_messaging: ^16.2.0
+  permission_handler: ^12.0.1
+  dio: ^5.9.2
 
 dev_dependencies:
   flutter_test:

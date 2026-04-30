@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
+import 'package:nutrilens/features/add_meal/logic/cubit.dart';
+import 'package:nutrilens/features/add_meal/presentation/add_screen.dart';
 import 'package:nutrilens/features/auth/data/models/user_model.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
@@ -61,12 +63,24 @@ class AppRouter {
       case Routes.home:
         return MaterialPageRoute(
           builder: (_) {
-            UserDataModel userModel = settings.arguments as UserDataModel;
-            return HomePage(userModel: userModel);
+final userData = settings.arguments as UserDataModel?;            // UserDataModel userModel = settings.arguments as UserDataModel;
+            return HomePage(userModel: userData ?? UserDataModel(
+                uid: '', 
+                email: '', 
+                name: 'User',
+                age: 0,
+              ),);
           },
         );
       case Routes.profile:
-        return MaterialPageRoute(builder: (_) => const ProfilePage());
+        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+       case Routes.addMeals:
+  return MaterialPageRoute(
+    builder: (_) => BlocProvider<AddMealCubit>(
+      create: (context) => getIt<AddMealCubit>(), 
+      child: const AddMealScreen(),
+    ),
+  );
 
       default:
         return MaterialPageRoute(

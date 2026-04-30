@@ -1,3 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:nutrilens/features/add_meal/data/data_source/data_source.dart';
+import 'package:nutrilens/features/add_meal/data/repository/add_repository.dart';
+import 'package:nutrilens/features/add_meal/logic/cubit.dart';
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/repository/repositroy.dart';
 import 'package:nutrilens/features/profile/data/data_source/data_source.dart';
@@ -11,6 +15,8 @@ import 'package:nutrilens/core/services/local_notification_service.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/features/auth/data/data_source/auth_data_source.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
+import 'package:nutrilens/features/profile/logic/cubit.dart';
+import 'package:nutrilens/features/profile/presentation/notification_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -21,6 +27,8 @@ void initSetupLocator() {
   _setupNotificationServiceLocator();
   _setupProfileLocator();
   _setupHomeLocator();
+  _setupAddMealLocator();
+  // getIt.registerLazySingleton<NotificationCubit>(() => NotificationCubit());
 }
 
 void _setupSecureStorageServiceLocator() {
@@ -66,10 +74,18 @@ void _setupNotificationServiceLocator() {
 }
 
 void _setupProfileLocator() {
-  getIt.registerLazySingleton<ProfileDataSource>(() => ProfileDataSourceImpl());
+  getIt.registerLazySingleton<ProfileDataSource>(
+    () => ProfileDataSourceImpl(
+      getIt<FirebaseFirestore>(),
+      getIt<FirebaseAuth>(),
+    ),
+  );
+
   getIt.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(getIt<ProfileDataSource>()),
   );
+
+  getIt.registerFactory(() => ProfileCubit(getIt<ProfileRepository>()));
 }
 
 void _setupHomeLocator() {
@@ -77,4 +93,20 @@ void _setupHomeLocator() {
   getIt.registerLazySingleton<HomeRepository>(
     () => HomeRepositoryImpl(getIt<HomeDataSource>()),
   );
+}
+
+void _setupAddMealLocator() {
+  if (!getIt.isRegistered<Dio>()) {
+    getIt.registerLazySingleton<Dio>(() => Dio());
+  }
+
+  getIt.registerLazySingleton<AddMealRemoteDataSource>(
+    () => AddMealRemoteDataSourceImpl(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<AddMealRepository>(
+    () => AddMealRepositoryImpl(remoteDataSource: getIt<AddMealRemoteDataSource>()),
+  );
+
+  getIt.registerFactory(() => AddMealCubit(getIt<AddMealRepository>()));
 }
