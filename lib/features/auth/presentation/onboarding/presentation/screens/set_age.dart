@@ -26,14 +26,16 @@ class SetAge extends StatelessWidget {
           radius: 120.r,
           backgroundColor: ColorsManager.primaryLight,
           child: WheelPicker(
-            height: 150.h,
+            height: 180.h,
             values: List.generate(60, (i) => i + 1),
-            initialValue: cubit.state.selectedAgeValue ?? 18,
+            initialValue: cubit.state.selectedAgeValue == 0
+                ? 18
+                : cubit.state.selectedAgeValue!,
             lineColor: ColorsManager.primary,
             selectedColor: ColorsManager.textHeading,
             unselectedColor: ColorsManager.textMuted,
             onSelected: (value) {
-              cubit.selectAge(age: value);
+              cubit.selectAge(selectedAge: value);
             },
           ),
         ),

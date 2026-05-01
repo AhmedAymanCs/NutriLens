@@ -6,9 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/extentions/custom_extentions.dart';
 import 'package:nutrilens/core/router/routes.dart';
+import 'package:nutrilens/core/utils/custom_loading.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
+import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/custom_dots_indicator.dart';
 import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/custom_onboarding_button.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
@@ -18,8 +21,11 @@ import 'package:nutrilens/features/auth/presentation/onboarding/presentation/scr
 import 'package:nutrilens/features/auth/presentation/onboarding/presentation/screens/set_height_weight.dart';
 
 class OnboardingAfterRegister extends StatefulWidget {
-  const OnboardingAfterRegister({super.key, required this.userName});
-  final String userName;
+  const OnboardingAfterRegister({
+    super.key,
+    required this.registerParamsModels,
+  });
+  final RegisterParamsModels registerParamsModels;
 
   @override
   State<OnboardingAfterRegister> createState() =>
@@ -70,11 +76,10 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
         return state.selectedGoal != null;
 
       case 2:
-        return state.selectedAgeValue != null;
+        return state.selectedAgeValue != 0;
 
       case 3:
-        return state.selectedHeightValue != null &&
-            state.selectedWeightValue != null;
+        return state.selectedHeight != 0.0 && state.selectedWeight != 0.0;
 
       default:
         return false;
@@ -147,6 +152,7 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
               }
               if (state.status == OnboardingStatus.failure) {
                 customSnackBar(context: context, message: state.errorMessage!);
+                Navigator.pushReplacementNamed(context, Routes.register);
               }
             },
             builder: (context, state) {
@@ -174,11 +180,18 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
                     onPressed: isStepValid(state)
                         ? () {
                             currentPage == pages.length - 1
-                                ? context
-                                      .read<OnboardingCubit>()
-                                      .saveDataToFirestore(
-                                        name: widget.userName,
-                                      )
+                                ? context.read<OnboardingCubit>().signUp(
+                                    params: widget.registerParamsModels,
+                                    userDataParams: UserOnboardingParamsModel(
+                                      gender: state.selectedGender!.label,
+                                      goal: state.selectedGoal!.label,
+                                      age: state.selectedAgeValue!,
+                                      height: state.selectedHeight!,
+                                      weight: state.selectedWeight!,
+                                    ),
+                                  )
+                                : state.status == OnboardingStatus.loading
+                                ? customLoading()
                                 : nextPage();
                           }
                         : null,

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nutrilens/features/auth/data/models/user_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
+import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 part 'states.dart';
 
@@ -8,48 +9,41 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   final AuthRepository _authRepository;
   OnboardingCubit(this._authRepository) : super(const OnboardingState());
 
-  void selectGender({required Gender gender, required String value}) {
-    emit(state.copyWith(selectedGender: gender, selectedGenderValue: value));
+  void selectGender({required Gender gender}) {
+    emit(state.copyWith(selectedGender: gender));
   }
 
-  void selectGoal({required Goal goal, required String value}) {
-    emit(state.copyWith(selectedGoal: goal, selectedGoalValue: value));
+  void selectGoal({required Goal goal}) {
+    emit(state.copyWith(selectedGoal: goal));
   }
 
-  void selectAge({required int age}) {
-    emit(state.copyWith(selectedAgeValue: age));
+  void selectAge({required int selectedAge}) {
+    emit(state.copyWith(selectedAgeValue: selectedAge));
   }
 
-  void selectHeight({required String selectedHeightValue}) {
-    emit(state.copyWith(selectedHeightValue: selectedHeightValue));
+  void selectHeight({required double selectedHeight}) {
+    emit(state.copyWith(selectedHeight: selectedHeight));
   }
 
-  void selectWeight({required String selectedWeightValue}) {
-    emit(state.copyWith(selectedWeightValue: selectedWeightValue));
+  void selectWeight({required double selectedWeight}) {
+    emit(state.copyWith(selectedWeight: selectedWeight));
   }
 
-  Future<void> saveDataToFirestore({required String name}) async {
+  Future<void> signUp({
+    required RegisterParamsModels params,
+    required UserOnboardingParamsModel userDataParams,
+  }) async {
     emit(state.copyWith(status: OnboardingStatus.loading));
-    final response = await _authRepository.addDataToFirestore(
-      state: state,
-      name: name,
+    final response = await _authRepository.signUp(
+      params: params,
+      userDataParams: userDataParams,
     );
-    response.fold(
-      (error) => emit(state.copyWith(status: OnboardingStatus.failure)),
-      (success) => emit(state.copyWith(status: OnboardingStatus.success)),
-    );
-    await getUserSession();
-  }
-
-  Future<void> getUserSession () async {
-    emit(state.copyWith(status: OnboardingStatus.loading));
-    final response = await _authRepository.getUserSession();
     response.fold(
       (error) => emit(
         state.copyWith(status: OnboardingStatus.failure, errorMessage: error),
       ),
       (userModel) => emit(
-        state.copyWith(status: OnboardingStatus.userSession, userModel: userModel),
+        state.copyWith(status: OnboardingStatus.success, userModel: userModel),
       ),
     );
   }

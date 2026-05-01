@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
-import 'package:nutrilens/features/auth/data/models/user_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
+import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
@@ -35,33 +36,37 @@ class AppRouter {
       case Routes.register:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<RegisterCubit>(
-            create: (context) => RegisterCubit(getIt<AuthRepository>()),
+            create: (context) => RegisterCubit(),
             child: const RegisterPage(),
           ),
         );
       case Routes.forgetPassword:
         return MaterialPageRoute(
           builder: (_) {
+            String email = settings.arguments as String;
             return BlocProvider<ForgetPasswordCubit>(
               create: (context) => ForgetPasswordCubit(getIt<AuthRepository>()),
-              child: const ForgetPasswordPage(),
+              child:  ForgetPasswordPage(email: email,),
             );
           },
         );
       case Routes.onBoarding:
         return MaterialPageRoute(
           builder: (_) {
-            final name = settings.arguments as String;
+            RegisterParamsModels registerParamsModels =
+                settings.arguments as RegisterParamsModels;
             return BlocProvider<OnboardingCubit>(
               create: (context) => OnboardingCubit(getIt<AuthRepository>()),
-              child: OnboardingAfterRegister(userName: name),
+              child: OnboardingAfterRegister(
+                registerParamsModels: registerParamsModels,
+              ),
             );
           },
         );
       case Routes.home:
         return MaterialPageRoute(
           builder: (_) {
-            UserDataModel userModel = settings.arguments as UserDataModel;
+            UserModel userModel = settings.arguments as UserModel;
             return HomePage(userModel: userModel);
           },
         );

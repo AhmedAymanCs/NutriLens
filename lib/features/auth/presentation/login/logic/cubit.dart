@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nutrilens/features/auth/data/models/user_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 part 'states.dart';
 
@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({required String email, required String password, bool rememberMe = false}) async {
     emit(state.copyWith(status: LoginStatus.loading));
     final response = await _authRepository.signIn(
       email: email,
@@ -27,7 +27,7 @@ class LoginCubit extends Cubit<LoginState> {
       (error) => emit(
         state.copyWith(status: LoginStatus.failure, errorMessage: error),
       ),
-      (success) => emit(state.copyWith(status: LoginStatus.success)),
+      (userModel) => emit(state.copyWith(status: LoginStatus.success, userModel: userModel)),
     );
   }
 
@@ -40,16 +40,5 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
-  void getUserSession() async {
-    emit(state.copyWith(status: LoginStatus.loading));
-    final response = await _authRepository.getUserSession();
-    response.fold(
-      (error) => emit(
-        state.copyWith(status: LoginStatus.failure, errorMessage: error),
-      ),
-      (userModel) => emit(
-        state.copyWith(status: LoginStatus.rememberMe, userModel: userModel),
-      ),
-    );
-  }
+
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
-import 'package:nutrilens/features/auth/data/models/user_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 part 'shared_widgets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.userModel});
-  final UserDataModel userModel;
+  final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +15,28 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(userModel.uid, style: AppTextStyle.font32PrimaryBold),
-            Text(userModel.name!, style: AppTextStyle.font32PrimaryBold),
-            Text(userModel.weight!, style: AppTextStyle.font32PrimaryBold),
-            Text(userModel.email, style: AppTextStyle.font32PrimaryBold),
+            Text("UID: ${userModel.uid}", style: AppTextStyle.font18BlackBold),
             Text(
-              userModel.age.toString(),
-              style: AppTextStyle.font32PrimaryBold,
+              "Name: ${userModel.name}",
+              style: AppTextStyle.font18BlackBold,
             ),
-            Text(userModel.gender!, style: AppTextStyle.font32PrimaryBold),
-            Text(userModel.gender!, style: AppTextStyle.font32PrimaryBold),
-            Text(userModel.goal!, style: AppTextStyle.font32PrimaryBold),
+            Text(
+              "Weight: ${userModel.weight}",
+              style: AppTextStyle.font18BlackBold,
+            ),
+            Text(
+              "Email: ${userModel.email}",
+              style: AppTextStyle.font18BlackBold,
+            ),
+            Text("Age: ${userModel.age}", style: AppTextStyle.font18BlackBold),
+            Text(
+              "Gender: ${userModel.gender}",
+              style: AppTextStyle.font18BlackBold,
+            ),
+            Text(
+              "Goal: ${userModel.goal}",
+              style: AppTextStyle.font18BlackBold,
+            ),
           ],
         ),
       ),

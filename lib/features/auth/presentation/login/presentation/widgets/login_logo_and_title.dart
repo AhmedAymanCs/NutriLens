@@ -21,7 +21,7 @@ class LoginLogoAndTitle extends StatelessWidget {
         Text(StringManager.appName, style: AppTextStyle.font32PrimaryBold),
         isRegisterPage
             ? Text(
-                StringManager.subTitleRegisterPage,
+                StringManager.subTitleLoginPage1,
                 style: AppTextStyle.font15GreyW500,
               )
             : Column(

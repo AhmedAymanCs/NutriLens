@@ -5,6 +5,7 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/image_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/utils/custom_loading.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
@@ -13,7 +14,8 @@ import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit
 import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({super.key});
+  const ForgetPasswordPage({super.key, required this.email});
+  final String email;
 
   @override
   State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
@@ -26,7 +28,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
+    _emailController = TextEditingController(text: widget.email);
   }
 
   @override
@@ -38,6 +40,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -111,7 +114,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             BlocConsumer<ForgetPasswordCubit, ForgetPasswordState>(
               listener: (context, state) {
                 if (state.status == ForgetPasswordStatus.failure) {
-                  customSnackBar(context: context, message: state.errorMessage!);
+                  customSnackBar(
+                    context: context,
+                    message: state.errorMessage!,
+                  );
                 }
                 if (state.status == ForgetPasswordStatus.success) {
                   customSnackBar(
@@ -119,22 +125,27 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     message: StringManager.resetPasswordSuccess,
                     isErrorMessage: false,
                   );
-                  Navigator.pop(context);
                 }
               },
-              
               builder: (context, state) {
-                return CustomButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<ForgetPasswordCubit>().resetPassword(
-                        email: _emailController.text.trim(),
+                return state.status == ForgetPasswordStatus.loading
+                    ? customLoading()
+                    : CustomButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<ForgetPasswordCubit>().resetPassword(
+                              email: _emailController.text.trim(),
+                            );
+                          }
+                        },
+                        text: StringManager.resetPassword,
                       );
-                    }
-                  },
-                  text: StringManager.resetPassword,
-                );
               },
+            ),
+            heightSpace(20),
+            CustomButton(
+              onPressed: () => Navigator.pop(context),
+              text: StringManager.backToLogin,
             ),
           ],
         ),

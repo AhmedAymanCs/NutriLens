@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
 
 class UserInformation extends StatelessWidget {
   const UserInformation({
@@ -13,18 +11,16 @@ class UserInformation extends StatelessWidget {
     this.width,
     this.height,
     required this.onTap,
+    required this.isSelected,
   });
   final String title;
   final IconData? icon;
   final double? width, height;
   final VoidCallback onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
-    OnboardingCubit cubit = context.watch<OnboardingCubit>();
-    bool isSelected =
-        cubit.state.selectedGenderValue == title ||
-        cubit.state.selectedGoalValue == title;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -32,9 +28,7 @@ class UserInformation extends StatelessWidget {
         height: height ?? 100.h,
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          color:
-              
-                isSelected
+          color: isSelected
               ? ColorsManager.primary
               : ColorsManager.backgroundWhite,
           borderRadius: BorderRadius.circular(40.r),
@@ -46,8 +40,7 @@ class UserInformation extends StatelessWidget {
           children: [
             Text(
               title,
-              style:
-                  isSelected
+              style: isSelected
                   ? AppTextStyle.font16WhiteWBold
                   : AppTextStyle.font16PrimaryBold,
             ),
@@ -55,8 +48,7 @@ class UserInformation extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: CircleAvatar(
-                backgroundColor:
-                    isSelected
+                backgroundColor: isSelected
                     ? ColorsManager.backgroundWhite
                     : ColorsManager.primaryLight,
                 radius: 30.r,

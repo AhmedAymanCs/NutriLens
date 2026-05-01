@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/router/routes.dart';
-import 'package:nutrilens/core/utils/custom_loading.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
+import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
 import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_validation.dart';
@@ -87,24 +87,7 @@ class _SignUpValidationState extends State<SignUpValidation> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: BlocConsumer<RegisterCubit, RegisterState>(
-        listener: (context, state) {
-          if (state.status == RegisterStatus.failure) {
-            customSnackBar(context: context, message: state.errorMessage!);
-          }
-          if (state.status == RegisterStatus.success) {
-            customSnackBar(
-              context: context,
-              message: "Welcome ${_nameController.text}",
-              isErrorMessage: false,
-            );
-            Navigator.pushReplacementNamed(
-              context,
-              Routes.onBoarding,
-              arguments: _nameController.text.trim(),
-            );
-          }
-        },
+      child: BlocBuilder<RegisterCubit, RegisterState>(
         builder: (context, state) {
           return Column(
             children: [
@@ -190,20 +173,28 @@ class _SignUpValidationState extends State<SignUpValidation> {
                 hasMatchedPassword: hasMatchedPassword,
               ),
               heightSpace(10),
-              state.status == RegisterStatus.loading
-                  ? customLoading()
-                  : CustomButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context.read<RegisterCubit>().signUp(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            name: _nameController.text,
-                          );
-                        }
-                      },
-                      text: StringManager.signUp,
-                    ),
+              CustomButton(
+                onPressed: () {
+                  RegisterParamsModels params = RegisterParamsModels(
+                    name: _nameController.text.trim(),
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text.trim(),
+                  );
+                  if (_formKey.currentState!.validate()) {
+                    customSnackBar(
+                      context: context,
+                      message: "Welcome ${params.name}",
+                      isErrorMessage: false,
+                    );
+                    Navigator.pushReplacementNamed(
+                      context,
+                      Routes.onBoarding,
+                      arguments: params,
+                    );
+                  }
+                },
+                text: StringManager.signUp,
+              ),
             ],
           );
         },

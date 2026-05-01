@@ -10,7 +10,6 @@ import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
-import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
 
 class LoginValidation extends StatefulWidget {
   const LoginValidation({super.key});
@@ -51,7 +50,7 @@ class _LoginValidationState extends State<LoginValidation> {
           if (state.status == LoginStatus.success) {
             customSnackBar(
               context: context,
-              message: "Login Successfully",
+              message: StringManager.loginSuccess,
               isErrorMessage: false,
             );
             Navigator.pushNamedAndRemoveUntil(
@@ -61,9 +60,7 @@ class _LoginValidationState extends State<LoginValidation> {
               arguments: state.userModel,
             );
           }
-          
         },
-
         builder: (context, state) {
           return Column(
             children: [
@@ -89,9 +86,6 @@ class _LoginValidationState extends State<LoginValidation> {
                   if (password == null || password.isEmpty) {
                     return StringManager.passwordEmpty;
                   }
-                  if (!PasswordAndEmailValidations.isPasswordValid(password)) {
-                    return StringManager.passwordInvalid;
-                  }
                   return null;
                 },
                 preIcon: Icons.lock_outlined,
@@ -105,12 +99,8 @@ class _LoginValidationState extends State<LoginValidation> {
                 children: [
                   Checkbox(
                     value: state.rememberMe,
-                    onChanged: (value) {
-                      context.read<LoginCubit>().changeRememberMe();
-                      if (value == true) {
-                        context.read<LoginCubit>().getUserSession();
-                      }
-                    },
+                    onChanged: (value) =>
+                        context.read<LoginCubit>().changeRememberMe(),
                   ),
                   Text(
                     StringManager.rememberMe,
@@ -118,8 +108,11 @@ class _LoginValidationState extends State<LoginValidation> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, Routes.forgetPassword),
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      Routes.forgetPassword,
+                      arguments: _emailController.text.trim(),
+                    ),
                     child: Text(
                       StringManager.forgotPassword,
                       style: AppTextStyle.font13GreyW400,
@@ -135,8 +128,9 @@ class _LoginValidationState extends State<LoginValidation> {
                         // Navigator.of(context).pushNamed(Routes.onBoarding);
                         if (_loginFormKey.currentState!.validate()) {
                           context.read<LoginCubit>().signIn(
-                            email: _emailController.text,
-                            password: _passwordController.text,
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                            rememberMe: state.rememberMe,
                           );
                         }
                       },

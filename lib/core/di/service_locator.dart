@@ -38,14 +38,14 @@ void _setupSecureStorageServiceLocator() {
 void _setupAuthRepositoryLocator() {
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(
-      getIt<FirebaseAuth>(),
-      getIt<FirebaseFirestore>(),
-      getIt<SecureStorageHelper>(),
-    ),
+    () => AuthRemoteDataSourceImpl(getIt<FirebaseAuth>()),
   );
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(getIt<AuthRemoteDataSource>()),
+    () => AuthRepositoryImpl(
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      firestore: getIt<FirebaseFirestore>(),
+    ),
   );
 }
 

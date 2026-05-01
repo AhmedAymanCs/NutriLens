@@ -1,13 +1,20 @@
 part of 'cubit.dart';
 
-enum LoginStatus { initial, loading, success, failure, passwordObscure, rememberMe }
+enum LoginStatus {
+  initial,
+  loading,
+  success,
+  failure,
+  passwordObscure,
+  rememberMe,
+}
 
 class LoginState extends Equatable {
   final LoginStatus status;
   final bool rememberMe;
   final bool passwordObscure;
   final String errorMessage;
-  final UserDataModel? userModel;
+  final UserModel? userModel;
 
   const LoginState({
     this.status = LoginStatus.initial,
@@ -21,7 +28,7 @@ class LoginState extends Equatable {
     bool? rememberMe,
     bool? passwordObscure,
     String? errorMessage,
-    UserDataModel? userModel,
+    UserModel? userModel,
   }) {
     return LoginState(
       status: status ?? this.status,

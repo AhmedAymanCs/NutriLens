@@ -11,7 +11,7 @@ class SetGender extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OnboardingCubit cubit = context.read<OnboardingCubit>();
+    OnboardingCubit cubit = context.watch<OnboardingCubit>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -22,22 +22,18 @@ class SetGender extends StatelessWidget {
         UserInformation(
           title: StringManager.genderFemale,
           onTap: () {
-            cubit.selectGender(
-              gender: Gender.female,
-              value: StringManager.genderFemale,
-            );
+            cubit.selectGender(gender: Gender.female);
           },
+          isSelected: cubit.state.selectedGender == Gender.female,
           icon: Icons.female_outlined,
         ),
         heightSpace(20),
         UserInformation(
           title: StringManager.genderMale,
           onTap: () {
-            cubit.selectGender(
-              gender: Gender.male,
-              value: StringManager.genderMale,
-            );
+            cubit.selectGender(gender: Gender.male);
           },
+          isSelected: cubit.state.selectedGender == Gender.male,
           icon: Icons.male_outlined,
         ),
       ],

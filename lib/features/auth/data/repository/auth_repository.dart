@@ -1,52 +1,85 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
+import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/auth/data/data_source/auth_data_source.dart';
-import 'package:nutrilens/features/auth/data/models/user_model.dart';
-import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
+import 'package:nutrilens/core/models/user_model.dart';
+import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 
 abstract class AuthRepository {
-  ServerResponse<Unit> signIn({
+  ServerResponse<UserModel> signIn({
     required String email,
     required String password,
+    bool rememberMe = false,
   });
 
-  ServerResponse<Unit> signUp({
-    required String name,
-    required String email,
-    required String password,
+  ServerResponse<UserModel> signUp({
+    required RegisterParamsModels params,
+    required UserOnboardingParamsModel userDataParams,
   });
-
-  ServerResponse<Unit> addDataToFirestore({
-    required OnboardingState state,
-    required String name,
-  });
-  ServerResponse<UserDataModel> addUserSession({
-    required UserDataModel userModel,
-  });
-
-  ServerResponse<UserDataModel> getUserSession();
 
   ServerResponse<Unit> resetPassword({required String email});
 }
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
+  final FirebaseFirestore firestore;
+  final SecureStorageHelper secureStorageHelper;
 
-  AuthRepositoryImpl(this.authRemoteDataSource);
+  AuthRepositoryImpl({
+    required this.authRemoteDataSource,
+    required this.firestore,
+    required this.secureStorageHelper,
+  });
 
   @override
-  ServerResponse<Unit> signIn({
+  ServerResponse<UserModel> signIn({
     required String email,
     required String password,
+    bool rememberMe = false,
   }) async {
     try {
-      await authRemoteDataSource.signIn(email: email, password: password);
-      return const Right(unit);
+      UserCredential userCredential = await authRemoteDataSource.signIn(
+        email: email,
+        password: password,
+      );
+      if (userCredential.user != null) {
+        final userDoc = await firestore
+            .collection(AppConstants.userCollectionName)
+            .doc(userCredential.user!.uid)
+            .get();
+
+        if (userDoc.exists && userDoc.data() != null) {
+          final userModel = UserModel.fromFirestore({
+            ...userDoc.data()!,
+            'uid': userDoc.id,
+          });
+
+          if (rememberMe) {
+            String sessionData = jsonEncode(userModel.toJson());
+            await secureStorageHelper.saveData(
+              key: AppConstants.userTempSession,
+              value: sessionData,
+            );
+          }
+
+          return Right(userModel);
+        } else {
+          return const Left("User data record not found in database");
+        }
+      }
+      return const Left("Authentication failed");
     } on FirebaseAuthException catch (e) {
-      log("SignIn FirebaseAuthException: ${e.message!}");
-      return Left(e.message!);
+      log("SignIn FirebaseAuthException: ${e.code}");
+      if (e.code == "invalid-credential") {
+        return const Left("Invalid Email or Password");
+      } else {
+        return Left(e.code);
+      }
     } catch (e) {
       log("SignIn Catch: $e");
       return Left(e.toString());
@@ -54,18 +87,31 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  ServerResponse<Unit> signUp({
-    required String name,
-    required String email,
-    required String password,
+  ServerResponse<UserModel> signUp({
+    required RegisterParamsModels params,
+    required UserOnboardingParamsModel userDataParams,
   }) async {
     try {
-      await authRemoteDataSource.signUp(
-        name: name,
-        email: email,
-        password: password,
+      UserCredential user = await authRemoteDataSource.signUp(params: params);
+      if (user.user == null) return const Left("Authentication failed");
+      final currentUser = UserModel.fromFirebaseAuth(user.user!, params.name);
+      final userModel = UserModel(
+        uid: currentUser.uid,
+        email: currentUser.email,
+        name: currentUser.name,
+        photoURL: currentUser.photoURL,
+        gender: userDataParams.gender,
+        goal: userDataParams.goal,
+        age: userDataParams.age,
+        height: userDataParams.height,
+        weight: userDataParams.weight,
       );
-      return const Right(unit);
+      DocumentReference userDoc = firestore
+          .collection(AppConstants.userCollectionName)
+          .doc(user.user!.uid);
+      await userDoc.set(userModel.toJson());
+      await secureStorageHelper.saveUserData(jsonEncode(userModel.toJson()));
+      return Right(userModel);
     } on FirebaseAuthException catch (e) {
       log("SignUp FirebaseAuthException: ${e.message!}");
       return Left(e.message!);
@@ -76,62 +122,15 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  ServerResponse<Unit> addDataToFirestore({
-    required OnboardingState state,
-    required String name,
-  }) async {
-    try {
-      await authRemoteDataSource.addDataToFirestore(state: state, name: name);
-      return const Right(unit);
-    } on FirebaseAuthException catch (e) {
-      log("AddDataToFirestore FirebaseAuthException: ${e.message!}");
-      return Left(e.message!);
-    } catch (e) {
-      log("AddDataToFirestore Catch: $e");
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  ServerResponse<UserDataModel> addUserSession({
-    required UserDataModel userModel,
-  }) async {
-    try {
-      await authRemoteDataSource.addUserSession(userModel: userModel);
-      return Right(userModel);
-    } on Exception catch (e) {
-      log("AddUserSession Exception: $e");
-      return Left(e.toString());
-    } catch (e) {
-      log("AddUserSession Catch: $e");
-      return Left(e.toString());
-    }
-  }
-
-  @override
   ServerResponse<Unit> resetPassword({required String email}) async {
     try {
-      await authRemoteDataSource.resetPassword(email: email);
+      await authRemoteDataSource.resetPassword(email: email.trim());
       return const Right(unit);
     } on FirebaseAuthException catch (e) {
       log("resetPassword FirebaseAuthException: ${e.message!}");
       return Left(e.message!);
     } catch (e) {
       log("resetPassword Catch: $e");
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  ServerResponse<UserDataModel> getUserSession() async {
-    try {
-      UserDataModel userModel = await authRemoteDataSource.getUserSession();
-      return Right(userModel);
-    } on FirebaseAuthException catch (e) {
-      log("getUserSession FirebaseAuthException: ${e.message!}");
-      return Left(e.message!);
-    } catch (e) {
-      log("getUserSession Catch: $e");
       return Left(e.toString());
     }
   }
