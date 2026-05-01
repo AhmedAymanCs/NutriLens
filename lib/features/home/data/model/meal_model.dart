@@ -1,13 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MealModel {
-  final String title;
-  final String description;
-  final String calories;
-  final String image;
+  final String? id; 
+  final String foodName;
+  final double quantity;
+  final String unit;
+  final int calories;
+  final int carbs;
+  final int protein;
+  final int fat;
+  final String imageUrl;
+  final DateTime timestamp;
 
   MealModel({
-    required this.title,
-    required this.description,
+    this.id,
+    required this.foodName,
+    required this.quantity,
+    required this.unit,
     required this.calories,
-    required this.image,
+    required this.carbs,
+    required this.protein,
+    required this.fat,
+    required this.imageUrl,
+    required this.timestamp,
   });
+
+  factory MealModel.fromFirestore(Map<String, dynamic> json, String documentId) {
+    return MealModel(
+      id: documentId,
+      foodName: json['foodName'] ?? '',
+      quantity: (json['quantity'] ?? 0).toDouble(),
+      unit: json['unit'] ?? '',
+      calories: json['calories'] ?? 0,
+      carbs: json['carbs'] ?? 0,
+      protein: json['protein'] ?? 0,
+      fat: json['fat'] ?? 0,
+      imageUrl: json['imageUrl'] ?? '',
+      timestamp: (json['timestamp'] as Timestamp).toDate(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'foodName': foodName,
+      'quantity': quantity,
+      'unit': unit,
+      'calories': calories,
+      'carbs': carbs,
+      'protein': protein,
+      'fat': fat,
+      'imageUrl': imageUrl,
+      'timestamp': Timestamp.fromDate(timestamp),
+    };
+  }
 }

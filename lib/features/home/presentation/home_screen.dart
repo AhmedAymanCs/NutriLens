@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
               style: AppTextStyle.font18BlackBold.copyWith(color: ColorsManager.textBlack),
             ),
             heightSpace(16),  
-            MealsListView()
+            // MealsListView()
           ],
         ),
       ),

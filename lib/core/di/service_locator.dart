@@ -1,5 +1,6 @@
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/repository/repositroy.dart';
+import 'package:nutrilens/features/home/logic/cubit.dart';
 import 'package:nutrilens/features/profile/data/data_source/data_source.dart';
 import 'package:nutrilens/features/profile/data/repository/profile_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -72,8 +73,15 @@ void _setupProfileLocator() {
 }
 
 void _setupHomeLocator() {
-  getIt.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl());
+  
+  getIt.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(
+    auth: getIt<FirebaseAuth>(),
+    firestore: getIt<FirebaseFirestore>(),
+  ));
+
   getIt.registerLazySingleton<HomeRepository>(
     () => HomeRepositoryImpl(getIt<HomeDataSource>()),
   );
+
+  getIt.registerFactory(() => HomeCubit(getIt<HomeRepository>()));
 }
