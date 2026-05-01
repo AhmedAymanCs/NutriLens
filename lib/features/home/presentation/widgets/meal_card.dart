@@ -3,19 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
+import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class MealCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String calories;
-  final String image;
+  final MealModel mealModel;
 
   const MealCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.calories,
-    required this.image,
+    required this.mealModel
   });
 
   @override
@@ -44,7 +39,7 @@ class MealCard extends StatelessWidget {
                 bottomLeft: Radius.circular(24),
               ),
             ),
-            child: Image.asset(image),
+            child: Image.asset(mealModel.imageUrl),
           ),
           heightSpace(16),
           Expanded(
@@ -52,12 +47,12 @@ class MealCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  mealModel.foodName,
                   style: AppTextStyle.font16PrimaryBold.copyWith(color: ColorsManager.textBlack),
                 ),
                 heightSpace(4),
                 Text(
-                  description,
+                  mealModel.quantity.toString(),
                   style: AppTextStyle.font13primaryColorW400,
                 ),
               ],
@@ -66,7 +61,7 @@ class MealCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Text(
-              calories,
+              mealModel.calories.toString(),
               style: AppTextStyle.font16PrimaryBold,
             ),
           ),

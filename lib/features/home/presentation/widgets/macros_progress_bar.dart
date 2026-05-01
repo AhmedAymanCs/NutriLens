@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/features/home/data/model/home_data_model.dart';
 import 'package:nutrilens/features/home/presentation/widgets/macro_indicator.dart';
 
 class MacrosProgressBar extends StatelessWidget {
-  const MacrosProgressBar({super.key});
+  const MacrosProgressBar({super.key, required this.data});
+
+  final HomeDataModel data;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         MacroIndicator(
           title: StringManager.protein,
-          current: 45,
-          total: 120,
+          current:data.proteinConsumed,
+          total:data.proteinGoal,
           color: ColorsManager.protein,
           icon: Icons.fitness_center,
         ),
         MacroIndicator(
           title: StringManager.carbs,
-          current: 120,
-          total: 250,
+          current: data.carbsConsumed,
+          total:data.carbsGoal,
           color: ColorsManager.carbs,
           icon: Icons.bolt,
         ),
         MacroIndicator(
           title: StringManager.fat,
-          current: 32,
-          total: 65,
+          current: data.fatsConsumed,
+          total: data.fatsGoal,
           color: ColorsManager.primary,
           icon: Icons.water_drop_outlined,
         ),
