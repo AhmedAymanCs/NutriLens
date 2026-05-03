@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
@@ -40,6 +41,7 @@ class _LoginValidationState extends State<LoginValidation> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.sizeOf(context).width;
     return Form(
       key: _loginFormKey,
       child: BlocConsumer<LoginCubit, LoginState>(
@@ -94,31 +96,51 @@ class _LoginValidationState extends State<LoginValidation> {
                 onPressed: () =>
                     context.read<LoginCubit>().changePasswordVisible(),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    value: state.rememberMe,
-                    onChanged: (value) =>
-                        context.read<LoginCubit>().changeRememberMe(),
-                  ),
-                  Text(
-                    StringManager.rememberMe,
-                    style: AppTextStyle.font13GreyW400,
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () => Navigator.pushNamed(
-                      context,
-                      Routes.forgetPassword,
-                      arguments: _emailController.text.trim(),
+
+              SizedBox(
+                width: deviceWidth * 0.75,
+                height: 30.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Transform.translate(
+                      offset: const Offset(-4, 0),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: state.rememberMe,
+                            side: const BorderSide(
+                              color: ColorsManager.primary,
+                            ),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
+                            onChanged: (value) =>
+                                context.read<LoginCubit>().changeRememberMe(),
+                          ),
+
+                          Text(
+                            StringManager.rememberMe,
+                            style: AppTextStyle.font13GreyW400,
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Text(
-                      StringManager.forgotPassword,
-                      style: AppTextStyle.font13GreyW400,
+
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        Routes.forgetPassword,
+                        arguments: _emailController.text.trim(),
+                      ),
+                      child: Text(
+                        StringManager.forgotPassword,
+                        style: AppTextStyle.font13GreyW400,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               heightSpace(10),
               state.status == LoginStatus.loading
