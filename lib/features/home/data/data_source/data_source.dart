@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HomeDataSource {
-  Future<Map<String, dynamic>> getUserData();
+  Future<UserModel> getUserData();
   Future<List<MealModel>> getTodayMeals();
 }
 
@@ -14,10 +16,10 @@ class HomeDataSourceImpl implements HomeDataSource {
   HomeDataSourceImpl({required this.firestore, required this.auth});
 
   @override
-  Future<Map<String, dynamic>> getUserData() async {
+  Future<UserModel> getUserData() async {
     final uid = auth.currentUser!.uid;
-    final doc = await firestore.collection('Users').doc(uid).get();
-    return doc.data() ?? {};
+    final doc = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
+    return UserModel.fromFirestore(doc.data()!);
   }
 
   @override
@@ -29,12 +31,12 @@ class HomeDataSourceImpl implements HomeDataSource {
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
     final query = await firestore
-        .collection('Users')
+        .collection(AppConstants.userCollectionName)
         .doc(uid)
-        .collection('meals') 
-        .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
-        .orderBy('timestamp', descending: true)
+        .collection(AppConstants.mealCollectionName) 
+        .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+        .orderBy(AppConstants.timestampKey, descending: true)
         .get();
 
     return query.docs

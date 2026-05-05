@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/history/data/data_source/data_source.dart';
 import 'package:nutrilens/features/history/data/model/history_data_model.dart';
@@ -33,7 +34,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
 
       final historyData = HistoryDataModel(
         meals: meals,
-        dailyGoal: int.tryParse(userData['daily_calorie_goal']?.toString() ?? '0') ?? 0,
+        dailyGoal: int.tryParse(userData[AppConstants.dailyCalorieGoalKey]?.toString() ?? '0') ?? 0,
         consumedCalories: consumed,
       );
 

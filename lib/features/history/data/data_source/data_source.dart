@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HistoryDataSource {
@@ -20,12 +21,12 @@ class HistoryDataSourceImpl implements HistoryDataSource {
     DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
     final query = await firestore
-        .collection('Users')
+        .collection(AppConstants.userCollectionName)
         .doc(uid)
-        .collection('meals')
-        .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
-        .orderBy('timestamp', descending: true)
+        .collection(AppConstants.mealCollectionName)
+        .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+        .orderBy(AppConstants.timestampKey, descending: true)
         .get();
 
     return query.docs

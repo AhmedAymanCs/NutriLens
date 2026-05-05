@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
 
 class MealModel {
-  final String? id; 
+  final String id; 
   final String foodName;
   final String mealType; 
   final bool isEaten; 
@@ -15,7 +16,7 @@ class MealModel {
   final DateTime timestamp;
 
   MealModel({
-    this.id,
+    required this.id,
     required this.foodName,
     required this.quantity,
     required this.unit,
@@ -30,33 +31,33 @@ class MealModel {
   factory MealModel.fromFirestore(Map<String, dynamic> json, String documentId) {
     return MealModel(
       id: documentId,
-      foodName: json['foodName'] ?? '',
-      mealType: json['mealType'] ?? '',
-      isEaten: json['isEaten'] ?? false,
-      quantity: (json['quantity'] ?? 0),
-      unit: json['unit'] ?? '',
-      calories: json['calories'] ?? 0,
-      carbs: json['carbs'] ?? 0,
-      protein: json['protein'] ?? 0,
-      fat: json['fat'] ?? 0,
-      imageUrl: json['imageUrl'] ?? '',
-      timestamp: (json['timestamp'] as Timestamp).toDate(),
+      foodName: json[AppConstants.foodNameKey] ?? '',
+      mealType: json[AppConstants.mealTypeKey] ?? '',
+      isEaten: json[AppConstants.isEatenKey] ?? false,
+      quantity: (json[AppConstants.quantityKey] ?? 0),
+      unit: json[AppConstants.unitKey] ?? '',
+      calories: json[AppConstants.caloriesKey] ?? 0,
+      carbs: json[AppConstants.carbsKey] ?? 0,
+      protein: json[AppConstants.proteinKey] ?? 0,
+      fat: json[AppConstants.fatKey] ?? 0,
+      imageUrl: json[AppConstants.imageUrlKey] ?? '',
+      timestamp: (json[AppConstants.timestampKey] as Timestamp).toDate(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'foodName': foodName,
-      'mealType': mealType,
-      'isEaten': isEaten,
-      'quantity': quantity,
-      'unit': unit,
-      'calories': calories,
-      'carbs': carbs,
-      'protein': protein,
-      'fat': fat,
-      'imageUrl': imageUrl,
-      'timestamp': Timestamp.fromDate(timestamp),
+      AppConstants.foodNameKey: foodName,
+      AppConstants.mealTypeKey: mealType,
+      AppConstants.isEatenKey: isEaten,
+      AppConstants.quantityKey: quantity,
+      AppConstants.unitKey: unit,
+      AppConstants.caloriesKey: calories,
+      AppConstants.carbsKey: carbs,
+      AppConstants.proteinKey: protein,
+      AppConstants.fatKey: fat,
+      AppConstants.imageUrlKey: imageUrl,
+      AppConstants.timestampKey: Timestamp.fromDate(timestamp),
     };
   }
 }

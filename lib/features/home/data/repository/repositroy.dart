@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/model/home_data_model.dart';
@@ -39,12 +40,12 @@ class HomeRepositoryImpl implements HomeRepository {
 
       final homeData = HomeDataModel(
         calorieGoal:
-            int.tryParse(userData['daily_calorie_goal']?.toString() ?? '0') ??
+            int.tryParse(userData[AppConstants.dailyCalorieGoalKey]?.toString() ?? '0') ??
             0,
         proteinGoal:
-            int.tryParse(userData['protein_goal']?.toString() ?? '0') ?? 0,
-        carbsGoal: int.tryParse(userData['carbs_goal']?.toString() ?? '0') ?? 0,
-        fatsGoal: int.tryParse(userData['fats_goal']?.toString() ?? '0') ?? 0,
+            int.tryParse(userData[AppConstants.proteinKey]?.toString() ?? '0') ?? 0,
+        carbsGoal: int.tryParse(userData[AppConstants.carbsKey]?.toString() ?? '0') ?? 0,
+        fatsGoal: int.tryParse(userData[AppConstants.fatKey]?.toString() ?? '0') ?? 0,
         consumedCalories: consumedCals,
         proteinConsumed: consumedProtein,
         carbsConsumed: consumedCarbs,
