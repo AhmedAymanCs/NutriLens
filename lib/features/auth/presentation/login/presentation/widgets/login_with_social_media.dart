@@ -20,9 +20,7 @@ class LoginWithSocialMedia extends StatelessWidget {
               width: 50.w,
               child: const Divider(color: ColorsManager.textSecondary),
             ),
-            const Text(
-              StringManager.orContinueWith,
-            ), // style: AppTextStyle.font13Grey400
+            const Text(StringManager.orContinueWith),
             SizedBox(
               width: 50.w,
               child: const Divider(color: ColorsManager.textSecondary),

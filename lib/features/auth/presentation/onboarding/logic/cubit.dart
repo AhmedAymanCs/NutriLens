@@ -9,6 +9,25 @@ class OnboardingCubit extends Cubit<OnboardingState> {
   final AuthRepository _authRepository;
   OnboardingCubit(this._authRepository) : super(const OnboardingState());
 
+  bool isStepValid({required int currentPage}) {
+    switch (currentPage) {
+      case 0:
+        return state.selectedGender != null;
+
+      case 1:
+        return state.selectedGoal != null;
+
+      case 2:
+        return state.selectedAgeValue != 0;
+
+      case 3:
+        return state.selectedHeight != 0.0 && state.selectedWeight != 0.0;
+
+      default:
+        return false;
+    }
+  }
+
   void selectGender({required Gender gender}) {
     emit(state.copyWith(selectedGender: gender));
   }

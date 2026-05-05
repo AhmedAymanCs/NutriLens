@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
-import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
@@ -26,17 +25,15 @@ class AppRouter {
       //   );
       case Routes.login:
         return MaterialPageRoute(
-          builder: (_) {
-            return BlocProvider<LoginCubit>(
-              create: (context) => LoginCubit(getIt<AuthRepository>()),
-              child: const LoginPage(),
-            );
-          },
+          builder: (_) => BlocProvider<LoginCubit>(
+            create: (context) => getIt<LoginCubit>(),
+            child: const LoginPage(),
+          ),
         );
       case Routes.register:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<RegisterCubit>(
-            create: (context) => RegisterCubit(),
+            create: (context) => getIt<RegisterCubit>(),
             child: const RegisterPage(),
           ),
         );
@@ -45,8 +42,8 @@ class AppRouter {
           builder: (_) {
             String email = settings.arguments as String;
             return BlocProvider<ForgetPasswordCubit>(
-              create: (context) => ForgetPasswordCubit(getIt<AuthRepository>()),
-              child:  ForgetPasswordPage(email: email,),
+              create: (context) => getIt<ForgetPasswordCubit>(),
+              child: ForgetPasswordPage(email: email),
             );
           },
         );
@@ -56,7 +53,7 @@ class AppRouter {
             RegisterParamsModels registerParamsModels =
                 settings.arguments as RegisterParamsModels;
             return BlocProvider<OnboardingCubit>(
-              create: (context) => OnboardingCubit(getIt<AuthRepository>()),
+              create: (context) => getIt<OnboardingCubit>(),
               child: OnboardingAfterRegister(
                 registerParamsModels: registerParamsModels,
               ),

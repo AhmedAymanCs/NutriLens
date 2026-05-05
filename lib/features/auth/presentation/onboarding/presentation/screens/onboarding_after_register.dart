@@ -1,14 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
-import 'package:nutrilens/core/extentions/custom_extentions.dart';
+import 'package:nutrilens/core/extensions/custom_extensions.dart';
 import 'package:nutrilens/core/router/routes.dart';
-import 'package:nutrilens/core/utils/custom_loading.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
@@ -35,11 +32,11 @@ class OnboardingAfterRegister extends StatefulWidget {
 class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
   int currentPage = 0;
 
-  List<Widget> pages = [
-    const SetGender(),
-    const SetGoal(),
-    const SetAge(),
-    const SetHeightWeight(),
+  final List<Widget> pages = const [
+    SetGender(),
+    SetGoal(),
+    SetAge(),
+    SetHeightWeight(),
   ];
   PageController? _controller;
 
@@ -67,25 +64,6 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
     setState(() {});
   }
 
-  bool isStepValid(OnboardingState state) {
-    switch (currentPage) {
-      case 0:
-        return state.selectedGender != null;
-
-      case 1:
-        return state.selectedGoal != null;
-
-      case 2:
-        return state.selectedAgeValue != 0;
-
-      case 3:
-        return state.selectedHeight != 0.0 && state.selectedWeight != 0.0;
-
-      default:
-        return false;
-    }
-  }
-
   @override
   void initState() {
     _controller = PageController(initialPage: currentPage);
@@ -100,7 +78,6 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
 
   @override
   Widget build(BuildContext context) {
-    log("current page $currentPage");
     return Scaffold(
       backgroundColor: ColorsManager.backgroundWhite,
       appBar: AppBar(
@@ -177,7 +154,11 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
                     text: currentPage == pages.length - 1
                         ? StringManager.letStartButton
                         : StringManager.continueButton,
-                    onPressed: isStepValid(state)
+                    onPressed:
+                        context.read<OnboardingCubit>().isStepValid(
+                              currentPage: currentPage,
+                            ) &&
+                            state.status != OnboardingStatus.loading
                         ? () {
                             currentPage == pages.length - 1
                                 ? context.read<OnboardingCubit>().signUp(
@@ -190,8 +171,6 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
                                       weight: state.selectedWeight!,
                                     ),
                                   )
-                                : state.status == OnboardingStatus.loading
-                                ? customLoading()
                                 : nextPage();
                           }
                         : null,

@@ -1,3 +1,7 @@
+import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/repository/repositroy.dart';
 import 'package:nutrilens/features/profile/data/data_source/data_source.dart';
@@ -47,6 +51,11 @@ void _setupAuthRepositoryLocator() {
       firestore: getIt<FirebaseFirestore>(),
     ),
   );
+  // Auth Cubits
+  getIt.registerFactory(() => LoginCubit(getIt<AuthRepository>()));
+  getIt.registerFactory(() => RegisterCubit());
+  getIt.registerFactory(() => ForgetPasswordCubit(getIt<AuthRepository>()));
+  getIt.registerFactory(() => OnboardingCubit(getIt<AuthRepository>()));
 }
 
 void _setupFirestoreServiceLocator() {

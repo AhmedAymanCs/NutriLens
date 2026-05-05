@@ -147,7 +147,6 @@ class _LoginValidationState extends State<LoginValidation> {
                   ? customLoading()
                   : CustomButton(
                       onPressed: () {
-                        // Navigator.of(context).pushNamed(Routes.onBoarding);
                         if (_loginFormKey.currentState!.validate()) {
                           context.read<LoginCubit>().signIn(
                             email: _emailController.text.trim(),

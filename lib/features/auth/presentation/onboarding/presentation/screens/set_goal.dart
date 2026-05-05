@@ -11,44 +11,48 @@ class SetGoal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OnboardingCubit cubit = context.watch<OnboardingCubit>();
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(StringManager.goalTitle, style: AppTextStyle.font24BlackW700),
-          heightSpace(16),
-          const Text(StringManager.goalSubTitle),
-          heightSpace(32),
-          UserInformation(
-            onTap: () {
-              cubit.selectGoal(goal: Goal.loseWeight);
-            },
-            isSelected: cubit.state.selectedGoal == Goal.loseWeight,
-            title: StringManager.goalLoseWeight,
-            icon: Icons.trending_down_outlined,
+    return BlocBuilder<OnboardingCubit, OnboardingState>(
+      builder: (context, state) {
+        final cubit = context.watch<OnboardingCubit>();
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(StringManager.goalTitle, style: AppTextStyle.font24BlackW700),
+              heightSpace(16),
+              const Text(StringManager.goalSubTitle),
+              heightSpace(32),
+              UserInformation(
+                onTap: () {
+                  cubit.selectGoal(goal: Goal.loseWeight);
+                },
+                isSelected: state.selectedGoal == Goal.loseWeight,
+                title: StringManager.goalLoseWeight,
+                icon: Icons.trending_down_outlined,
+              ),
+              heightSpace(20),
+              UserInformation(
+                onTap: () {
+                  cubit.selectGoal(goal: Goal.maintainWeight);
+                },
+                isSelected: state.selectedGoal == Goal.maintainWeight,
+                title: StringManager.goalMaintainWeight,
+                icon: Icons.monitor_weight_outlined,
+              ),
+              heightSpace(20),
+              UserInformation(
+                onTap: () {
+                  cubit.selectGoal(goal: Goal.gainWeight);
+                },
+                isSelected: state.selectedGoal == Goal.gainWeight,
+                title: StringManager.goalGainWeight,
+                icon: Icons.trending_up_outlined,
+              ),
+              heightSpace(50),
+            ],
           ),
-          heightSpace(20),
-          UserInformation(
-            onTap: () {
-              cubit.selectGoal(goal: Goal.maintainWeight);
-            },
-            isSelected: cubit.state.selectedGoal == Goal.maintainWeight,
-            title: StringManager.goalMaintainWeight,
-            icon: Icons.monitor_weight_outlined,
-          ),
-          heightSpace(20),
-          UserInformation(
-            onTap: () {
-              cubit.selectGoal(goal: Goal.gainWeight);
-            },
-            isSelected: cubit.state.selectedGoal == Goal.gainWeight,
-            title: StringManager.goalGainWeight,
-            icon: Icons.trending_up_outlined,
-          ),
-          heightSpace(50),
-        ],
-      ),
+        );
+      },
     );
   }
 }

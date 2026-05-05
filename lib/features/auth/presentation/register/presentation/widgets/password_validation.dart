@@ -28,24 +28,20 @@ class PasswordValidation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildRowPasswordValidation("At Least 1 Number", hasANumber),
-        buildRowPasswordValidation("At Least 8 Characters", hasCharacterLength),
-        buildRowPasswordValidation(
-          "At Least 1 Lowercase Letter",
-          hasLowerLetter,
+        BuildRowPasswordValidation(text:  "At Least 1 Number",hasValidation:  hasANumber),
+        BuildRowPasswordValidation(text:"At Least 8 Characters", hasValidation: hasCharacterLength),
+        BuildRowPasswordValidation(
+          text:"At Least 1 Lowercase Letter", hasValidation: hasLowerLetter,
         ),
-        buildRowPasswordValidation(
-          "At Least 1 Special Character",
-          hasSpecialCharacter,
+        BuildRowPasswordValidation(
+          text:"At Least 1 Special Character", hasValidation: hasSpecialCharacter,
         ),
-        buildRowPasswordValidation(
-          "At Least 1 Uppercase Letter",
-          hasUpperLetter,
+        BuildRowPasswordValidation(
+          text:"At Least 1 Uppercase Letter", hasValidation: hasUpperLetter,
         ),
         isSignUpScreen && hasMatchedPassword != null
-            ? buildRowPasswordValidation(
-                "Matched Password",
-                hasMatchedPassword!,
+            ? BuildRowPasswordValidation(
+                text: "Matched Password", hasValidation: hasMatchedPassword!,
               )
             : const SizedBox.shrink(),
       ],
@@ -53,24 +49,36 @@ class PasswordValidation extends StatelessWidget {
   }
 }
 
-Row buildRowPasswordValidation(String text, bool hasValidation) {
-  return Row(
-    children: [
-      hasValidation
-          ? Icon(Icons.check, size: 20.sp, color: ColorsManager.primary)
-          : CircleAvatar(
-              backgroundColor: ColorsManager.overlayBlack10,
-              radius: 3.w,
-            ),
-      widthSpace(8.w),
-      Text(
-        text,
-        style: AppTextStyle.font13GreyW400.copyWith(
-          decoration: hasValidation ? TextDecoration.lineThrough : null,
-          decorationColor: hasValidation ? ColorsManager.success : null,
-          decorationThickness: hasValidation ? 2.w : null,
+class BuildRowPasswordValidation extends StatelessWidget {
+  const BuildRowPasswordValidation({
+    super.key,
+    required this.text,
+    required this.hasValidation,
+  });
+
+  final String text;
+  final bool hasValidation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        hasValidation
+            ? Icon(Icons.check, size: 20.sp, color: ColorsManager.primary)
+            : CircleAvatar(
+                backgroundColor: ColorsManager.overlayBlack10,
+                radius: 3.w,
+              ),
+        widthSpace(8.w),
+        Text(
+          text,
+          style: AppTextStyle.font13GreyW400.copyWith(
+            decoration: hasValidation ? TextDecoration.lineThrough : null,
+            decorationColor: hasValidation ? ColorsManager.success : null,
+            decorationThickness: hasValidation ? 2.w : null,
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

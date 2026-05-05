@@ -23,39 +23,44 @@ class UserInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: width ?? double.infinity,
-        height: height ?? 100.h,
-        padding: EdgeInsets.all(20.r),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? ColorsManager.primary
-              : ColorsManager.backgroundWhite,
-          borderRadius: BorderRadius.circular(40.r),
-          border: Border.all(color: ColorsManager.primary),
+      child: Card(
+        elevation: isSelected ? 50 : 0,
+        shadowColor: ColorsManager.primaryLight,
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+        color: isSelected
+            ? ColorsManager.primary
+            : ColorsManager.backgroundWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.r),
+          side: const BorderSide(color: ColorsManager.primary),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: isSelected
-                  ? AppTextStyle.font16WhiteWBold
-                  : AppTextStyle.font16PrimaryBold,
-            ),
-            const Spacer(),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: CircleAvatar(
-                backgroundColor: isSelected
-                    ? ColorsManager.backgroundWhite
-                    : ColorsManager.primaryLight,
-                radius: 30.r,
-                child: Icon(icon, color: ColorsManager.primary, size: 30.sp),
+        child: Container(
+          width: width ?? double.infinity,
+          height: height ?? 100.h,
+          padding: EdgeInsets.all(20.r),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: isSelected
+                    ? AppTextStyle.font16WhiteWBold
+                    : AppTextStyle.font16PrimaryBold,
               ),
-            ),
-          ],
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: CircleAvatar(
+                  backgroundColor: isSelected
+                      ? ColorsManager.backgroundWhite
+                      : ColorsManager.primaryLight,
+                  radius: 30.r,
+                  child: Icon(icon, color: ColorsManager.primary, size: 30.sp),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,14 +73,12 @@ class AuthRepositoryImpl implements AuthRepository {
       }
       return const Left("Authentication failed");
     } on FirebaseAuthException catch (e) {
-      log("SignIn FirebaseAuthException: ${e.code}");
       if (e.code == "invalid-credential") {
         return const Left("Invalid Email or Password");
       } else {
         return Left(e.code);
       }
     } catch (e) {
-      log("SignIn Catch: $e");
       return Left(e.toString());
     }
   }
@@ -113,10 +110,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await secureStorageHelper.saveUserData(jsonEncode(userModel.toJson()));
       return Right(userModel);
     } on FirebaseAuthException catch (e) {
-      log("SignUp FirebaseAuthException: ${e.message!}");
       return Left(e.message!);
     } catch (e) {
-      log("SignUp Catch: $e");
       return Left(e.toString());
     }
   }
@@ -127,10 +122,8 @@ class AuthRepositoryImpl implements AuthRepository {
       await authRemoteDataSource.resetPassword(email: email.trim());
       return const Right(unit);
     } on FirebaseAuthException catch (e) {
-      log("resetPassword FirebaseAuthException: ${e.message!}");
       return Left(e.message!);
     } catch (e) {
-      log("resetPassword Catch: $e");
       return Left(e.toString());
     }
   }
