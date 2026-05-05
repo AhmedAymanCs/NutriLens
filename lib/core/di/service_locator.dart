@@ -1,3 +1,6 @@
+import 'package:nutrilens/features/history/data/data_source/data_source.dart';
+import 'package:nutrilens/features/history/data/repository/history_repository.dart';
+import 'package:nutrilens/features/history/logic/cubit.dart';
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/repository/repositroy.dart';
 import 'package:nutrilens/features/home/logic/cubit.dart';
@@ -22,6 +25,7 @@ void initSetupLocator() {
   _setupNotificationServiceLocator();
   _setupProfileLocator();
   _setupHomeLocator();
+  _setupHistoryLocator();
 }
 
 void _setupSecureStorageServiceLocator() {
@@ -84,4 +88,18 @@ void _setupHomeLocator() {
   );
 
   getIt.registerFactory(() => HomeCubit(getIt<HomeRepository>()));
+}
+
+void _setupHistoryLocator() {
+
+  getIt.registerLazySingleton<HistoryDataSource>(() => HistoryDataSourceImpl(
+    auth: getIt<FirebaseAuth>(),
+    firestore: getIt<FirebaseFirestore>(),
+  ));
+
+  getIt.registerLazySingleton<HistoryRepository>(
+    () => HistoryRepositoryImpl(getIt<HistoryDataSource>(), getIt<HomeDataSource>()),
+  );
+
+  getIt.registerFactory(() => HistoryCubit(getIt<HistoryRepository>()));
 }

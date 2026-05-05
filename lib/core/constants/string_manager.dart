@@ -46,4 +46,14 @@ class StringManager {
   static const String notFound = 'Not Found';
   static const String editProfile = 'Edit Profile';
   static const String logout = 'Logout';
+
+  //history
+  static const String history = 'History';
+  static const String dailyIntake = 'Daily Intake';
+  static const String eaten = 'EATEN';
+  static const String missed = 'MISSED';
+  static const String allMeals = 'All Meals';
+  static const String breakfast = 'Breakfast';
+  static const String lunch = 'Lunch';
+  static const String dinner = 'Dinner';
 }

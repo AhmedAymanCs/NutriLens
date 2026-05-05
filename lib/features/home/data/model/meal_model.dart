@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MealModel {
   final String? id; 
   final String foodName;
+  final String mealType; 
+  final bool isEaten; 
   final double quantity;
   final String unit;
   final int calories;
@@ -22,14 +24,16 @@ class MealModel {
     required this.protein,
     required this.fat,
     required this.imageUrl,
-    required this.timestamp,
+    required this.timestamp, required this.mealType, required this.isEaten,
   });
 
   factory MealModel.fromFirestore(Map<String, dynamic> json, String documentId) {
     return MealModel(
       id: documentId,
       foodName: json['foodName'] ?? '',
-      quantity: (json['quantity'] ?? 0).toDouble(),
+      mealType: json['mealType'] ?? '',
+      isEaten: json['isEaten'] ?? false,
+      quantity: (json['quantity'] ?? 0),
       unit: json['unit'] ?? '',
       calories: json['calories'] ?? 0,
       carbs: json['carbs'] ?? 0,
@@ -43,6 +47,8 @@ class MealModel {
   Map<String, dynamic> toJson() {
     return {
       'foodName': foodName,
+      'mealType': mealType,
+      'isEaten': isEaten,
       'quantity': quantity,
       'unit': unit,
       'calories': calories,

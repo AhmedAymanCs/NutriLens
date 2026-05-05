@@ -1,3 +1,4 @@
+import 'package:nutrilens/features/history/presentation/history_screen.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
 import 'package:nutrilens/features/profile/presentation/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => HomePage());
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => ProfilePage());
-
+      case Routes.history:
+        return MaterialPageRoute(builder: (_) => HistoryPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
