@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+// نستخدم الموديل بتاع المهندس محمد افضل ونعمل كوبي ويز لو عاوز اعمل اي اضافة تانية
 class MealModel extends Equatable {
-  final String? id; 
+  final String? id;
   final String name;
   final String imageUrl;
   final double calories;
   final List<String> ingredients;
 
   const MealModel({
-    this.id, 
+    this.id,
     required this.name,
     required this.imageUrl,
     required this.calories,
@@ -17,12 +18,12 @@ class MealModel extends Equatable {
 
   factory MealModel.fromJson(Map<String, dynamic> json) {
     return MealModel(
-      id: json['id']?.toString(), 
+      id: json['id']?.toString(), // هنا مش هتبقا نل
       name: json['name'] ?? '',
-      imageUrl: json['image'] ?? json['imageUrl'] ?? '', 
+      imageUrl: json['image'] ?? json['imageUrl'] ?? '',
       calories: (json['calories'] ?? 0).toDouble(),
-      ingredients: json['ingredients'] != null 
-          ? List<String>.from(json['ingredients']) 
+      ingredients: json['ingredients'] != null
+          ? List<String>.from(json['ingredients'])
           : [],
     );
   }
@@ -30,7 +31,7 @@ class MealModel extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {
       'name': name,
-      'image': imageUrl, 
+      'image': imageUrl,
       'calories': calories,
       'ingredients': ingredients,
     };

@@ -14,7 +14,6 @@ import 'package:nutrilens/core/services/local_notification_service.dart';
 import 'package:nutrilens/core/services/my_bloc_observer.dart';
 import 'package:nutrilens/core/theme/app_theme.dart';
 import 'package:nutrilens/core/theme/cubit/cubit.dart';
-import 'package:nutrilens/features/profile/presentation/notification_cubit.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -42,9 +41,7 @@ void main() async {
   await getIt<LocalNotificationService>().init();
 
   await FirebaseMessaging.instance.subscribeToTopic("all_users");
-  //  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //   getIt<NotificationCubit>().increment();
-  // });
+
   runApp(const MyApp());
 }
 
@@ -57,7 +54,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ThemeCubit(getIt<FlutterSecureStorage>()),
         ),
-        // BlocProvider(create: (context) => NotificationCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
@@ -73,7 +69,7 @@ class MyApp extends StatelessWidget {
                 themeMode: themeMode,
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: AppRouter.onGenerateRoute,
-                initialRoute: Routes.addMeals,
+                initialRoute: Routes.profile,
               );
             },
           );

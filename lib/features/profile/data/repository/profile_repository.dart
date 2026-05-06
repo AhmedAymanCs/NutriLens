@@ -1,29 +1,60 @@
-import '../data_source/data_source.dart';
+
+
+
+import 'dart:developer';
+import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrilens/core/utils/typedef.dart';
+import 'package:nutrilens/features/profile/data/data_source/data_source.dart';
 import '../models/user_model.dart';
 
 abstract class ProfileRepository {
-  Future<UserModel> getUser();
-  Future<void> updateProfile(UserModel user);
-  Future<void> signOut();
+  ServerResponse<UserModel> getUser();
+  ServerResponse<Unit> updateProfile({required UserModel user});
+  ServerResponse<Unit> signOut();
 }
 
 class ProfileRepositoryImpl implements ProfileRepository {
-  final ProfileDataSource _dataSource;
+  final ProfileRemoteDataSource profileRemoteDataSource;
 
-  ProfileRepositoryImpl(this._dataSource);
+  ProfileRepositoryImpl(this.profileRemoteDataSource);
 
   @override
-  Future<UserModel> getUser() async {
-    return await _dataSource.getUserData();
+  ServerResponse<UserModel> getUser() async {
+    try {
+      final user = await profileRemoteDataSource.getUserData();
+      return Right(user);
+    } on FirebaseAuthException catch (e) {
+      log("GetUser FirebaseAuthException: ${e.message!}");
+      return Left(e.message!);
+    } catch (e) {
+      log("GetUser Catch: $e");
+      return Left(e.toString());
+    }
   }
 
   @override
-  Future<void> updateProfile(UserModel user) async {
-    await _dataSource.updateUserData(user);
+  ServerResponse<Unit> updateProfile({required UserModel user}) async {
+    try {
+      await profileRemoteDataSource.updateUserData(user: user);
+      return const Right(unit);
+    } on FirebaseAuthException catch (e) {
+      log("UpdateProfile FirebaseAuthException: ${e.message!}");
+      return Left(e.message!);
+    } catch (e) {
+      log("UpdateProfile Catch: $e");
+      return Left(e.toString());
+    }
   }
 
   @override
-  Future<void> signOut() async {
-    await _dataSource.signOut();
+  ServerResponse<Unit> signOut() async {
+    try {
+      await profileRemoteDataSource.signOut();
+      return const Right(unit);
+    } catch (e) {
+      log("SignOut Catch: $e");
+      return Left(e.toString());
+    }
   }
 }

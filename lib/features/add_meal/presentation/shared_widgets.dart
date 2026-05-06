@@ -30,7 +30,7 @@ class _AddMealBody extends StatelessWidget {
       ),
     );
   }
-
+// خليها استيت ليست عشان تبقا افضل 
   Widget _buildSearchBar(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w),
@@ -44,7 +44,7 @@ class _AddMealBody extends StatelessWidget {
         onChanged: (val) {
           if (val.length > 2) context.read<AddMealCubit>().searchMeals(val);
         },
-        decoration: InputDecoration(
+       decoration: InputDecoration(
           hintText: 'Search for food...',
           border: InputBorder.none,
           icon: Icon(Icons.search, color: ColorsManager.gray500),

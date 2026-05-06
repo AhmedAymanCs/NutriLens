@@ -16,7 +16,6 @@ import 'package:nutrilens/core/database/local/secure_storage/secure_storage_help
 import 'package:nutrilens/features/auth/data/data_source/auth_data_source.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 import 'package:nutrilens/features/profile/logic/cubit.dart';
-import 'package:nutrilens/features/profile/presentation/notification_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -74,20 +73,19 @@ void _setupNotificationServiceLocator() {
 }
 
 void _setupProfileLocator() {
-  getIt.registerLazySingleton<ProfileDataSource>(
-    () => ProfileDataSourceImpl(
+  getIt.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(
       getIt<FirebaseFirestore>(),
       getIt<FirebaseAuth>(),
     ),
   );
 
   getIt.registerLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(getIt<ProfileDataSource>()),
+    () => ProfileRepositoryImpl(getIt<ProfileRemoteDataSource>()),
   );
 
   getIt.registerFactory(() => ProfileCubit(getIt<ProfileRepository>()));
 }
-
 void _setupHomeLocator() {
   getIt.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl());
   getIt.registerLazySingleton<HomeRepository>(

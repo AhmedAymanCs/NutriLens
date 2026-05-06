@@ -60,10 +60,11 @@ class AppRouter {
             );
           },
         );
+        // هنا هشيل الجزء ده واضيفة في الريبو وكدا كدا اليوزير مش هيرجه بنل
       case Routes.home:
         return MaterialPageRoute(
           builder: (_) {
-final userData = settings.arguments as UserDataModel?;            // UserDataModel userModel = settings.arguments as UserDataModel;
+final userData = settings.arguments as UserDataModel?;            
             return HomePage(userModel: userData ?? UserDataModel(
                 uid: '', 
                 email: '', 

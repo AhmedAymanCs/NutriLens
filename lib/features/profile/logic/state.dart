@@ -1,17 +1,18 @@
 
+
 part of 'cubit.dart';
 
 enum ProfileStatus { initial, loading, success, failure, updating }
 
 class ProfileState extends Equatable {
   final ProfileStatus status;
-  final UserModel? user; 
-  final String error;
+  final UserModel? user;
+  final String? error;
 
   const ProfileState({
     this.status = ProfileStatus.initial,
     this.user,
-    this.error = '',
+    this.error,
   });
 
   ProfileState copyWith({
@@ -21,7 +22,7 @@ class ProfileState extends Equatable {
   }) {
     return ProfileState(
       status: status ?? this.status,
-      user: user ?? this.user, 
+      user: user ?? this.user,
       error: error ?? this.error,
     );
   }

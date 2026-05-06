@@ -1,7 +1,7 @@
 part of 'cubit.dart';
 
 enum AddMealStatus { initial, loading, success, error, searching }
-
+// زود هنا equtable 
 class AddMealState {
   final AddMealStatus status;
   final List<MealModel> meals;
@@ -10,7 +10,7 @@ class AddMealState {
   AddMealState({
     this.status = AddMealStatus.initial,
     this.meals = const [],
-    this.errorMessage,
+    this.errorMessage = "no massage",
   });
 
   AddMealState copyWith({

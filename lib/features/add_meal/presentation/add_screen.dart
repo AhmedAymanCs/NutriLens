@@ -31,6 +31,8 @@ class _AddMealScreenState extends State<AddMealScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // هنا الجزء بتاع الاسناك بار اجيبه كاستم 
+      // هندل هنا الالوان الاتنين ابيض كدا غلط لازم اظبط عشان اعمل الثيم وانا بغير الاسود 
       backgroundColor: ColorsManager.background,
       appBar: AppBar(
         backgroundColor: ColorsManager.backgroundWhite,
@@ -39,6 +41,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
           icon: Icon(Icons.close, color: ColorsManager.primary, size: 24.sp),
           onPressed: () => Navigator.pop(context),
         ),
+        // هنا هرد استرنج 
         title: Text('Add Meal', style: AppTextStyle.font18BlackBold),
         centerTitle: true,
       ),
@@ -47,7 +50,6 @@ class _AddMealScreenState extends State<AddMealScreen> {
             current.status == AddMealStatus.success || current.status == AddMealStatus.error,
         listener: (context, state) {
           if (state.status == AddMealStatus.success) {
-            // لو الوجبات فاضية معناها إنه جاي من addNewMeal مش البحث
             if (state.meals.isEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Meal Added Successfully!'), backgroundColor: Colors.green),
