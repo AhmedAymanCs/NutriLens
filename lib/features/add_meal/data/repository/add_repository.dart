@@ -1,43 +1,38 @@
 import 'package:dartz/dartz.dart';
+import 'package:nutrilens/features/add_meal/data/data_source/data_source.dart';
 import 'package:nutrilens/features/add_meal/data/models/user_model.dart';
-import '../data_source/data_source.dart';
+
+typedef ServerResponse<T> = Future<Either<String, T>>;
 
 abstract class AddMealRepository {
-  Future<Either<String, void>> addMeal(MealModel meal);
-  Future<Either<String, List<MealModel>>> getMeals();
-  Future<Either<String, List<MealModel>>> searchMeals(String query);
+  ServerResponse<List<MealModel>> searchMeals(String query);
+  ServerResponse<void> addMeal(MealModel meal); 
 }
 
 class AddMealRepositoryImpl implements AddMealRepository {
-  final AddMealRemoteDataSource remoteDataSource;
+  final AddMealLocalDataSource localDataSource;
 
-  AddMealRepositoryImpl({required this.remoteDataSource});
+  AddMealRepositoryImpl(this.localDataSource);
 
   @override
-  Future<Either<String, void>> addMeal(MealModel meal) async {
+  ServerResponse<List<MealModel>> searchMeals(String query) async {
     try {
-      await remoteDataSource.addMeal(meal);
+      final allMeals = await localDataSource.getMealsFromAssets();
+      if (query.isEmpty) return Right(allMeals);
+      
+      final filtered = allMeals.where((meal) => 
+        meal.name.toLowerCase().contains(query.toLowerCase())).toList();
+      
+      return Right(filtered);
+    } catch (e) {
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<void> addMeal(MealModel meal) async {
+    try {
       return const Right(null);
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either<String, List<MealModel>>> getMeals() async {
-    try {
-      final meals = await remoteDataSource.getMeals();
-      return Right(meals);
-    } catch (e) {
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  Future<Either<String, List<MealModel>>> searchMeals(String query) async {
-    try {
-      final searchResults = await remoteDataSource.searchMeals(query);
-      return Right(searchResults);
     } catch (e) {
       return Left(e.toString());
     }

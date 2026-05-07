@@ -1,16 +1,17 @@
-part of 'cubit.dart';
+import 'package:equatable/equatable.dart';
+import 'package:nutrilens/features/add_meal/data/models/user_model.dart';
 
-enum AddMealStatus { initial, loading, success, error, searching }
-// زود هنا equtable 
-class AddMealState {
+enum AddMealStatus { initial, loading, success, error }
+
+class AddMealState extends Equatable {
   final AddMealStatus status;
   final List<MealModel> meals;
   final String? errorMessage;
 
-  AddMealState({
+  const AddMealState({
     this.status = AddMealStatus.initial,
     this.meals = const [],
-    this.errorMessage = "no massage",
+    this.errorMessage,
   });
 
   AddMealState copyWith({
@@ -24,4 +25,7 @@ class AddMealState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  @override
+  List<Object?> get props => [status, meals, errorMessage];
 }

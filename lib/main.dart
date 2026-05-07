@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
                 themeMode: themeMode,
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: AppRouter.onGenerateRoute,
-                initialRoute: Routes.profile,
+                initialRoute: Routes.addMeals,
               );
             },
           );

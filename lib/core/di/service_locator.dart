@@ -86,6 +86,7 @@ void _setupProfileLocator() {
 
   getIt.registerFactory(() => ProfileCubit(getIt<ProfileRepository>()));
 }
+
 void _setupHomeLocator() {
   getIt.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl());
   getIt.registerLazySingleton<HomeRepository>(
@@ -94,16 +95,12 @@ void _setupHomeLocator() {
 }
 
 void _setupAddMealLocator() {
-  if (!getIt.isRegistered<Dio>()) {
-    getIt.registerLazySingleton<Dio>(() => Dio());
-  }
-
-  getIt.registerLazySingleton<AddMealRemoteDataSource>(
-    () => AddMealRemoteDataSourceImpl(dio: getIt<Dio>()),
+  getIt.registerLazySingleton<AddMealLocalDataSource>(
+    () => AddMealLocalDataSourceImpl(),
   );
 
   getIt.registerLazySingleton<AddMealRepository>(
-    () => AddMealRepositoryImpl(remoteDataSource: getIt<AddMealRemoteDataSource>()),
+    () => AddMealRepositoryImpl(getIt<AddMealLocalDataSource>()),
   );
 
   getIt.registerFactory(() => AddMealCubit(getIt<AddMealRepository>()));
