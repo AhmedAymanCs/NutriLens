@@ -1,5 +1,6 @@
+import 'package:equatable/equatable.dart';
 
-class UserModel {
+class UserModel extends Equatable {
   final String uid;
   final String name;
   final String email;
@@ -12,7 +13,7 @@ class UserModel {
   final int streakCount;
   final bool isPro;
 
-  UserModel({
+  const UserModel({
     required this.uid,
     required this.name,
     required this.email,
@@ -60,7 +61,7 @@ class UserModel {
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       age: json['age'] ?? 0,
-      gender: json['gender'] ?? '', 
+      gender: json['gender'] ?? '',
       weight: json['weight'] ?? '',
       height: json['height'] ?? '',
       dailyCalorieGoal: json['dailyCalorieGoal'] ?? 0,
@@ -85,4 +86,19 @@ class UserModel {
       'isPro': isPro,
     };
   }
+
+  @override
+  List<Object?> get props => [
+    uid,
+    name,
+    email,
+    age,
+    gender,
+    weight,
+    height,
+    dailyCalorieGoal,
+    photoUrl,
+    streakCount,
+    isPro,
+  ];
 }

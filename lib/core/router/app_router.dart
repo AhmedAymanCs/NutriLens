@@ -75,11 +75,11 @@ final userData = settings.arguments as UserDataModel?;
         );
       case Routes.profile:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
-       case Routes.addMeals:
+    case Routes.addMeals:
   return MaterialPageRoute(
     builder: (_) => BlocProvider<AddMealCubit>(
       create: (context) => getIt<AddMealCubit>(), 
-      child: const AddMealScreen(),
+      child: const AddMealScreen(), 
     ),
   );
 

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
-import 'package:nutrilens/features/add_meal/data/models/user_model.dart';
 import 'package:nutrilens/features/add_meal/logic/cubit.dart';
-import 'package:nutrilens/features/add_meal/logic/state.dart'; 
+import 'package:nutrilens/features/add_meal/logic/state.dart';
 
 part 'shared_widgets.dart';
 
@@ -16,59 +15,128 @@ class AddMealScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController(text: 'Avocado Grain Bowl');
-    final TextEditingController quantityController = TextEditingController(text: '1');
-    final TextEditingController searchController = TextEditingController();
+    return BlocProvider(
+      create: (_) => GetIt.instance<AddMealCubit>(),
+      child: const _AddMealView(),
+    );
+  }
+}
 
-    return Scaffold(
-      backgroundColor: ColorsManager.background, 
-      appBar: AppBar(
-        backgroundColor: ColorsManager.backgroundWhite,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.close, color: ColorsManager.primary, size: 24.sp),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text('Add Meal', style: AppTextStyle.font18BlackBold),
-        centerTitle: true,
-      ),
-      body: BlocListener<AddMealCubit, AddMealState>(
-        listenWhen: (previous, current) =>
-            current.status == AddMealStatus.success || current.status == AddMealStatus.error,
-        listener: (context, state) {
-          if (state.status == AddMealStatus.success && state.errorMessage == null) {
-             customSnackBar(
-                context: context, 
-                message: 'Meal Added Successfully!', 
-                isErrorMessage: false
-             );
-             Navigator.pop(context);
-          } else if (state.status == AddMealStatus.error) {
-            customSnackBar(
-              context: context, 
-              message: state.errorMessage ?? 'Error occurred', 
-              isErrorMessage: true
-            );
-          }
-        },
-        child: _AddMealBody(
-          nameController: nameController,
-          quantityController: quantityController,
-          searchController: searchController,
-        ),
-      ),
-      bottomSheet: _ConfirmButton(
-        onPressed: () {
-          final meal = MealModel(
-            id: DateTime.now().toString(),
-            name: nameController.text,
-            imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd',
-            calories: 420.0,
-            ingredients: const [],
+class _AddMealView extends StatefulWidget {
+  const _AddMealView();
+
+  @override
+  State<_AddMealView> createState() => _AddMealViewState();
+}
+
+class _AddMealViewState extends State<_AddMealView> {
+  late TextEditingController nameController;
+  late TextEditingController quantityController;
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController     = TextEditingController();
+    quantityController = TextEditingController(text: '1');
+    searchController   = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    quantityController.dispose();
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AddMealCubit, AddMealState>(
+      listenWhen: (prev, curr) =>prev.status != curr.status || prev.selectedMeal != curr.selectedMeal,
+      listener: (context, state) {
+        if (state.selectedMeal != null && nameController.text.isEmpty) {
+        nameController.text = state.selectedMeal!.name;
+      }
+        if (state.status == AddMealStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Meal added successfully!'),
+              backgroundColor: ColorsManager.primary,
+              behavior: SnackBarBehavior.floating,
+            ),
           );
-          context.read<AddMealCubit>().addNewMeal(meal);
-        },
+          Navigator.of(context).pop();
+        } else if (state.status == AddMealStatus.error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'Something went wrong'),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: ColorsManager.background,
+        appBar: AppBar(title: const Text("Add Meal")),
+        body: _AddMealBody(
+          nameController:     nameController,
+          quantityController: quantityController,
+          searchController:   searchController,
+        ),
       ),
+    );
+  }
+}
+
+class _AddMealBody extends StatelessWidget {
+  final TextEditingController nameController;
+  final TextEditingController quantityController;
+  final TextEditingController searchController;
+
+  const _AddMealBody({
+    required this.nameController,
+    required this.quantityController,
+    required this.searchController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _SearchBarSection(
+                  searchController: searchController,
+                  nameController:   nameController,
+                ),
+                const _MealImageCard(),
+                heightSpace(10),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: _InputFieldsSection(
+                    nameController:     nameController,
+                    quantityController: quantityController,
+                  ),
+                ),
+                heightSpace(20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: const _NutritionInfoSection(),
+                ),
+                heightSpace(20),
+              ],
+            ),
+          ),
+        ),
+        _ConfirmButton(
+          onPressed: () => context.read<AddMealCubit>().addNewMeal(),
+        ),
+      ],
     );
   }
 }

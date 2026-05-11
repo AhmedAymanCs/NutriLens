@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:nutrilens/features/add_meal/data/data_source/data_source.dart';
 import 'package:nutrilens/features/add_meal/data/models/user_model.dart';
+import '../data_source/data_source.dart';
 
 typedef ServerResponse<T> = Future<Either<String, T>>;
 
@@ -18,23 +18,27 @@ class AddMealRepositoryImpl implements AddMealRepository {
   ServerResponse<List<MealModel>> searchMeals(String query) async {
     try {
       final allMeals = await localDataSource.getMealsFromAssets();
-      if (query.isEmpty) return Right(allMeals);
+      
+      if (query.trim().isEmpty) {
+        return  Right(allMeals);
+      }
       
       final filtered = allMeals.where((meal) => 
         meal.name.toLowerCase().contains(query.toLowerCase())).toList();
       
       return Right(filtered);
     } catch (e) {
-      return Left(e.toString());
+      return Left("عذراً، تعذر العثور على الوجبات حالياً.");
     }
   }
 
   @override
   ServerResponse<void> addMeal(MealModel meal) async {
     try {
+
       return const Right(null);
     } catch (e) {
-      return Left(e.toString());
+      return const Left("فشل في إضافة الوجبة، حاول مرة أخرى.");
     }
   }
 }

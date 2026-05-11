@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:nutrilens/features/add_meal/data/data_source/data_source.dart';
 import 'package:nutrilens/features/add_meal/data/repository/add_repository.dart';
 import 'package:nutrilens/features/add_meal/logic/cubit.dart';
