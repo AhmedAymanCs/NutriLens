@@ -4,7 +4,7 @@ enum HomeStatus { initial, loading, success, failure }
 
 class HomeState extends Equatable {
   final HomeStatus status;
-  final HomeDataModel? homeDataModel;
+  final UserModel? homeDataModel;
   final String errorMessage;
 
   const HomeState({
@@ -14,12 +14,12 @@ class HomeState extends Equatable {
   });
   HomeState copyWith({
     HomeStatus? status,
-    HomeDataModel? homeDataModel,
+    UserModel? homeDataModel,
     String? errorMessage,
   }) {
     return HomeState(
       status: status ?? this.status,
-      homeDataModel: homeDataModel ?? this.homeDataModel,
+      homeDataModel: homeDataModel,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }

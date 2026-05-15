@@ -34,7 +34,7 @@ class HistoryRepositoryImpl implements HistoryRepository {
 
       final historyData = HistoryDataModel(
         meals: meals,
-        dailyGoal: int.tryParse(userData[AppConstants.dailyCalorieGoalKey]?.toString() ?? '0') ?? 0,
+        dailyGoal: int.tryParse(userData[AppConstants.calorieKey]?.toString() ?? '0') ?? 0,
         consumedCalories: consumed,
       );
 

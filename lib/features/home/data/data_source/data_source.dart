@@ -17,14 +17,17 @@ class HomeDataSourceImpl implements HomeDataSource {
 
   @override
   Future<UserModel> getUserData() async {
-    final uid = auth.currentUser!.uid;
+    // final uid = auth.currentUser!.uid;
+    final uid = "cezwhJQagQOmscxfWBazANgPeeW2";
     final doc = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
+    
     return UserModel.fromFirestore(doc.data()!);
   }
 
   @override
   Future<List<MealModel>> getTodayMeals() async {
-    final uid = auth.currentUser!.uid;
+    // final uid = auth.currentUser!.uid;
+    final uid = "cezwhJQagQOmscxfWBazANgPeeW2";
     
     DateTime now = DateTime.now();
     DateTime startOfDay = DateTime(now.year, now.month, now.day);

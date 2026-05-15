@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nutrilens/features/home/data/model/home_data_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/presentation/widgets/meal_card.dart';
 
 class MealsListView extends StatelessWidget {
   const MealsListView({super.key, required this.data});
 
-  final HomeDataModel data;
+  final UserModel data;
   // final meals = [
   //   MealModel(
   //     title: 'Breakfast',

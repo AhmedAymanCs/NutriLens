@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nutrilens/features/home/data/model/home_data_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/data/repository/repositroy.dart';
 part 'state.dart';
 

@@ -41,7 +41,9 @@ class MealModel {
       protein: json[AppConstants.proteinKey] ?? 0,
       fat: json[AppConstants.fatKey] ?? 0,
       imageUrl: json[AppConstants.imageUrlKey] ?? '',
-      timestamp: (json[AppConstants.timestampKey] as Timestamp).toDate(),
+      timestamp: json[AppConstants.timestampKey] != null 
+    ? (json[AppConstants.timestampKey] as Timestamp).toDate() 
+    : DateTime.now(),
     );
   }
 

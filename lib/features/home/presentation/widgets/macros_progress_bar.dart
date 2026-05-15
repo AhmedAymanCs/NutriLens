@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
-import 'package:nutrilens/features/home/data/model/home_data_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/presentation/widgets/macro_indicator.dart';
 
 class MacrosProgressBar extends StatelessWidget {
   const MacrosProgressBar({super.key, required this.data});
 
-  final HomeDataModel data;
+  final UserModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +30,8 @@ class MacrosProgressBar extends StatelessWidget {
         ),
         MacroIndicator(
           title: StringManager.fat,
-          current: data.fatsConsumed,
-          total: data.fatsGoal,
+          current: data.fatConsumed,
+          total: data.fatGoal,
           color: ColorsManager.primary,
           icon: Icons.water_drop_outlined,
         ),

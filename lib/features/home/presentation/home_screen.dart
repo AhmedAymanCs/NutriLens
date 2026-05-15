@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HomeCubit>(),
+      create: (context) => getIt<HomeCubit>()..getHomeData(),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         appBar: const HomeAppBar(),
@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
               );
             }
 
-            if (state.status == HomeStatus.success || state.status == HomeStatus.initial) {
+            if (state.status == HomeStatus.success) {
               return SingleChildScrollView(
                 padding: EdgeInsets.all(24.0.w),
                 child: Column(
@@ -87,12 +87,12 @@ class HomePage extends StatelessWidget {
                   children: [
                     heightSpace(20),
                     CalorieSummaryRing(
-                      remaining: dummyData.calorieGoal - dummyData.consumedCalories,
-                      consumed: dummyData.consumedCalories,
-                      goal: dummyData.calorieGoal,
+                      remaining: state.homeDataModel!.dailyCalorieGoal - state.homeDataModel!.dailyCalorieConsumed,
+                      consumed: state.homeDataModel!.dailyCalorieConsumed,
+                      goal: state.homeDataModel!.dailyCalorieGoal,
                     ),
                     heightSpace(40),
-                    MacrosProgressBar(data:dummyData),
+                    MacrosProgressBar(data: state.homeDataModel!),
                     heightSpace(40),
                     Text(
                       StringManager.todaysMeals,
@@ -102,7 +102,7 @@ class HomePage extends StatelessWidget {
                     ),
                     heightSpace(16),
                     MealsListView(
-                      data: dummyData,
+                      data: state.homeDataModel!,
                     ),
                   ],
                 ),
