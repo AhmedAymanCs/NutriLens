@@ -36,7 +36,7 @@ class HomeDataSourceImpl implements HomeDataSource {
     final query = await firestore
         .collection(AppConstants.userCollectionName)
         .doc(uid)
-        .collection(AppConstants.mealCollectionName) 
+        .collection(AppConstants.mealSubCollectionName) 
         .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
         .orderBy(AppConstants.timestampKey, descending: true)

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart'; // تأكد من المسار
+import 'package:nutrilens/features/home/data/model/meal_model.dart'; 
 
 class UserModel {
   final String uid, email;
@@ -10,15 +10,15 @@ class UserModel {
   final double height;
   final double weight;
 
-  final int dailyCalorieGoal;
-  final int carbsGoal;
-  final int proteinGoal;
-  final int fatGoal;
+  final num dailyCalorieGoal;
+  final num carbsGoal;
+  final num proteinGoal;
+  final num fatGoal;
 
-  final int dailyCalorieConsumed;
-  final int carbsConsumed;
-  final int proteinConsumed;
-  final int fatConsumed;
+  final num dailyCalorieConsumed;
+  final num carbsConsumed;
+  final num proteinConsumed;
+  final num fatConsumed;
 
   final List<MealModel> todayMeals;
 
@@ -53,14 +53,14 @@ class UserModel {
     int? age,
     double? height,
     double? weight,
-    int? dailyCalorieGoal,
-    int? carbsGoal,
-    int? proteinGoal,
-    int? fatGoal,
-    int? dailyCalorieConsumed,
-    int? carbsConsumed,
-    int? proteinConsumed,
-    int? fatConsumed,
+    num? carbsGoal,
+    num? proteinGoal,
+    num? dailyCalorieGoal,
+    num? fatGoal,
+    num? dailyCalorieConsumed,
+    num? carbsConsumed,
+    num? proteinConsumed,
+    num? fatConsumed,
     List<MealModel>? todayMeals,
   }) {
     return UserModel(
@@ -103,8 +103,8 @@ class UserModel {
       gender: json['gender'] ?? "",
       goal: json['goal'] ?? "",
       age: json['age'] ?? 0,
-      height: json['height'] ?? 0,
-      weight: json['weight'] ?? 0,
+      height: json['height'].toDouble() ?? 0.0,
+      weight: json['weight'].toDouble() ?? 0.0,
       dailyCalorieGoal: json['daily_calorie_goal'] ?? 0,
       carbsGoal: json['carbs'] ?? 0,
       proteinGoal: json['protein'] ?? 0,

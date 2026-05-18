@@ -6,7 +6,7 @@ class MealModel {
   final String foodName;
   final String mealType; 
   final bool isEaten; 
-  final double quantity;
+  final num quantity;
   final String unit;
   final int calories;
   final int carbs;

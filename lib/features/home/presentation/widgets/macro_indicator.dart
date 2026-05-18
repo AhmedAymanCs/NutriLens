@@ -6,8 +6,8 @@ import 'package:nutrilens/core/utils/spacer.dart';
 
 class MacroIndicator extends StatelessWidget {
   final String title;
-  final int current;
-  final int total;
+  final num current;
+  final num total;
   final Color color;
   final IconData icon;
 

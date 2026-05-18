@@ -7,9 +7,9 @@ import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/home/presentation/widgets/status_column.dart';
 
 class CalorieSummaryRing extends StatelessWidget {
-  final int remaining;
-  final int consumed;
-  final int goal;
+  final num remaining;
+  final num consumed;
+  final num goal;
 
   const CalorieSummaryRing({
     super.key,
