@@ -54,7 +54,7 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HistoryCubit>(),
+      create: (context) => getIt<HistoryCubit>()..fetchHistory(DateTime.now()),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         body: BlocBuilder<HistoryCubit, HistoryState>(
@@ -71,39 +71,39 @@ class HistoryPage extends StatelessWidget {
       
             if (state.status == HistoryStatus.success) {
               return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                children: [
-                  heightSpace(32),
-                  HistoryHeader(),
-                  heightSpace(16),
-                  CustomCalendar(
-                    selectedDay: state.focusedDay,
-                    onDaySelected: (focusedDay) {
-                      getIt<HistoryCubit>().fetchHistory(focusedDay);
-                    },
-                  ),
-                  heightSpace(24),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  children: [
+                    heightSpace(32),
+                    const HistoryHeader(),
+                    heightSpace(16),
+                    CustomCalendar(
+                      selectedDay: state.focusedDay,
+                      onDaySelected: (focusedDay) {
+                        context.read<HistoryCubit>().fetchHistory(focusedDay);
+                      },
+                    ),
+                    heightSpace(24),
       
-                  DailyIntakeCard(
-                    consumed: state.historyData!.consumedCalories,
-                    goal: state.historyData!.dailyGoal,
-                  ),
+                    DailyIntakeCard(
+                      consumed: state.historyData?.dailyCalorieConsumed ?? 0,
+                      goal: state.historyData?.dailyCalorieGoal ?? 0,
+                    ),
       
-                  heightSpace(24),
-                  MealFilters(
-                    selectedFilter: state.selectedFilter,
-                    onFilterChanged: (filter) {
-                      getIt<HistoryCubit>().updateFilter(filter);
-                    },
-                  ),
+                    heightSpace(24),
+                    MealFilters(
+                      selectedFilter: state.selectedFilter,
+                      onFilterChanged: (filter) {
+                        context.read<HistoryCubit>().updateFilter(filter);
+                      },
+                    ),
       
-                  heightSpace(8),
-                  HistoryMealsListView(historyDataModel: state.historyData!),
-                ],
-              ),
-            );
-            
+                    heightSpace(8),
+                   
+                    HistoryMealsListView(historyDataModel: state.historyData!),
+                  ],
+                ),
+              );
             }
             return const SizedBox();
           },

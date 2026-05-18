@@ -6,8 +6,8 @@ import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 
 class DailyIntakeCard extends StatelessWidget {
-  final int consumed;
-  final int goal;
+  final num consumed;
+  final num goal;
 
   const DailyIntakeCard({super.key, required this.consumed, required this.goal});
 

@@ -79,7 +79,7 @@ class HistoryMealCard extends StatelessWidget {
                               Colors.transparent,
                               BlendMode.multiply,
                             ),
-                      child: Image.asset(
+                      child: Image.network(
                         meal.imageUrl,
                         width: 60.w,
                         height: 60.w,

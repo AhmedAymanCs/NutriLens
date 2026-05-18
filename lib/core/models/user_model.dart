@@ -109,6 +109,10 @@ class UserModel {
       carbsGoal: json['carbs'] ?? 0,
       proteinGoal: json['protein'] ?? 0,
       fatGoal: json['fat'] ?? 0,
+      dailyCalorieConsumed: json['daily_calorie_consumed'] ?? 0,
+      carbsConsumed: json['carbs_consumed'] ?? 0,
+      proteinConsumed: json['protein_consumed'] ?? 0,
+      fatConsumed: json['fat_consumed'] ?? 0,
     );
   }
 
@@ -127,6 +131,10 @@ class UserModel {
       'carbs': carbsGoal,
       'protein': proteinGoal,
       'fat': fatGoal,
+      'daily_calorie_consumed': dailyCalorieConsumed,
+      'carbs_consumed': carbsConsumed,
+      'protein_consumed': proteinConsumed,
+      'fat_consumed': fatConsumed,
     };
   }
 }

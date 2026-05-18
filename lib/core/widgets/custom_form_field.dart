@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/font_manager.dart';
@@ -7,6 +8,7 @@ class CustomFormField extends StatelessWidget {
   final String? title;
   final String hint;
   final IconData? preIcon;
+  final Color? preIconColor;
   final VoidCallback? onPressed;
   final TextInputType? keyboardType;
   final bool obscure;
@@ -14,6 +16,7 @@ class CustomFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
   final void Function(String?)? onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomFormField({
     super.key,
@@ -27,6 +30,7 @@ class CustomFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onSubmitted,
+    this.preIconColor, this.inputFormatters,
   });
 
   @override
@@ -45,6 +49,8 @@ class CustomFormField extends StatelessWidget {
           SizedBox(height: 5.h),
         ],
         TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          inputFormatters: inputFormatters,
           onChanged: onChanged,
           onSaved: onSubmitted,
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
@@ -55,13 +61,13 @@ class CustomFormField extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             prefixIcon: preIcon != null
-                ? Icon(preIcon, color: ColorsManager.gray500)
+                ? Icon(preIcon, color: preIconColor ?? ColorsManager.gray500)
                 : null,
             suffixIcon: onPressed != null
                 ? IconButton(
                     onPressed: onPressed,
                     icon: Icon(
-                      obscure ? Icons.visibility : Icons.visibility_off,
+                      obscure ? Icons.visibility_off : Icons.visibility,
                       color: ColorsManager.gray500,
                     ),
                   )
@@ -73,20 +79,20 @@ class CustomFormField extends StatelessWidget {
               fontWeight: FontWeightManager.regular,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: ColorsManager.primary),
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: const BorderSide(color: ColorsManager.primary),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: ColorsManager.error),
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: const BorderSide(color: ColorsManager.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: ColorsManager.error),
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: const BorderSide(color: ColorsManager.error),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: ColorsManager.gray500),
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: const BorderSide(color: ColorsManager.gray500),
             ),
           ),
         ),

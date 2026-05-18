@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   Text(
                     StringManager.appName,
-                    style: AppTextStyle.font32PrimaryColorBold,
+                    style: AppTextStyle.font32PrimaryBold,
                   ),
                   Text(
                     StringManager.subTitleLoginPage1,

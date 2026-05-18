@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/font_manager.dart';
 import 'package:nutrilens/core/constants/image_manager.dart';
+import 'package:nutrilens/core/utils/spacer.dart';
 
 class LogoWithText extends StatelessWidget {
   final String text;
@@ -14,8 +13,8 @@ class LogoWithText extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          SvgPicture.asset(ImageManager.logo, fit: BoxFit.contain),
-          SizedBox(height: 10.h),
+          Image.asset(ImageManager.logo, fit: BoxFit.contain),
+          heightSpace(10),
           Text(
             text,
             style: TextStyle(

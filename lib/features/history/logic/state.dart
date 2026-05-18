@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
-import 'package:nutrilens/features/history/data/model/history_data_model.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 
 enum HistoryStatus { initial, loading, success, failure }
 
 class HistoryState extends Equatable {
   final HistoryStatus status;
   final String error;
-  final HistoryDataModel? historyData;
+  final UserModel? historyData;
   final DateTime selectedDate;
   final DateTime focusedDay;
   final String selectedFilter;
@@ -24,7 +24,7 @@ class HistoryState extends Equatable {
   HistoryState copyWith({
     HistoryStatus? status,
     String? error,
-    HistoryDataModel? historyData,
+    UserModel? historyData,
     DateTime? selectedDate,
     DateTime? focusedDay,
     String? selectedFilter,

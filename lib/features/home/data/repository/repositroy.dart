@@ -25,25 +25,8 @@ ServerResponse<UserModel> getHomeData() async {
     final user = results[0] as UserModel;
     final todayMeals = results[1] as List<MealModel>;
 
-    int consumedCals = 0;
-    int consumedProtein = 0;
-    int consumedCarbs = 0;
-    int consumedFats = 0;
-
-    for (var meal in todayMeals) {
-      if (meal.isEaten) {
-        consumedCals += meal.calories;
-        consumedProtein += meal.protein;
-        consumedCarbs += meal.carbs;
-        consumedFats += meal.fat;
-      }
-    }
 
     final homeUserData = user.copyWith(
-      dailyCalorieConsumed: consumedCals,
-      proteinConsumed: consumedProtein,
-      carbsConsumed: consumedCarbs,
-      fatConsumed: consumedFats,
       todayMeals: todayMeals,
     );
 

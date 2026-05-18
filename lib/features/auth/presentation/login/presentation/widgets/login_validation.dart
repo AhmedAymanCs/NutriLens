@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nutrilens/core/constants/app_text_style.dart';
+import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/router/routes.dart';
+import 'package:nutrilens/core/utils/custom_loading.dart';
+import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
-import 'package:nutrilens/core/widgets/cutom_form_field.dart';
-import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/forgot_password.dart';
-import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/password_and_email_validations.dart';
+import 'package:nutrilens/core/widgets/custom_form_field.dart';
+import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
 
 class LoginValidation extends StatefulWidget {
   const LoginValidation({super.key});
@@ -30,62 +36,130 @@ class _LoginValidationState extends State<LoginValidation> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _loginFormKey.currentState!.dispose();
     super.dispose();
   }
-  // LoginCubit cubit = getIt<LoginCubit>();
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.sizeOf(context).width;
     return Form(
       key: _loginFormKey,
-      child: Column(
-        children: [
-          CustomFormField(
-            controller: _emailController,
-            validator: (email) {
-              if (email == null || email.isEmpty) {
-                return "Please enter your email";
-              }
-              if (!PasswordAndEmailValidations.isValidEmail(email: email)) {
-                return "Please enter a valid email";
-              }
-              return null;
-            },
-            preIcon: Icons.email_outlined,
-            hint: StringManager.email,
-          ),
-          heightSpace(20),
-          CustomFormField(
-            controller: _passwordController,
-            obscure: true,
-            validator: (password) {
-              if (password == null || password.isEmpty) {
-                return "Please enter your password";
-              }
-              if (!PasswordAndEmailValidations.isPasswordValid(password)) {
-                return "Please enter a valid password";
-              }
-              return null;
-            },
-            preIcon: Icons.visibility_off,
-            hint: StringManager.password,
-          ),
-          const ForgotPassword(),
-          heightSpace(10),
-          CustomButton(
-            onPressed: () {
-              // LoginCubit cubit = getIt<LoginCubit>();
-              if (_loginFormKey.currentState!.validate()) {
-                // cubit.login(
-                //   email: loginEmailController.text,
-                //   password: loginPasswordController.text,
-                // );
-              }
-            },
-            text: StringManager.login,
-          ),
-        ],
+      child: BlocConsumer<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status == LoginStatus.failure) {
+            customSnackBar(context: context, message: state.errorMessage);
+          }
+          if (state.status == LoginStatus.success) {
+            customSnackBar(
+              context: context,
+              message: StringManager.loginSuccess,
+              isErrorMessage: false,
+            );
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.home,
+              (route) => false,
+              arguments: state.userModel,
+            );
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              CustomFormField(
+                controller: _emailController,
+                title: StringManager.email,
+                validator: (email) {
+                  if (email == null || email.isEmpty) {
+                    return StringManager.emailEmpty;
+                  }
+                  return null;
+                },
+                preIcon: Icons.email_outlined,
+                hint: StringManager.emailHint,
+                preIconColor: ColorsManager.primary,
+              ),
+              heightSpace(20),
+              CustomFormField(
+                controller: _passwordController,
+                title: StringManager.password,
+                obscure: !state.passwordObscure,
+                validator: (password) {
+                  if (password == null || password.isEmpty) {
+                    return StringManager.passwordEmpty;
+                  }
+                  return null;
+                },
+                preIcon: Icons.lock_outlined,
+                preIconColor: ColorsManager.primary,
+                hint: StringManager.passwordHint,
+                onPressed: () =>
+                    context.read<LoginCubit>().changePasswordVisible(),
+              ),
+
+              SizedBox(
+                width: deviceWidth * 0.75,
+                height: 30.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Transform.translate(
+                      offset: const Offset(-4, 0),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: state.rememberMe,
+                            side: const BorderSide(
+                              color: ColorsManager.primary,
+                            ),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
+                            onChanged: (value) =>
+                                context.read<LoginCubit>().changeRememberMe(),
+                          ),
+
+                          Text(
+                            StringManager.rememberMe,
+                            style: AppTextStyle.font13GreyW400,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        Routes.forgetPassword,
+                        arguments: _emailController.text.trim(),
+                      ),
+                      child: Text(
+                        StringManager.forgotPassword,
+                        style: AppTextStyle.font13GreyW400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              heightSpace(10),
+              state.status == LoginStatus.loading
+                  ? customLoading()
+                  : CustomButton(
+                      onPressed: () {
+                        if (_loginFormKey.currentState!.validate()) {
+                          context.read<LoginCubit>().signIn(
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                            rememberMe: state.rememberMe,
+                          );
+                        }
+                      },
+                      text: StringManager.login,
+                    ),
+            ],
+          );
+        },
       ),
     );
   }

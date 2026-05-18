@@ -16,7 +16,8 @@ class ColorsManager {
   static const Color textHeading = Color(0xFF2B352F);
   static const Color textMuted = Color(0xFF9AA09C);
   static const Color textLight = Color(0xFFFFFFFF);
-  static const Color textBlack = Color(0xFF191C1D);
+    static const Color textBlack = Color(0xFF191C1D);
+
 
   // Grays
   static const Color gray200 = Color(0xFFE0E4E1);

@@ -1,7 +1,6 @@
 class AppConstants {
   static const String userCollectionName = 'Users';
   static const String mealCollectionName = 'Meals';
-  static const String mealSubCollectionName = 'Meal';
   static const String userTempSession = 'user_temp_session';
   static const String userSession = 'user_session';
   static const String dateTimeFormat = 'dd MMM yyyy - hh:mm a';
@@ -20,4 +19,8 @@ class AppConstants {
   static const String fatKey = 'fat';
   static const String imageUrlKey = 'image_url';
   static const String timestampKey = 'timestamp';
+  static const String dailyCalorieConsumed = 'daily_calorie_consumed';
+  static const String carbsConsumed = 'carbs_consumed';
+  static const String proteinConsumed = 'protein_consumed';
+  static const String fatConsumed = 'fat_consumed';
 }

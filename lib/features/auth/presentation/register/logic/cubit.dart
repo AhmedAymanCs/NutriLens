@@ -1,13 +1,25 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
 part 'states.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  final AuthRepository _authRepository;
-  RegisterCubit(this._authRepository) : super(RegisterState());
+  RegisterCubit() : super(const RegisterState());
 
   void changePasswordVisible() {
-    emit(state.copyWith(passwordObscure: !state.passwordObscure));
+    emit(
+      state.copyWith(
+        status: RegisterStatus.passwordObscure,
+        passwordObscure: !state.passwordObscure,
+      ),
+    );
+  }
+
+  void changeConfirmPasswordVisible() {
+    emit(
+      state.copyWith(
+        status: RegisterStatus.passwordObscure,
+        confirmPasswordObscure: !state.confirmPasswordObscure,
+      ),
+    );
   }
 }

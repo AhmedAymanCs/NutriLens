@@ -6,4 +6,5 @@ class Routes {
   static const String home = '/home';
   static const String profile = '/profile';
   static const String history = '/history';
+  static const String onBoarding = '/onBoarding';
 }

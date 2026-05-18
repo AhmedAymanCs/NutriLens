@@ -1,3 +1,7 @@
+import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
+import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/history/data/data_source/data_source.dart';
 import 'package:nutrilens/features/history/data/repository/history_repository.dart';
 import 'package:nutrilens/features/history/logic/cubit.dart';
@@ -43,14 +47,20 @@ void _setupSecureStorageServiceLocator() {
 void _setupAuthRepositoryLocator() {
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(
-      getIt<FirebaseAuth>(),
-      getIt<FirebaseFirestore>(),
-    ),
+    () => AuthRemoteDataSourceImpl(getIt<FirebaseAuth>()),
   );
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(getIt<AuthRemoteDataSource>()),
+    () => AuthRepositoryImpl(
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      firestore: getIt<FirebaseFirestore>(),
+    ),
   );
+  // Auth Cubits
+  getIt.registerFactory(() => LoginCubit(getIt<AuthRepository>()));
+  getIt.registerFactory(() => RegisterCubit());
+  getIt.registerFactory(() => ForgetPasswordCubit(getIt<AuthRepository>()));
+  getIt.registerFactory(() => OnboardingCubit(getIt<AuthRepository>()));
 }
 
 void _setupFirestoreServiceLocator() {
@@ -96,6 +106,7 @@ void _setupHistoryLocator() {
   getIt.registerLazySingleton<HistoryDataSource>(() => HistoryDataSourceImpl(
     auth: getIt<FirebaseAuth>(),
     firestore: getIt<FirebaseFirestore>(),
+    storage: getIt<SecureStorageHelper>()
   ));
 
   getIt.registerLazySingleton<HistoryRepository>(

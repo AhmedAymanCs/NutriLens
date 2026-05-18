@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,44 +21,47 @@ class HomeDataSourceImpl implements HomeDataSource {
 
   @override
   Future<UserModel> getUserData() async {
-    final uid = auth.currentUser!.uid;
-    // final uid = "cezwhJQagQOmscxfWBazANgPeeW2";
-    final doc = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
-    final userData = await storage.getData(key: AppConstants.userSession);
-    final userDataSession = jsonDecode(userData!);
-    log(userDataSession);
-    return UserModel.fromFirestore(doc.data()!);
+
+    final currentUserData = await storage.getData(key: AppConstants.userSession);
+    
+    Map<String, dynamic> userDataSession = jsonDecode(currentUserData ?? '');
+    String uid = userDataSession['uid'];
+
+    final userData = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
+    if (userData.data() != null) {
+      UserModel userModel = UserModel.fromFirestore(userData.data()!);
+      // log(userData.data().toString());
+      return userModel;
+    }
+
+    UserModel userModel = UserModel.fromFirestore(userDataSession);
+    return userModel;
+
   }
 
   @override
   Future<List<MealModel>> getTodayMeals() async {
-    // final uid = "cezwhJQagQOmscxfWBazANgPeeW2";
+
     final userData = await storage.getData(key: AppConstants.userSession);
-    final userDataSession = jsonDecode(userData!);
-    log(userDataSession);
+    Map<String, dynamic> userDataSession = jsonDecode(userData ?? '');
+    UserModel userModel = UserModel.fromFirestore(userDataSession);
     DateTime now = DateTime.now();
     DateTime startOfDay = DateTime(now.year, now.month, now.day);
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
 
     final query = await firestore
         .collection(AppConstants.userCollectionName)
-        // .doc(uid)
-        // .collection(AppConstants.mealCollectionName) 
-        // .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        // .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
-        // .orderBy(AppConstants.timestampKey, descending: true)
+        .doc(userModel.uid)
+        .collection(AppConstants.mealCollectionName) 
+        .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+        .orderBy(AppConstants.timestampKey, descending: true)
         .get();
-    var x = query.docs
-        .map((doc) {
-           log(doc.data().toString());
-           print(333333);
-          return MealModel.fromFirestore(doc.data(), doc.id);
-        } )
-        .toList();
+
    
-  return x;
-    // return query.docs
-    //     .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
-    //     .toList();
+   
+    return query.docs
+        .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
+        .toList();
   }
 }
