@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/core/constants/image_manager.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
-import 'package:nutrilens/features/history/data/model/history_data_model.dart';
 import 'package:nutrilens/features/history/logic/cubit.dart';
 import 'package:nutrilens/features/history/logic/state.dart';
 import 'package:nutrilens/features/history/presentation/widgets/custom_calendar.dart';
@@ -13,46 +11,45 @@ import 'package:nutrilens/features/history/presentation/widgets/daily_intake_car
 import 'package:nutrilens/features/history/presentation/widgets/history_header.dart';
 import 'package:nutrilens/features/history/presentation/widgets/history_meals_list_view.dart';
 import 'package:nutrilens/features/history/presentation/widgets/meals_filter.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 part 'shared_widgets.dart';
 
 class HistoryPage extends StatelessWidget {
-  HistoryPage({super.key});
+  const HistoryPage({super.key});
 
-  final dummyData = HistoryDataModel(
-    dailyGoal: 2000,
-    consumedCalories: 570,
-    meals: [
-      MealModel(
-        id: '1',
-        foodName: 'Avocado Toast',
-        mealType: 'Breakfast',
-        timestamp: DateTime(2026, 5, 5),
-        quantity: 300,
-        unit: 'g',
-        calories: 320,
-        carbs: 20,
-        protein: 10,
-        fat: 15,
-        isEaten: true,
-        imageUrl: ImageManager.logo,
-      ),
-      MealModel(
-        id: '2',
-        foodName: 'Chicken Salad',
-        mealType: 'Lunch',
-        timestamp: DateTime(2026, 5, 5),
-        quantity: 100,
-        unit: 'g',
-        calories: 450,
-        carbs: 20,
-        protein: 10,
-        fat: 15,
-        isEaten: false,
-        imageUrl: ImageManager.logo,
-      ),
-    ],
-  );
+  // final dummyData = HistoryDataModel(
+  //   dailyGoal: 2000,
+  //   consumedCalories: 570,
+  //   meals: [
+  //     MealModel(
+  //       id: '1',
+  //       foodName: 'Avocado Toast',
+  //       mealType: 'Breakfast',
+  //       timestamp: DateTime(2026, 5, 5),
+  //       quantity: 300,
+  //       unit: 'g',
+  //       calories: 320,
+  //       carbs: 20,
+  //       protein: 10,
+  //       fat: 15,
+  //       isEaten: true,
+  //       imageUrl: ImageManager.logo,
+  //     ),
+  //     MealModel(
+  //       id: '2',
+  //       foodName: 'Chicken Salad',
+  //       mealType: 'Lunch',
+  //       timestamp: DateTime(2026, 5, 5),
+  //       quantity: 100,
+  //       unit: 'g',
+  //       calories: 450,
+  //       carbs: 20,
+  //       protein: 10,
+  //       fat: 15,
+  //       isEaten: false,
+  //       imageUrl: ImageManager.logo,
+  //     ),
+  //   ],
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +69,7 @@ class HistoryPage extends StatelessWidget {
               );
             }
       
-            if (state.status == HistoryStatus.success || state.status == HistoryStatus.initial) {
+            if (state.status == HistoryStatus.success) {
               return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Column(
@@ -83,26 +80,26 @@ class HistoryPage extends StatelessWidget {
                   CustomCalendar(
                     selectedDay: state.focusedDay,
                     onDaySelected: (focusedDay) {
-                      
+                      getIt<HistoryCubit>().fetchHistory(focusedDay);
                     },
                   ),
                   heightSpace(24),
       
                   DailyIntakeCard(
-                    consumed: dummyData.consumedCalories,
-                    goal: dummyData.dailyGoal,
+                    consumed: state.historyData!.consumedCalories,
+                    goal: state.historyData!.dailyGoal,
                   ),
       
                   heightSpace(24),
                   MealFilters(
                     selectedFilter: state.selectedFilter,
                     onFilterChanged: (filter) {
-                      context.read<HistoryCubit>().updateFilter(filter);
+                      getIt<HistoryCubit>().updateFilter(filter);
                     },
                   ),
       
                   heightSpace(8),
-                  HistoryMealsListView(historyDataModel: dummyData),
+                  HistoryMealsListView(historyDataModel: state.historyData!),
                 ],
               ),
             );

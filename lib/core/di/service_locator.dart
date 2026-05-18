@@ -81,6 +81,7 @@ void _setupHomeLocator() {
   getIt.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl(
     auth: getIt<FirebaseAuth>(),
     firestore: getIt<FirebaseFirestore>(),
+    storage: getIt<SecureStorageHelper>()
   ));
 
   getIt.registerLazySingleton<HomeRepository>(
