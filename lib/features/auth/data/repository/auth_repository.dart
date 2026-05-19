@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,11 @@ class AuthRepositoryImpl implements AuthRepository {
           });
 
           if (rememberMe) {
+            await secureStorageHelper.deleteData(
+              key: AppConstants.userTempSession,
+            );
             String sessionData = jsonEncode(userModel.toJson());
+            log("sessionData ==>$sessionData");
             await secureStorageHelper.saveData(
               key: AppConstants.userTempSession,
               value: sessionData,

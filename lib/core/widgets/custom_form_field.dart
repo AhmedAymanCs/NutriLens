@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/font_manager.dart';
+import 'package:nutrilens/core/utils/spacer.dart';
 
 class CustomFormField extends StatelessWidget {
   final String? title;
   final String hint;
   final IconData? preIcon;
   final Color? preIconColor;
-  final VoidCallback? onPressed;
+  final VoidCallback? onPressed, onEditingComplete, onTap;
   final TextInputType? keyboardType;
   final bool obscure;
   final TextEditingController? controller;
@@ -17,6 +19,9 @@ class CustomFormField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final void Function(String?)? onSubmitted;
   final List<TextInputFormatter>? inputFormatters;
+  final TextInputAction? textInputAction;
+  final bool enabled;
+  final Widget? suffixIcon;
 
   const CustomFormField({
     super.key,
@@ -30,7 +35,13 @@ class CustomFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onSubmitted,
-    this.preIconColor, this.inputFormatters,
+    this.preIconColor,
+    this.inputFormatters,
+    this.enabled = true,
+    this.onEditingComplete,
+    this.textInputAction,
+    this.onTap,
+    this.suffixIcon,
   });
 
   @override
@@ -39,26 +50,23 @@ class CustomFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null) ...[
-          Text(
-            title!,
-            style: TextStyle(
-              fontSize: FontSize.s16,
-              fontWeight: FontWeightManager.medium,
-            ),
-          ),
-          SizedBox(height: 5.h),
+          Text(title!, style: AppTextStyle.font16BlackBold),
+          heightSpace(5),
         ],
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           inputFormatters: inputFormatters,
           onChanged: onChanged,
-          onSaved: onSubmitted,
+          onEditingComplete: onEditingComplete,
+          onTap: onTap,
+          enabled: enabled,
           onTapOutside: (_) => FocusScope.of(context).unfocus(),
           controller: controller,
           validator: validator,
           obscureText: obscure,
           cursorColor: ColorsManager.primary,
           keyboardType: keyboardType,
+          textInputAction: textInputAction,
           decoration: InputDecoration(
             prefixIcon: preIcon != null
                 ? Icon(preIcon, color: preIconColor ?? ColorsManager.gray500)
@@ -71,7 +79,7 @@ class CustomFormField extends StatelessWidget {
                       color: ColorsManager.gray500,
                     ),
                   )
-                : null,
+                : suffixIcon,
             hintText: hint,
             hintStyle: TextStyle(
               color: ColorsManager.gray500,
@@ -81,6 +89,10 @@ class CustomFormField extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),
               borderSide: const BorderSide(color: ColorsManager.primary),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.r),
+              borderSide: const BorderSide(color: ColorsManager.gray500),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.r),

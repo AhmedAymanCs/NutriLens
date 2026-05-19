@@ -55,11 +55,17 @@ class _LoginValidationState extends State<LoginValidation> {
               message: StringManager.loginSuccess,
               isErrorMessage: false,
             );
+            // Navigator.pushNamedAndRemoveUntil(
+            //   context,
+            //   Routes.home,
+            //   (route) => false,
+            //   arguments: state.userModel,
+            // );
             Navigator.pushNamedAndRemoveUntil(
               context,
-              Routes.home,
+              Routes.addMeal,
               (route) => false,
-              arguments: state.userModel,
+              // arguments: state.userModel,
             );
           }
         },
@@ -151,7 +157,6 @@ class _LoginValidationState extends State<LoginValidation> {
                           context.read<LoginCubit>().signIn(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
-                            rememberMe: state.rememberMe,
                           );
                         }
                       },

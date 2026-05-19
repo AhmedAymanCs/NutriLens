@@ -40,7 +40,8 @@ class UserModel {
       uid: user.uid,
       email: user.email!,
       name: user.displayName ?? name,
-      photoURL: user.photoURL ??
+      photoURL:
+          user.photoURL ??
           "https://cutiedp.com/wp-content/uploads/2025/08/no-dp-image-5.webp",
     );
   }
@@ -58,6 +59,30 @@ class UserModel {
       age: json['age'] ?? 0,
       height: json['height'] ?? 0.0,
       weight: json['weight'] ?? 0.0,
+    );
+  }
+
+  UserModel copyWith({
+    String? uid,
+    String? email,
+    String? name,
+    String? photoURL,
+    String? gender,
+    String? goal,
+    int? age,
+    double? height,
+    double? weight,
+  }) {
+    return UserModel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      photoURL: photoURL ?? this.photoURL,
+      gender: gender ?? this.gender,
+      goal: goal ?? this.goal,
+      age: age ?? this.age,
+      height: height ?? this.height,
+      weight: weight ?? this.weight,
     );
   }
 }

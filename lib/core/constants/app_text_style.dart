@@ -3,6 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 
 class AppTextStyle {
+  static TextStyle font16RedW600 = TextStyle(
+    color: ColorsManager.error,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+  );
   static TextStyle font24BlackW700 = TextStyle(
     color: ColorsManager.textHeading,
     fontSize: 24.sp,
@@ -13,6 +18,11 @@ class AppTextStyle {
     fontSize: 11.sp,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle font16BlackBold = TextStyle(
+    color: ColorsManager.textHeading,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle font18BlackBold = TextStyle(
     color: ColorsManager.textHeading,
     fontSize: 18.sp,
@@ -22,6 +32,11 @@ class AppTextStyle {
     color: ColorsManager.primary,
     fontSize: 13.sp,
     fontWeight: FontWeight.w400,
+  );
+  static TextStyle font22PrimaryBold = TextStyle(
+    color: ColorsManager.primary,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.bold,
   );
   static TextStyle font16PrimaryBold = TextStyle(
     color: ColorsManager.primary,
@@ -47,6 +62,11 @@ class AppTextStyle {
     color: ColorsManager.textLight,
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
+  );
+  static TextStyle font22WhiteWBold = TextStyle(
+    color: ColorsManager.textLight,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.bold,
   );
   static TextStyle font16WhiteWBold = TextStyle(
     color: ColorsManager.textLight,

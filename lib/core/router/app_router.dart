@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/models/user_model.dart';
+import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
+import 'package:nutrilens/features/add_meal/presentation/screens/add_meal_screen.dart';
 import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
@@ -8,7 +10,8 @@ import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart
 import 'package:nutrilens/features/auth/presentation/onboarding/presentation/screens/onboarding_after_register.dart';
 import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
-import 'package:nutrilens/features/profile/presentation/profile_screen.dart';
+import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
+import 'package:nutrilens/features/profile/presentation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/router/routes.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/presentation/forget_password_screen.dart';
@@ -68,7 +71,19 @@ class AppRouter {
           },
         );
       case Routes.profile:
-        return MaterialPageRoute(builder: (_) => const ProfilePage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ProfileCubit>(
+            create: (context) => getIt<ProfileCubit>(),
+            child: const ProfilePage(),
+          ),
+        );
+      case Routes.addMeal:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<AddMealCubit>(
+            create: (context) => getIt<AddMealCubit>(),
+            child: const AddMealScreen(),
+          ),
+        );
 
       default:
         return MaterialPageRoute(

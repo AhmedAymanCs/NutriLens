@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/core/constants/font_manager.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -18,10 +18,7 @@ class CustomButton extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           width: double.infinity,
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white, fontSize: FontSize.s16),
-          ),
+          child: Text(text, style: AppTextStyle.font16WhiteWBold),
         ),
       ),
     );
