@@ -1,3 +1,6 @@
+import 'package:nutrilens/features/add_meal/data/data_source/add_meal_data_source.dart';
+import 'package:nutrilens/features/add_meal/data/repository/add_meal_repository.dart';
+import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';
@@ -19,6 +22,7 @@ import 'package:nutrilens/core/services/local_notification_service.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/features/auth/data/data_source/auth_data_source.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
+import 'package:nutrilens/features/profile/logic/cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -30,6 +34,7 @@ void initSetupLocator() {
   _setupProfileLocator();
   _setupHomeLocator();
   _setupHistoryLocator();
+  _setupAddMealLocator();
 }
 
 void _setupSecureStorageServiceLocator() {
@@ -80,10 +85,17 @@ void _setupNotificationServiceLocator() {
 }
 
 void _setupProfileLocator() {
-  getIt.registerLazySingleton<ProfileDataSource>(() => ProfileDataSourceImpl());
+  getIt.registerLazySingleton<ProfileDataSource>(
+    () => ProfileDataSourceImpl(
+      firestore: getIt<FirebaseFirestore>(),
+      auth: getIt<FirebaseAuth>(),
+      storage: getIt<SecureStorageHelper>(),
+    ),
+  );
   getIt.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(getIt<ProfileDataSource>()),
   );
+  getIt.registerFactory(() => ProfileCubit(getIt<ProfileRepository>()));
 }
 
 void _setupHomeLocator() {
@@ -114,4 +126,18 @@ void _setupHistoryLocator() {
   );
 
   getIt.registerFactory(() => HistoryCubit(getIt<HistoryRepository>()));
+}
+
+
+void _setupAddMealLocator() {
+  getIt.registerLazySingleton<AddMealRemoteDataSource>(
+    () => AddMealRemoteDataSourceImpl(getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<AddMealRepository>(
+    () => AddMealRepositoryImpl(
+      getIt<AddMealRemoteDataSource>(),
+      getIt<SecureStorageHelper>(),
+    ),
+  );
+  getIt.registerFactory(() => AddMealCubit(getIt<AddMealRepository>()));
 }

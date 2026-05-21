@@ -5,6 +5,7 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/home/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/widgets/calories_summary_ring.dart';
@@ -13,7 +14,8 @@ import 'package:nutrilens/features/home/presentation/widgets/macros_progress_bar
 import 'package:nutrilens/features/home/presentation/widgets/meals_list_view.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final UserModel userModel;
+  const HomePage({super.key, required this.userModel});
 
 //   final dummyData = HomeDataModel(
 //   calorieGoal: 2000,
