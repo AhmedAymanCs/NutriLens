@@ -6,7 +6,8 @@ import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HomeRepository {
-  ServerResponse<UserModel> getHomeData();
+  ServerResponse<UserModel> getUserData();
+  ServerResponse<List<MealModel>> getTodayMeals();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -15,26 +16,26 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._homeDataSource);
 
   @override
-ServerResponse<UserModel> getHomeData() async {
-  try {
-    final results = await Future.wait([
-      _homeDataSource.getUserData(),
-      _homeDataSource.getTodayMeals(),
-    ]);
-
-    final user = results[0] as UserModel;
-    final todayMeals = results[1] as List<MealModel>;
-
-
-    final homeUserData = user.copyWith(
-      todayMeals: todayMeals,
-    );
-
-    return Right(homeUserData);
-  } on FirebaseException catch (e) {
-    return Left(e.message ?? "Firebase exception");
-  } catch (e) {
-    return Left("Unexpected error: ${e.toString()}");
+  ServerResponse<UserModel> getUserData() async {
+    try {
+      final user = await _homeDataSource.getUserData();
+      return Right(user);
+    } on FirebaseException catch (e) {
+      return Left(e.message ?? "Firebase exception");
+    } catch (e) {
+      return Left("Unexpected error: ${e.toString()}");
+    }
   }
-}
+
+  @override
+  ServerResponse<List<MealModel>> getTodayMeals() async {
+    try {
+      final todayMeals = await _homeDataSource.getTodayMeals();
+      return Right(todayMeals);
+    } on FirebaseException catch (e) {
+      return Left(e.message ?? "Firebase exception");
+    } catch (e) {
+      return Left("Unexpected error: ${e.toString()}");
+    }
+  }
 }

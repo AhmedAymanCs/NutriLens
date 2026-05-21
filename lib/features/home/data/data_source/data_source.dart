@@ -23,19 +23,8 @@ class HomeDataSourceImpl implements HomeDataSource {
   Future<UserModel> getUserData() async {
 
     final currentUserData = await storage.getData(key: AppConstants.userSession);
-    
-    Map<String, dynamic> userDataSession = jsonDecode(currentUserData ?? '');
-    String uid = userDataSession['uid'];
-
-    final userData = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
-    if (userData.data() != null) {
-      UserModel userModel = UserModel.fromFirestore(userData.data()!);
-      // log(userData.data().toString());
-      return userModel;
-    }
-
-    UserModel userModel = UserModel.fromFirestore(userDataSession);
-    return userModel;
+    Map<String, dynamic> userDataSession = jsonDecode(currentUserData!);
+    return UserModel.fromFirestore(userDataSession);
 
   }
 
@@ -43,8 +32,9 @@ class HomeDataSourceImpl implements HomeDataSource {
   Future<List<MealModel>> getTodayMeals() async {
 
     final userData = await storage.getData(key: AppConstants.userSession);
-    Map<String, dynamic> userDataSession = jsonDecode(userData ?? '');
+    Map<String, dynamic> userDataSession = jsonDecode(userData!);
     UserModel userModel = UserModel.fromFirestore(userDataSession);
+
     DateTime now = DateTime.now();
     DateTime startOfDay = DateTime(now.year, now.month, now.day);
     DateTime endOfDay = DateTime(now.year, now.month, now.day, 23, 59, 59);
@@ -58,8 +48,6 @@ class HomeDataSourceImpl implements HomeDataSource {
         .orderBy(AppConstants.timestampKey, descending: true)
         .get();
 
-   
-   
     return query.docs
         .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
         .toList();

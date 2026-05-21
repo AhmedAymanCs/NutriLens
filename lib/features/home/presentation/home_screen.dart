@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HomeCubit>()..getHomeData(),
+      create: (context) => getIt<HomeCubit>()..getUserData()..getTodayMeals(),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         appBar: const HomeAppBar(),
@@ -86,12 +86,12 @@ class HomePage extends StatelessWidget {
                   children: [
                     heightSpace(20),
                     CalorieSummaryRing(
-                      remaining: state.homeDataModel?.dailyCalorieGoal ?? 0 - state.homeDataModel!.dailyCalorieConsumed,
-                      consumed: state.homeDataModel!.dailyCalorieConsumed,
-                      goal: state.homeDataModel?.dailyCalorieGoal ?? 0,
+                      remaining: (state.userModel?.dailyCalorieGoal ?? 0) - state.userModel!.dailyCalorieConsumed,
+                      consumed: state.userModel!.dailyCalorieConsumed,
+                      goal: state.userModel?.dailyCalorieGoal ?? 0,
                     ),
                     heightSpace(40),
-                    MacrosProgressBar(data: state.homeDataModel!),
+                    MacrosProgressBar(data: state.userModel!),
                     heightSpace(40),
                     Text(
                       StringManager.todaysMeals,
@@ -101,7 +101,7 @@ class HomePage extends StatelessWidget {
                     ),
                     heightSpace(16),
                     MealsListView(
-                      data: state.homeDataModel!,
+                      data: state.mealModels ?? [],
                     ),
                   ],
                 ),
