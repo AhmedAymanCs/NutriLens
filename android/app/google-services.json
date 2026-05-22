@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035297405888",
+    "project_id": "nutrilens-d38fa",
+    "storage_bucket": "nutrilens-d38fa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035297405888:android:10b1ec399c72f720096625",
+        "android_client_info": {
+          "package_name": "com.example.nutrilens"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjc4AgIDPxtJNWq3Zr8XjkcfPvfACiro4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
