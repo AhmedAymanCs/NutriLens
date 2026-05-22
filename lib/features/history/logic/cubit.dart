@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/history/data/repository/history_repository.dart';
 import 'package:nutrilens/features/history/logic/state.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class HistoryCubit extends Cubit<HistoryState> {
   final HistoryRepository _historyRepository;
   
-  List<MealModel> _originalHistoryData = []; 
+  UserModel? _originalHistoryData; 
 
   HistoryCubit(this._historyRepository)
       : super(HistoryState(
@@ -15,33 +15,24 @@ class HistoryCubit extends Cubit<HistoryState> {
           focusedDay: DateTime.now(),
         ));
 
-  Future<void> getUserData() async {
+  Future<void> getLocalUserData() async {
     emit(state.copyWith(status: HistoryStatus.loading));
-    final result = await _historyRepository.getUserData();
+    final result = await _historyRepository.getLocalUserData();
     result.fold(
-      (failure) => emit(state.copyWith(
-        status: HistoryStatus.failure,
-        error: failure,
-      )),
-      (userModel) => emit(
-        state.copyWith(
-          status: HistoryStatus.success,
-          userModel: userModel,
-        ),
-      ),
+      (failure) => emit(state.copyWith(status: HistoryStatus.failure, error: failure)),
+      (userModel) => emit(state.copyWith(status: HistoryStatus.success, userModel: userModel)),
     );
   }
 
-  Future<void> getHistoryByDate(DateTime date) async {
+  Future<void> getRemoteHistoryData(DateTime date) async {
     emit(state.copyWith(status: HistoryStatus.loading, selectedDate: date, focusedDay: date));
 
-    final result = await _historyRepository.getHistoryByDate(date);
+    final result = await _historyRepository.getRemoteHistoryData(date);
 
     result.fold(
       (error) => emit(state.copyWith(status: HistoryStatus.failure, error: error)),
       (data) {
         _originalHistoryData = data;
-        
         _applyFilter(state.selectedFilter); 
       },
     );
@@ -53,21 +44,25 @@ class HistoryCubit extends Cubit<HistoryState> {
   }
 
   void _applyFilter(String filter) {
+    if (_originalHistoryData == null) return;
+
     if (filter == StringManager.allMeals) {
       emit(state.copyWith(
         status: HistoryStatus.success, 
-        mealModels: _originalHistoryData,
+        userModel: _originalHistoryData,
       ));
       return;
     }
 
-    final filteredMeals = _originalHistoryData.where((meal) {
+    final filteredMeals = _originalHistoryData!.todayMeals.where((meal) {
       return meal.mealType.trim().toLowerCase() == filter.trim().toLowerCase();
     }).toList();
 
+    final filteredData = _originalHistoryData!.copyWith(todayMeals: filteredMeals);
+
     emit(state.copyWith(
       status: HistoryStatus.success, 
-      mealModels: filteredMeals, 
+      userModel: filteredData, 
     ));
   }
 }

@@ -54,7 +54,13 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HistoryCubit>()..getUserData()..getHistoryByDate(DateTime.now()),
+      create: (context) {
+        final cubit = getIt<HistoryCubit>();
+        cubit.getLocalUserData().then((_) {
+          cubit.getRemoteHistoryData(DateTime.now());
+        });
+        return cubit;
+      },
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         body: BlocBuilder<HistoryCubit, HistoryState>(
@@ -80,7 +86,7 @@ class HistoryPage extends StatelessWidget {
                     CustomCalendar(
                       selectedDay: state.focusedDay,
                       onDaySelected: (focusedDay) {
-                        context.read<HistoryCubit>().getHistoryByDate(focusedDay);
+                        context.read<HistoryCubit>().getRemoteHistoryData(focusedDay);
                       },
                     ),
                     heightSpace(24),

@@ -24,7 +24,6 @@ class AppConstants {
   static const String isEatenKey = 'is_eaten';
   static const String quantityKey = 'quantity';
   static const String unitKey = 'unit';
-  static const String caloriesKey = 'calories';
   static const String carbsKey = 'carbs';
   static const String proteinKey = 'protein';
   static const String fatKey = 'fat';

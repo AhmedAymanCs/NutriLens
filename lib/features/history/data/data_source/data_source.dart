@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +7,8 @@ import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HistoryDataSource {
-  Future<UserModel> getUserData();
-  Future<List<MealModel>> getMealsByDate(DateTime date);
+  Future<UserModel?> getLocalUserData();
+  Future<UserModel> getRemoteHistoryData(DateTime date);
 }
 
 class HistoryDataSourceImpl implements HistoryDataSource {
@@ -25,36 +23,38 @@ class HistoryDataSourceImpl implements HistoryDataSource {
   });
 
   @override
-  Future<UserModel> getUserData() async {
-
-    final currentUserData = await storage.getData(key: AppConstants.userSession);
+  Future<UserModel?> getLocalUserData() async {
+    final currentUserData = await storage.getData(key: AppConstants.userSession);    
     Map<String, dynamic> userDataSession = jsonDecode(currentUserData!);
     return UserModel.fromFirestore(userDataSession);
-
   }
 
   @override
-  Future<List<MealModel>> getMealsByDate(DateTime date) async {
+  Future<UserModel> getRemoteHistoryData(DateTime date) async {
     
-    final userData = await storage.getData(key: AppConstants.userSession);
+    final currentUid = auth.currentUser!.uid;
+    final userDoc = await firestore.collection(AppConstants.userCollectionName).doc(currentUid).get();
     
-    Map<String, dynamic> userDataSession = jsonDecode(userData!);
-    String uid = userDataSession[AppConstants.uid];
+    UserModel user = UserModel.fromFirestore(userDoc.data()!);
 
     DateTime startOfDay = DateTime(date.year, date.month, date.day);
     DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);
 
     final query = await firestore
         .collection(AppConstants.userCollectionName)
-        .doc(uid)
+        .doc(currentUid)
         .collection(AppConstants.mealCollectionName) 
         .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
         .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
         .orderBy(AppConstants.timestampKey, descending: true)
         .get();
    
-    return query.docs
+    List<MealModel> historyMeals = query.docs
         .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
         .toList();
+
+    return user.copyWith(
+      todayMeals: historyMeals,
+    );
   }
 }
