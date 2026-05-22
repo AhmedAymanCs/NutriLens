@@ -54,7 +54,7 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<HistoryCubit>()..fetchHistory(DateTime.now()),
+      create: (context) => getIt<HistoryCubit>()..getUserData()..getHistoryByDate(DateTime.now()),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         body: BlocBuilder<HistoryCubit, HistoryState>(
@@ -80,14 +80,14 @@ class HistoryPage extends StatelessWidget {
                     CustomCalendar(
                       selectedDay: state.focusedDay,
                       onDaySelected: (focusedDay) {
-                        context.read<HistoryCubit>().fetchHistory(focusedDay);
+                        context.read<HistoryCubit>().getHistoryByDate(focusedDay);
                       },
                     ),
                     heightSpace(24),
       
                     DailyIntakeCard(
-                      consumed: state.historyData?.dailyCalorieConsumed ?? 0,
-                      goal: state.historyData?.dailyCalorieGoal ?? 0,
+                      consumed: state.userModel?.dailyCalorieConsumed ?? 0,
+                      goal: state.userModel?.dailyCalorieGoal ?? 0,
                     ),
       
                     heightSpace(24),
@@ -100,7 +100,7 @@ class HistoryPage extends StatelessWidget {
       
                     heightSpace(8),
                    
-                    HistoryMealsListView(historyDataModel: state.historyData!),
+                    HistoryMealsListView(historyDataModel: state.userModel!),
                   ],
                 ),
               );

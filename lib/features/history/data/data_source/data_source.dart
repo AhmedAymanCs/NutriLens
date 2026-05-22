@@ -5,9 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
+import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HistoryDataSource {
+  Future<UserModel> getUserData();
   Future<List<MealModel>> getMealsByDate(DateTime date);
 }
 
@@ -23,13 +25,21 @@ class HistoryDataSourceImpl implements HistoryDataSource {
   });
 
   @override
+  Future<UserModel> getUserData() async {
+
+    final currentUserData = await storage.getData(key: AppConstants.userSession);
+    Map<String, dynamic> userDataSession = jsonDecode(currentUserData!);
+    return UserModel.fromFirestore(userDataSession);
+
+  }
+
+  @override
   Future<List<MealModel>> getMealsByDate(DateTime date) async {
+    
     final userData = await storage.getData(key: AppConstants.userSession);
     
-  
-
     Map<String, dynamic> userDataSession = jsonDecode(userData!);
-    String uid = userDataSession['uid'];
+    String uid = userDataSession[AppConstants.uid];
 
     DateTime startOfDay = DateTime(date.year, date.month, date.day);
     DateTime endOfDay = DateTime(date.year, date.month, date.day, 23, 59, 59);

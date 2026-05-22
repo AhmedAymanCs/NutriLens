@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,8 +24,19 @@ class HomeDataSourceImpl implements HomeDataSource {
   Future<UserModel> getUserData() async {
 
     final currentUserData = await storage.getData(key: AppConstants.userSession);
-    Map<String, dynamic> userDataSession = jsonDecode(currentUserData!);
-    return UserModel.fromFirestore(userDataSession);
+    
+    Map<String, dynamic> userDataSession = jsonDecode(currentUserData ?? '');
+    String uid = userDataSession['uid'];
+
+    final userData = await firestore.collection(AppConstants.userCollectionName).doc(uid).get();
+    if (userData.data() != null) {
+      UserModel userModel = UserModel.fromFirestore(userData.data()!);
+      log(userData.data().toString());
+      return userModel;
+    }
+
+    UserModel userModel = UserModel.fromFirestore(userDataSession);
+    return userModel;
 
   }
 

@@ -122,7 +122,7 @@ void _setupHistoryLocator() {
   ));
 
   getIt.registerLazySingleton<HistoryRepository>(
-    () => HistoryRepositoryImpl(getIt<HistoryDataSource>(), getIt<HomeDataSource>()),
+    () => HistoryRepositoryImpl(getIt<HistoryDataSource>()),
   );
 
   getIt.registerFactory(() => HistoryCubit(getIt<HistoryRepository>()));
