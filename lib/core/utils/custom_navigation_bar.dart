@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/features/add_meal/presentation/screens/add_meal_screen.dart';
+import 'package:nutrilens/features/add_meal/presentation/add_meal_screen.dart';
 import 'package:nutrilens/features/history/presentation/history_screen.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
 import 'package:nutrilens/features/profile/presentation/screens/profile_screen.dart';

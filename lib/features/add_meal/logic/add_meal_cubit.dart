@@ -38,6 +38,14 @@ class AddMealCubit extends Cubit<AddMealState> {
     emit(state.copyWith(filteredFoodItems: []));
   }
 
+  bool isValidIngredient(String value) {
+    return state.foodItems.any(
+      (item) =>
+          item.name.toLowerCase() == value.trim().toLowerCase() ||
+          item.nameEn.toLowerCase() == value.trim().toLowerCase(),
+    );
+  }
+
   //////////////////////////////////////////////////////////////////////////////////
   Future<void> getMealElements() async {
     emit(state.copyWith(status: AddMealStatus.loading));

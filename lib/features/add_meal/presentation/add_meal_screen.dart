@@ -10,8 +10,7 @@ import 'package:nutrilens/core/widgets/custom_form_field.dart';
 import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_state.dart';
-import 'package:nutrilens/features/add_meal/presentation/screens/shared_widgets.dart';
-import 'package:nutrilens/features/add_meal/presentation/widgets/nutrition_card_widget.dart';
+import 'package:nutrilens/features/add_meal/presentation/shared_widgets.dart';
 
 class AddMealPage extends StatefulWidget {
   const AddMealPage({super.key});
@@ -186,11 +185,12 @@ class _AddMealPageState extends State<AddMealPage> {
                   ...List.generate(
                     state.currentIngredients.length,
                     (index) => IngredientAutoCompleteField(
-                      foodItems: state.foodItems,
                       controller: _nameControllers[index],
-                      onSelected: (item) {
-                        cubit.updateIngredientName(index, item.name);
-                      },
+                      suggestions: state.filteredFoodItems,
+                      onSearch: cubit.searchFoodItems,
+                      onSelected: (item) =>
+                          cubit.updateIngredientName(index, item.name),
+                      isValid: cubit.isValidIngredient,
                     ),
                   ),
                   heightSpace(12),
