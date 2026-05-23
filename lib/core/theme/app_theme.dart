@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/font_manager.dart';
@@ -179,14 +181,14 @@ class AppTheme {
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: const Color(0xFF121412), 
-    
+    scaffoldBackgroundColor: const Color(0xFF121412),
+
     colorScheme: const ColorScheme.dark(
       primary: ColorsManager.primary,
       secondary: ColorsManager.gray500,
-      surface: Color(0xFF1C201D), 
+      surface: Color(0xFF1C201D),
       onPrimary: ColorsManager.textLight,
-      onSurface: ColorsManager.textLight, 
+      onSurface: ColorsManager.textLight,
     ),
 
     appBarTheme: AppBarTheme(
@@ -201,24 +203,47 @@ class AppTheme {
     ),
 
     textTheme: TextTheme(
-      displayLarge: TextStyle(fontSize: FontSize.s35, fontWeight: FontWeightManager.bold, color: ColorsManager.textLight),
-      headlineMedium: TextStyle(fontSize: FontSize.s20, fontWeight: FontWeightManager.semiBold, color: ColorsManager.textLight),
-      bodyLarge: TextStyle(fontSize: FontSize.s16, color: ColorsManager.textLight),
-      bodyMedium: TextStyle(fontSize: FontSize.s14, color: ColorsManager.textLight.withOpacity(0.7)),
-      titleSmall: TextStyle(fontSize: FontSize.s12, color: ColorsManager.textMuted),
+      displayLarge: TextStyle(
+        fontSize: FontSize.s35,
+        fontWeight: FontWeightManager.bold,
+        color: ColorsManager.textLight,
+      ),
+      headlineMedium: TextStyle(
+        fontSize: FontSize.s20,
+        fontWeight: FontWeightManager.semiBold,
+        color: ColorsManager.textLight,
+      ),
+      bodyLarge: TextStyle(
+        fontSize: FontSize.s16,
+        color: ColorsManager.textLight,
+      ),
+      bodyMedium: TextStyle(
+        fontSize: FontSize.s14,
+        color: ColorsManager.textLight.withOpacity(0.7),
+      ),
+      titleSmall: TextStyle(
+        fontSize: FontSize.s12,
+        color: ColorsManager.textMuted,
+      ),
     ),
 
     cardTheme: CardThemeData(
       color: const Color(0xFF1C201D),
-      elevation: 0, 
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: const Color(0xFF252A26),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-      hintStyle: TextStyle(color: ColorsManager.textMuted, fontSize: FontSize.s14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
+      hintStyle: TextStyle(
+        color: ColorsManager.textMuted,
+        fontSize: FontSize.s14,
+      ),
     ),
 
     dividerTheme: DividerThemeData(

@@ -14,48 +14,6 @@ import 'package:nutrilens/features/home/presentation/widgets/meals_list_view.dar
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  //   final dummyData = HomeDataModel(
-  //   calorieGoal: 2000,
-  //   consumedCalories: 1200,
-  //   proteinGoal: 150,
-  //   proteinConsumed: 90,
-  //   carbsGoal: 250,
-  //   carbsConsumed: 180,
-  //   fatsGoal: 70,
-  //   fatsConsumed: 45,
-  //   todayMeals: [
-  //     MealModel(
-  //       id: 'm1',
-  //       foodName: 'Avocado Toast & Egg',
-  //       mealType: 'Breakfast',
-  //       isEaten: true,
-  //       quantity: 250,
-  //       unit: 'g',
-  //       calories: 350,
-  //       carbs: 45,
-  //       protein: 12,
-  //       fat: 8,
-  //       imageUrl: ImageManager.logo,
-  //       timestamp: DateTime.now().subtract(const Duration(hours: 4)),
-  //     ),
-  //     MealModel(
-  //       id: 'm2',
-  //       foodName: 'Grilled Chicken Salad',
-  //       mealType: 'Lunch',
-  //       isEaten: true,
-  //       quantity: 200,
-  //       unit: 'g',
-  //       calories: 600,
-  //       carbs: 10,
-  //       protein: 45,
-  //       fat: 15,
-  //       imageUrl: ImageManager.logo,
-  //       timestamp: DateTime.now().subtract(const Duration(hours: 1)),
-  //     ),
-
-  //   ],
-  // );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,11 +24,11 @@ class HomePage extends StatelessWidget {
           if (state.status == HomeStatus.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-    
+
           if (state.status == HomeStatus.failure) {
             return Center(child: Text(state.errorMessage));
           }
-    
+
           if (state.status == HomeStatus.success) {
             return SingleChildScrollView(
               padding: EdgeInsets.all(24.0.w),

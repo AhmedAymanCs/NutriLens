@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/custom_navigation_bar.dart';
 import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
@@ -15,7 +16,9 @@ import 'package:nutrilens/features/auth/presentation/login/presentation/screens/
 import 'package:nutrilens/features/auth/presentation/register/presentation/screens/register_screen.dart';
 import 'package:nutrilens/features/history/logic/cubit.dart';
 import 'package:nutrilens/features/home/logic/cubit.dart';
+import 'package:nutrilens/features/home/presentation/home_screen.dart';
 import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
+import 'package:nutrilens/features/splash/screens/splash_screen.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -85,26 +88,20 @@ class AppRouter {
             );
           },
         );
-      // case Routes.home:
-      //   return MaterialPageRoute(
-      //     builder: (_) {
-      //       return const HomePage();
-      //     },
-      //   );
-      // case Routes.profile:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider<ProfileCubit>(
-      //       create: (context) => getIt<ProfileCubit>(),
-      //       child: const ProfilePage(),
-      //     ),
-      //   );
-      // case Routes.addMeal:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider<AddMealCubit>(
-      //       create: (context) => getIt<AddMealCubit>(),
-      //       child: const AddMealPage(),
-      //     ),
-      //   );
+      case Routes.home:
+        return MaterialPageRoute(
+          builder: (_) {
+            return const HomePage();
+          },
+        );
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) {
+            return SplashScreen(
+              secureStorageHelper: getIt<SecureStorageHelper>(),
+            );
+          },
+        );
 
       default:
         return MaterialPageRoute(
