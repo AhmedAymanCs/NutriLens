@@ -1,6 +1,6 @@
 import 'package:nutrilens/features/add_meal/data/data_source/add_meal_data_source.dart';
 import 'package:nutrilens/features/add_meal/data/repository/add_meal_repository.dart';
-import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
+import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/onboarding/logic/cubit.dart';

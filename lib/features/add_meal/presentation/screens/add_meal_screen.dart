@@ -8,8 +8,9 @@ import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
 import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
-import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
-import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_state.dart';
+import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
+import 'package:nutrilens/features/add_meal/logic/add_meal_state.dart';
+import 'package:nutrilens/features/add_meal/presentation/screens/shared_widgets.dart';
 import 'package:nutrilens/features/add_meal/presentation/widgets/nutrition_card_widget.dart';
 
 class AddMealPage extends StatefulWidget {
@@ -21,120 +22,25 @@ class AddMealPage extends StatefulWidget {
 
 class _AddMealPageState extends State<AddMealPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController mealNameController = TextEditingController();
-  String? selectedMealType;
-  final List<String> mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
-  final List<IngredientControllers> ingredients = [];
+  final List<String> _mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+
+  final TextEditingController _mealNameController = TextEditingController();
+  final List<TextEditingController> _nameControllers = [];
+  final List<TextEditingController> _gramControllers = [];
 
   @override
   void initState() {
     super.initState();
-    // Start with one ingredient controller and add the listener to it
-    final firstIngredient = IngredientControllers();
-    firstIngredient.gramController.addListener(_onGramChanged);
-    ingredients.add(firstIngredient);
-
-    // Fetch meals in the background for local search
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AddMealCubit>().getMealElements();
-    });
-  }
-
-  void _onGramChanged() {
-    setState(() {});
-  }
-
-  void addIngredient() {
-    final controller = IngredientControllers();
-    controller.gramController.addListener(_onGramChanged);
-    setState(() {
-      ingredients.add(controller);
-    });
-  }
-
-  void removeIngredient(int index) {
-    if (ingredients.length == 1) return;
-
-    setState(() {
-      ingredients[index].gramController.removeListener(_onGramChanged);
-      ingredients[index].dispose();
-      ingredients.removeAt(index);
-    });
-  }
-
-  NutritionModel _calculateEstimatedNutrition(AddMealState state) {
-    // If a meal was found via search and ingredients are unmodified, return its original nutrition
-    if (state.meal != null && _isIngredientsUnchanged(state.meal!)) {
-      return state.meal!.nutrition;
-    }
-
-    double totalGrams = 0;
-    for (var ing in ingredients) {
-      totalGrams += double.tryParse(ing.gramController.text) ?? 0;
-    }
-    if (totalGrams == 0) return const NutritionModel();
-
-    // Smooth estimation formula based on general ingredient breakdown (15% protein, 45% carbs, 10% fats)
-    final protein = totalGrams * 0.15;
-    final carbs = totalGrams * 0.45;
-    final fats = totalGrams * 0.10;
-    final calories = (protein * 4) + (carbs * 4) + (fats * 9);
-
-    return NutritionModel(
-      calories: calories,
-      protein: protein,
-      carbs: carbs,
-      fats: fats,
-    );
-  }
-
-  bool _isIngredientsUnchanged(MealModel searchMeal) {
-    if (searchMeal.ingredients.length != ingredients.length) return false;
-    for (int i = 0; i < ingredients.length; i++) {
-      if (ingredients[i].nameController.text.trim().toLowerCase() !=
-          searchMeal.ingredients[i].name.toLowerCase()) {
-        return false;
-      }
-      if (double.tryParse(ingredients[i].gramController.text.trim()) !=
-          searchMeal.ingredients[i].grams) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void saveMeal() {
-    if (_formKey.currentState!.validate()) {
-      final state = context.read<AddMealCubit>().state;
-      final mealModel = MealModel(
-        mealName: mealNameController.text.trim(),
-        mealType: selectedMealType ?? 'Unknown',
-        imageUrl:
-            state.meal?.imageUrl ??
-            "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
-        nutrition: _calculateEstimatedNutrition(state),
-        ingredients: ingredients.map((e) {
-          return IngredientModel(
-            name: e.nameController.text.trim(),
-            grams: num.tryParse(e.gramController.text.trim()) ?? 0,
-          );
-        }).toList(),
-      );
-
-      context.read<AddMealCubit>().saveMeal(
-        mealModel: mealModel,
-        mealType: selectedMealType ?? 'Unknown',
-      );
-    }
+    _nameControllers.add(TextEditingController());
+    _gramControllers.add(TextEditingController());
+    context.read<AddMealCubit>().getMealElements();
   }
 
   @override
   void dispose() {
-    mealNameController.dispose();
-    for (var ingredient in ingredients) {
-      ingredient.gramController.removeListener(_onGramChanged);
-      ingredient.dispose();
-    }
+    _mealNameController.dispose();
+    for (final c in _nameControllers) c.dispose();
+    for (final c in _gramControllers) c.dispose();
     super.dispose();
   }
 
@@ -144,7 +50,7 @@ class _AddMealPageState extends State<AddMealPage> {
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading:const SizedBox.shrink(),
+        leading: const SizedBox.shrink(),
         title: Text('Add Meal', style: AppTextStyle.font22PrimaryBold),
         centerTitle: true,
       ),
@@ -159,53 +65,50 @@ class _AddMealPageState extends State<AddMealPage> {
             Navigator.of(context).pop();
           } else if (state.status == AddMealStatus.failure) {
             customSnackBar(context: context, message: state.errorMessage);
-          } else if (state.status == AddMealStatus.getSuccess &&
-              state.meal != null) {
-            mealNameController.text = state.meal!.mealName;
-            selectedMealType = state.meal!.mealType;
+          } else if (state.status == AddMealStatus.getSuccess) {
+            // Sync controllers with data from cubit
+            _mealNameController.text = state.currentMealName;
 
-            for (var ing in ingredients) {
-              ing.gramController.removeListener(_onGramChanged);
-              ing.dispose();
-            }
-            ingredients.clear();
+            for (final c in _nameControllers) c.dispose();
+            for (final c in _gramControllers) c.dispose();
+            _nameControllers.clear();
+            _gramControllers.clear();
 
-            if (state.meal!.ingredients.isEmpty) {
-              final controller = IngredientControllers();
-              controller.gramController.addListener(_onGramChanged);
-              ingredients.add(controller);
-            } else {
-              for (var ing in state.meal!.ingredients) {
-                final controller = IngredientControllers();
-                controller.nameController.text = ing.name;
-                controller.gramController.text = ing.grams.toString();
-                controller.gramController.addListener(_onGramChanged);
-                ingredients.add(controller);
-              }
+            for (final ing in state.currentIngredients) {
+              _nameControllers.add(TextEditingController(text: ing.name));
+              _gramControllers.add(
+                TextEditingController(text: ing.grams.toString()),
+              );
             }
-            setState(() {});
+
             customSnackBar(
               context: context,
-              message: 'Loaded recipe details for: ${state.meal!.mealName}',
+              message: 'Loaded recipe details for: ${state.currentMealName}',
               isErrorMessage: false,
             );
           }
         },
         builder: (context, state) {
-          final estimatedNutrition = _calculateEstimatedNutrition(state);
+          final cubit = context.read<AddMealCubit>();
+
+          // Keep controllers list in sync with state ingredients count
+          while (_nameControllers.length < state.currentIngredients.length) {
+            _nameControllers.add(TextEditingController());
+            _gramControllers.add(TextEditingController());
+          }
+          while (_nameControllers.length > state.currentIngredients.length) {
+            _nameControllers.removeLast().dispose();
+            _gramControllers.removeLast().dispose();
+          }
+
           final currentMealModel = MealModel(
-            mealName: mealNameController.text.trim(),
-            mealType: selectedMealType ?? 'Unknown',
+            mealName: state.currentMealName,
+            mealType: state.currentMealType ?? 'Unknown',
             imageUrl:
                 state.meal?.imageUrl ??
                 "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
-            nutrition: estimatedNutrition,
-            ingredients: ingredients.map((e) {
-              return IngredientModel(
-                name: e.nameController.text.trim(),
-                grams: num.tryParse(e.gramController.text.trim()) ?? 0,
-              );
-            }).toList(),
+            nutrition: state.estimatedNutrition,
+            ingredients: state.currentIngredients,
           );
 
           return Form(
@@ -216,7 +119,7 @@ class _AddMealPageState extends State<AddMealPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// Estimated image or placeholder
+                  // Meal image
                   if (state.meal != null) ...[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20.r),
@@ -236,13 +139,19 @@ class _AddMealPageState extends State<AddMealPage> {
                     heightSpace(15),
                   ],
 
-                  /// Meal Name with Search Trigger
+                  // Meal name
                   CustomFormField(
                     hint: 'Meal Name',
-                    controller: mealNameController,
-                    suffixIcon: const Icon(
-                      Icons.search,
-                      color: ColorsManager.primary,
+                    controller: _mealNameController,
+                    onChanged: (value) => cubit.updateMealName(value ?? ''),
+                    suffixIcon: GestureDetector(
+                      onTap: () => cubit.searchInMeals(
+                        mealName: _mealNameController.text.trim(),
+                      ),
+                      child: const Icon(
+                        Icons.search,
+                        color: ColorsManager.primary,
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -254,97 +163,44 @@ class _AddMealPageState extends State<AddMealPage> {
 
                   heightSpace(18),
 
-                  /// Meal Type Dropdown
+                  // Meal type
                   DropdownButtonFormField<String>(
-                    initialValue: selectedMealType,
-                    items: mealTypes.map((type) {
-                      return DropdownMenuItem(value: type, child: Text(type));
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedMealType = value;
-                      });
-                    },
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Select meal type';
-                      }
-                      return null;
-                    },
+                    initialValue: state.currentMealType,
+                    items: _mealTypes
+                        .map(
+                          (type) =>
+                              DropdownMenuItem(value: type, child: Text(type)),
+                        )
+                        .toList(),
+                    onChanged: cubit.updateMealType,
+                    validator: (value) =>
+                        value == null ? 'Select meal type' : null,
                   ),
 
                   heightSpace(28),
-                  Text('Ingredients', style: AppTextStyle.font18BlackBold),
 
+                  Text('Ingredients', style: AppTextStyle.font18BlackBold),
                   heightSpace(16),
 
+                  // Ingredients list
                   ...List.generate(
-                    ingredients.length,
-                    (index) => Padding(
-                      padding: EdgeInsets.only(bottom: 14.h),
-                      child: Row(
-                        children: [
-                          /// Ingredient Name
-                          Expanded(
-                            child: CustomFormField(
-                              hint: 'Ingredient',
-                              controller: ingredients[index].nameController,
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Required';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-
-                          widthSpace(12),
-
-                          /// Grams
-                          Expanded(
-                            child: CustomFormField(
-                              controller: ingredients[index].gramController,
-                              keyboardType: TextInputType.number,
-                              hint: 'Grams',
-                              suffixIcon: Text(
-                                'g',
-                                style: AppTextStyle.font15GreyW500,
-                              ),
-
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Required';
-                                }
-                                if (double.tryParse(value.trim()) == null) {
-                                  return 'Type A Number';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-
-                          widthSpace(5),
-
-                          IconButton(
-                            onPressed: () => removeIngredient(index),
-                            icon: const Icon(
-                              Icons.delete_outline,
-                              color: ColorsManager.error,
-                            ),
-                          ),
-                        ],
-                      ),
+                    state.currentIngredients.length,
+                    (index) => IngredientAutoCompleteField(
+                      foodItems: state.foodItems,
+                      controller: _nameControllers[index],
+                      onSelected: (item) {
+                        cubit.updateIngredientName(index, item.name);
+                      },
                     ),
                   ),
-
                   heightSpace(12),
 
-                  /// Add More Button
+                  // Add more
                   Center(
                     child: SizedBox(
                       width: 200.w,
                       child: OutlinedButton.icon(
-                        onPressed: addIngredient,
+                        onPressed: cubit.addIngredient,
                         icon: const Icon(Icons.add),
                         label: const Text('Add More'),
                         style: OutlinedButton.styleFrom(
@@ -359,18 +215,15 @@ class _AddMealPageState extends State<AddMealPage> {
                   ),
 
                   heightSpace(24),
-
-                  /// Estimated Nutrition Card
                   NutritionCardWidget(mealModel: currentMealModel),
-
                   heightSpace(36),
-
-                  /// Save Meal Button
                   CustomButton(
                     text: 'Save Meal',
-                    onPressed: state.status == AddMealStatus.loading
-                        ? null
-                        : saveMeal,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        cubit.saveMeal();
+                      }
+                    },
                   ),
                 ],
               ),
@@ -379,15 +232,5 @@ class _AddMealPageState extends State<AddMealPage> {
         },
       ),
     );
-  }
-}
-
-class IngredientControllers {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController gramController = TextEditingController();
-
-  void dispose() {
-    nameController.dispose();
-    gramController.dispose();
   }
 }

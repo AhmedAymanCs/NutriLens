@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/custom_navigation_bar.dart';
-import 'package:nutrilens/features/add_meal/presentation/logic/add_meal_cubit.dart';
+import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
 import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
 import 'package:nutrilens/features/auth/presentation/login/logic/cubit.dart';
@@ -81,7 +81,7 @@ class AppRouter {
                       getIt<HistoryCubit>()..fetchHistory(DateTime.now()),
                 ),
                 BlocProvider<AddMealCubit>(
-                  create: (context) => getIt<AddMealCubit>(),
+                  create: (context) => getIt<AddMealCubit>()..getFoodItems(),
                 ),
               ],
               child: const CustomNavigationBar(),

@@ -8,6 +8,7 @@ import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/add_meal/data/data_source/add_meal_data_source.dart';
+import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/save_meal_params.dart';
 
@@ -22,6 +23,7 @@ abstract class AddMealRepository {
     required MealModel mealModel,
     required String mealType,
   });
+  ServerResponse<List<FoodItemModel>> getFoodItems();
 }
 
 class AddMealRepositoryImpl implements AddMealRepository {
@@ -65,14 +67,21 @@ class AddMealRepositoryImpl implements AddMealRepository {
       DateFormat format = DateFormat(AppConstants.dateTimeFormat);
       String formattedString = format.format(dateTime);
       DateTime formattedDate = format.parse(formattedString);
-      await addMealLocalDataSource.saveMeal(
-        params: SaveMealParams(
-          mealModel: mealModel,
-          userId: userId,
-          mealType: mealType,
-          date: formattedDate,
-        ),
-      );
+      await addMealLocalDataSource
+          .saveMeal(
+            params: SaveMealParams(
+              mealModel: mealModel,
+              userId: userId,
+              mealType: mealType,
+              date: formattedDate,
+            ),
+          )
+          .then((value) {
+            log('Meal saved successfully');
+          })
+          .catchError((e) {
+            log('Error saving meal: $e');
+          });
       return right(unit);
     } on FirebaseException catch (e) {
       log('in saveMeal() FirebaseException: ${e.message}');
@@ -101,6 +110,20 @@ class AddMealRepositoryImpl implements AddMealRepository {
       return const Left('No meals found');
     } catch (e) {
       log('in searchInMeals() catch: $e');
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<List<FoodItemModel>> getFoodItems() async {
+    try {
+      final result = await addMealLocalDataSource.getFoodItems();
+      return Right(result);
+    } on FirebaseException catch (e) {
+      log('in Get Food Items FirebaseException: ${e.message}');
+      return Left(e.message!);
+    } catch (e) {
+      log('in Get Food Items catch: $e');
       return Left(e.toString());
     }
   }

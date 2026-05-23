@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
+import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/save_meal_params.dart';
 
 abstract class AddMealRemoteDataSource {
   Future<QuerySnapshot<Map<String, dynamic>>> getMealElements();
   Future<void> saveMeal({required SaveMealParams params});
+  Future<List<FoodItemModel>> getFoodItems();
 }
 
 class AddMealRemoteDataSourceImpl implements AddMealRemoteDataSource {
@@ -25,15 +27,16 @@ class AddMealRemoteDataSourceImpl implements AddMealRemoteDataSource {
     await firestore
         .collection(AppConstants.userCollectionName)
         .doc(params.userId)
-        .update({
-          'meals': FieldValue.arrayUnion([
-            {
-              'meal': params.mealModel
-                  .copyWith(mealType: params.mealType, mealId: params.userId)
-                  .toJson(),
-              'date': params.date,
-            },
-          ]),
-        });
+        .collection('meals')
+        .doc(params.mealModel.mealId)
+        .set({'meal': params.mealModel.toJson(), 'date': params.date});
+  }
+
+  @override
+  Future<List<FoodItemModel>> getFoodItems() async {
+    final snapshot = await firestore.collection('meals').get();
+    return snapshot.docs
+        .map((doc) => FoodItemModel.fromJson(doc.data()))
+        .toList();
   }
 }
