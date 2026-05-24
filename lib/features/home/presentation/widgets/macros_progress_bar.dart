@@ -16,15 +16,15 @@ class MacrosProgressBar extends StatelessWidget {
       children: [
         MacroIndicator(
           title: StringManager.protein,
-          current: data.proteinConsumed,
-          total: data.proteinGoal,
+          current:data.proteinConsumed,
+          total:data.proteinGoal,
           color: ColorsManager.protein,
           icon: Icons.fitness_center,
         ),
         MacroIndicator(
           title: StringManager.carbs,
           current: data.carbsConsumed,
-          total: data.carbsGoal,
+          total:data.carbsGoal,
           color: ColorsManager.carbs,
           icon: Icons.bolt,
         ),

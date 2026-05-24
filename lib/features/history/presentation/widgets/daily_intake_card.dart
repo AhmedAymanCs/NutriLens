@@ -9,11 +9,7 @@ class DailyIntakeCard extends StatelessWidget {
   final num consumed;
   final num goal;
 
-  const DailyIntakeCard({
-    super.key,
-    required this.consumed,
-    required this.goal,
-  });
+  const DailyIntakeCard({super.key, required this.consumed, required this.goal});
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +19,11 @@ class DailyIntakeCard extends StatelessWidget {
         color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
-          const BoxShadow(
+          BoxShadow(
             color: ColorsManager.gray500,
             blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
+            offset: const Offset(0, 5),
+          )
         ],
       ),
       child: Column(
@@ -37,36 +33,23 @@ class DailyIntakeCard extends StatelessWidget {
           heightSpace(8),
           Row(
             children: [
-              Text(
-                "$consumed",
-                style: AppTextStyle.font24BlackW700.copyWith(
-                  color: ColorsManager.textBlack,
-                ),
-              ),
-              Text(
-                " /$goal ${StringManager.kcal}",
-                style: AppTextStyle.font15GreyW500,
-              ),
+              Text("$consumed", style: AppTextStyle.font24BlackW700.copyWith(color: ColorsManager.textBlack)),
+              Text(" /$goal ${StringManager.kcal}", style: AppTextStyle.font15GreyW500),
               const Spacer(),
               CircleAvatar(
                 backgroundColor: ColorsManager.primary.withValues(alpha: 0.2),
-                child: const Icon(
-                  Icons.local_fire_department,
-                  color: ColorsManager.primary,
-                ),
-              ),
+                child: Icon(Icons.local_fire_department, color: ColorsManager.primary),
+              )
             ],
           ),
           heightSpace(12),
           ClipRRect(
             borderRadius: BorderRadius.circular(10.r),
             child: LinearProgressIndicator(
-              value: (goal > 0) ? (consumed / goal).clamp(0.0, 1.0) : 0.0,
+              value: consumed / goal,
               minHeight: 10.h,
               backgroundColor: ColorsManager.gray200,
-              valueColor: const AlwaysStoppedAnimation<Color>(
-                ColorsManager.primary,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.primary),
             ),
           ),
         ],

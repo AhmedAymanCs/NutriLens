@@ -11,14 +11,12 @@ class HistoryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.arrow_back_ios, color: ColorsManager.textBlack),
+        Icon(Icons.arrow_back_ios, color: ColorsManager.textBlack),
         widthSpace(105),
         Text(
           StringManager.history,
-          style: AppTextStyle.font18BlackBold.copyWith(
-            color: ColorsManager.textBlack,
-          ),
-        ),
+          style: AppTextStyle.font18BlackBold.copyWith(color: ColorsManager.textBlack),
+        )
       ],
     );
   }

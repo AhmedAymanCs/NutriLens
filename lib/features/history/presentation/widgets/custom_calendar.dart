@@ -9,9 +9,9 @@ class CustomCalendar extends StatelessWidget {
   final Function(DateTime) onDaySelected;
 
   const CustomCalendar({
-    super.key,
-    required this.selectedDay,
-    required this.onDaySelected,
+    super.key, 
+    required this.selectedDay, 
+    required this.onDaySelected
   });
 
   @override
@@ -22,11 +22,11 @@ class CustomCalendar extends StatelessWidget {
         color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
-          const BoxShadow(
+          BoxShadow(
             color: ColorsManager.gray500,
             blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
+            offset: const Offset(0, 5),
+          )
         ],
       ),
       child: TableCalendar(
@@ -36,18 +36,18 @@ class CustomCalendar extends StatelessWidget {
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
         onDaySelected: (selected, focused) {
           if (!isSameDay(selectedDay, selected)) {
-            onDaySelected(selected);
+            onDaySelected(selected); 
           }
         },
-        headerStyle: const HeaderStyle(
+        headerStyle: HeaderStyle(
           titleCentered: true,
           formatButtonVisible: false,
         ),
         headerVisible: true,
         calendarStyle: CalendarStyle(
           isTodayHighlighted: true,
-          selectedDecoration: const BoxDecoration(
-            color: ColorsManager.primary,
+          selectedDecoration: BoxDecoration(
+            color: ColorsManager.primary, 
             shape: BoxShape.circle,
           ),
           todayDecoration: BoxDecoration(
@@ -61,7 +61,7 @@ class CustomCalendar extends StatelessWidget {
           weekdayStyle: AppTextStyle.font13GreyW400,
           weekendStyle: AppTextStyle.font13GreyW400,
         ),
-
+        
         availableGestures: AvailableGestures.all,
         calendarFormat: CalendarFormat.month,
       ),

@@ -20,6 +20,7 @@ class CalorieSummaryRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       children: [
         SizedBox(
@@ -29,10 +30,10 @@ class CalorieSummaryRing extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               CircularProgressIndicator(
-                value: (goal > 0) ? (consumed / goal).clamp(0.0, 1.0) : 0.0,
+                value: consumed / goal,
                 strokeWidth: 15,
                 backgroundColor: ColorsManager.gray200,
-                color: ColorsManager.primary,
+                color: ColorsManager.primary, 
                 strokeCap: StrokeCap.round,
               ),
               Center(
@@ -41,21 +42,15 @@ class CalorieSummaryRing extends StatelessWidget {
                   children: [
                     Text(
                       StringManager.remaining,
-                      style: AppTextStyle.font11BlackW600.copyWith(
-                        color: ColorsManager.gray500,
-                      ),
+                      style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.gray500),
                     ),
                     Text(
                       '$remaining',
-                      style: AppTextStyle.font24BlackW700.copyWith(
-                        color: ColorsManager.textBlack,
-                      ),
+                      style: AppTextStyle.font24BlackW700.copyWith(color: ColorsManager.textBlack),
                     ),
                     Text(
                       StringManager.kcal,
-                      style: AppTextStyle.font11BlackW600.copyWith(
-                        color: ColorsManager.gray500,
-                      ),
+                      style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.gray500),
                     ),
                   ],
                 ),
@@ -77,4 +72,6 @@ class CalorieSummaryRing extends StatelessWidget {
       ],
     );
   }
+
+  
 }

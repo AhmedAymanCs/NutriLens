@@ -3,10 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/home/data/data_source/data_source.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HomeRepository {
-  ServerResponse<UserModel> getHomeData();
+  ServerResponse<UserModel?> getLocalUserData(); 
+  ServerResponse<UserModel> getRemoteUserData();
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -15,19 +15,20 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._homeDataSource);
 
   @override
-  ServerResponse<UserModel> getHomeData() async {
+  ServerResponse<UserModel?> getLocalUserData() async {
     try {
-      final results = await Future.wait([
-        _homeDataSource.getUserData(),
-        _homeDataSource.getTodayMeals(),
-      ]);
+      final user = await _homeDataSource.getLocalUserData();
+      return Right(user);
+    } catch (e) {
+      return Left("Local storage error: ${e.toString()}");
+    }
+  }
 
-      final user = results[0] as UserModel;
-      final todayMeals = results[1] as List<MealModel>;
-
-      final homeUserData = user.copyWith(todayMeals: todayMeals);
-
-      return Right(homeUserData);
+  @override
+  ServerResponse<UserModel> getRemoteUserData() async {
+    try {
+      final user = await _homeDataSource.getRemoteUserData();
+      return Right(user);
     } on FirebaseException catch (e) {
       return Left(e.message ?? "Firebase exception");
     } catch (e) {

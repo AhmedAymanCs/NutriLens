@@ -7,7 +7,7 @@ enum HistoryStatus { initial, loading, success, failure }
 class HistoryState extends Equatable {
   final HistoryStatus status;
   final String error;
-  final UserModel? historyData;
+  final UserModel? userModel;
   final DateTime selectedDate;
   final DateTime focusedDay;
   final String selectedFilter;
@@ -15,7 +15,7 @@ class HistoryState extends Equatable {
   const HistoryState({
     this.status = HistoryStatus.initial,
     this.error = '',
-    this.historyData,
+    this.userModel,
     required this.selectedDate,
     required this.focusedDay,
     this.selectedFilter = StringManager.allMeals,
@@ -24,7 +24,7 @@ class HistoryState extends Equatable {
   HistoryState copyWith({
     HistoryStatus? status,
     String? error,
-    UserModel? historyData,
+    UserModel? userModel,
     DateTime? selectedDate,
     DateTime? focusedDay,
     String? selectedFilter,
@@ -32,7 +32,7 @@ class HistoryState extends Equatable {
     return HistoryState(
       status: status ?? this.status,
       error: error ?? this.error,
-      historyData: historyData ?? this.historyData,
+      userModel: userModel ?? this.userModel,
       selectedDate: selectedDate ?? this.selectedDate,
       focusedDay: focusedDay ?? this.focusedDay,
       selectedFilter: selectedFilter ?? this.selectedFilter,
@@ -40,6 +40,5 @@ class HistoryState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, error, historyData, selectedDate, focusedDay, selectedFilter];
+  List<Object?> get props => [status, error, userModel, selectedDate, focusedDay, selectedFilter];
 }
-

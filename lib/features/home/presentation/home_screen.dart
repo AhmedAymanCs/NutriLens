@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/home/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/widgets/calories_summary_ring.dart';
@@ -16,50 +17,53 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorsManager.background,
-      appBar: const HomeAppBar(),
-      body: BlocBuilder<HomeCubit, HomeState>(
-        builder: (context, state) {
-          if (state.status == HomeStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return BlocProvider(
+      create: (context) => getIt<HomeCubit>()..getRemoteUserData(),
+      child: Scaffold(
+        backgroundColor: ColorsManager.background,
+        appBar: const HomeAppBar(),
+        body: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state.status == HomeStatus.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (state.status == HomeStatus.failure) {
-            return Center(child: Text(state.errorMessage));
-          }
+            if (state.status == HomeStatus.failure) {
+              return Center(child: Text(state.errorMessage));
+            }
 
-          if (state.status == HomeStatus.success) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.all(24.0.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  heightSpace(20),
-                  CalorieSummaryRing(
-                    remaining:
-                        state.homeDataModel?.dailyCalorieGoal ??
-                        0 - state.homeDataModel!.dailyCalorieConsumed,
-                    consumed: state.homeDataModel!.dailyCalorieConsumed,
-                    goal: state.homeDataModel?.dailyCalorieGoal ?? 0,
-                  ),
-                  heightSpace(40),
-                  MacrosProgressBar(data: state.homeDataModel!),
-                  heightSpace(40),
-                  Text(
-                    StringManager.todaysMeals,
-                    style: AppTextStyle.font18BlackBold.copyWith(
-                      color: ColorsManager.textBlack,
+            if (state.status == HomeStatus.success) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(24.0.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    heightSpace(20),
+                    CalorieSummaryRing(
+                      remaining:
+                          (state.userModel?.dailyCalorieGoal ?? 0) -
+                          state.userModel!.dailyCalorieConsumed,
+                      consumed: state.userModel!.dailyCalorieConsumed,
+                      goal: state.userModel?.dailyCalorieGoal ?? 0,
                     ),
-                  ),
-                  heightSpace(16),
-                  MealsListView(data: state.homeDataModel!),
-                ],
-              ),
-            );
-          }
-          return const SizedBox();
-        },
+                    heightSpace(40),
+                    MacrosProgressBar(data: state.userModel!),
+                    heightSpace(40),
+                    Text(
+                      StringManager.todaysMeals,
+                      style: AppTextStyle.font18BlackBold.copyWith(
+                        color: ColorsManager.textBlack,
+                      ),
+                    ),
+                    heightSpace(16),
+                    MealsListView(data: state.userModel?.todayMeals ?? []),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

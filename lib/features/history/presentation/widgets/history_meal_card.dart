@@ -29,7 +29,7 @@ class HistoryMealCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: VerticalDivider(
                   thickness: 2,
                   color: ColorsManager.gray200,

@@ -13,7 +13,10 @@ class StatusColumn extends StatelessWidget {
           value,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.grey, fontSize: 12),
+        ),
       ],
     );
   }

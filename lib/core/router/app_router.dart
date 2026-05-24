@@ -23,11 +23,11 @@ import 'package:nutrilens/features/splash/screens/splash_screen.dart';
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case Routes.splash:
-      //   return MaterialPageRoute(
-      //     builder: (_) =>
-      //         SplashScreen(secureStorageHelper: getIt<SecureStorageHelper>()),
-      //   );
+      case Routes.splash:
+        return MaterialPageRoute(
+          builder: (_) =>
+              SplashScreen(secureStorageHelper: getIt<SecureStorageHelper>()),
+        );
       case Routes.login:
         return MaterialPageRoute(
           builder: (_) => BlocProvider<LoginCubit>(
@@ -71,14 +71,14 @@ class AppRouter {
             return MultiBlocProvider(
               providers: [
                 BlocProvider<HomeCubit>(
-                  create: (context) => getIt<HomeCubit>()..getHomeData(),
+                  create: (context) => getIt<HomeCubit>()..getRemoteUserData(),
                 ),
                 BlocProvider<ProfileCubit>(
                   create: (context) => getIt<ProfileCubit>()..getProfileData(),
                 ),
                 BlocProvider<HistoryCubit>(
                   create: (context) =>
-                      getIt<HistoryCubit>()..fetchHistory(DateTime.now()),
+                      getIt<HistoryCubit>()..getRemoteHistoryData(DateTime.now()),
                 ),
                 BlocProvider<AddMealCubit>(
                   create: (context) => getIt<AddMealCubit>()..getFoodItems(),
@@ -94,14 +94,7 @@ class AppRouter {
             return const HomePage();
           },
         );
-      case Routes.splash:
-        return MaterialPageRoute(
-          builder: (_) {
-            return SplashScreen(
-              secureStorageHelper: getIt<SecureStorageHelper>(),
-            );
-          },
-        );
+      
 
       default:
         return MaterialPageRoute(

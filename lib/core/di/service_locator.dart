@@ -126,7 +126,6 @@ void _setupHistoryLocator() {
   getIt.registerLazySingleton<HistoryRepository>(
     () => HistoryRepositoryImpl(
       getIt<HistoryDataSource>(),
-      getIt<HomeDataSource>(),
     ),
   );
 
