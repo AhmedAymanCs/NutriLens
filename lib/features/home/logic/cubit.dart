@@ -37,10 +37,58 @@ class HomeCubit extends Cubit<HomeState> {
         status: HomeStatus.failure,
         errorMessage: failure,
       )),
-      (userModel) => emit(state.copyWith(
-        status: HomeStatus.success,
-        userModel: userModel, 
-      )),
+      (fetchedUser) {
+        
+        UserModel userToDisplay = fetchedUser;
+
+        if (userToDisplay.dailyCalorieGoal == 0 || userToDisplay.carbsGoal == 0 || userToDisplay.proteinGoal == 0 || userToDisplay.fatGoal == 0) {
+          userToDisplay = calculateDailyGoals(userToDisplay);
+          
+        }
+
+        emit(state.copyWith(
+          status: HomeStatus.success,
+          userModel: userToDisplay, 
+        ));
+      },
+    );
+  }
+
+  UserModel calculateDailyGoals(UserModel user) {
+    double bmr;
+
+    if (user.gender.toLowerCase() == 'male') {
+      bmr = (10 * user.weight) + (6.25 * user.height) - (5 * user.age) + 5;
+    } else {
+      bmr = (10 * user.weight) + (6.25 * user.height) - (5 * user.age) - 161;
+    }
+
+    double tdee = bmr * 1.2;
+
+    double targetCalories = tdee;
+    String currentGoal = user.goal.toLowerCase().trim();
+
+    if (currentGoal.contains('gain') || currentGoal == 'Gain Weight') {
+      targetCalories += 500; 
+    } else if (currentGoal.contains('lose') || currentGoal == 'Lose Weight'){
+      targetCalories -= 500; 
+    } 
+
+    double carbs = (targetCalories * 0.50) / 4;
+    
+    double protein = (targetCalories * 0.30) / 4;
+    
+    double fats = (targetCalories * 0.20) / 9;
+
+    return user.copyWith(
+      dailyCalorieGoal: targetCalories.round(),
+      carbsGoal: carbs.round(),
+      proteinGoal: protein.round(),
+      fatGoal: fats.round(),
+      dailyCalorieConsumed: 0,
+      carbsConsumed: 0,
+      proteinConsumed: 0,
+      fatConsumed: 0,
     );
   }
 }

@@ -62,17 +62,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
-        final cubit = getIt<HomeCubit>();
-
-        cubit.getLocalUserData().then((_) {
-          if (cubit.state.userModel == null) {
-            cubit.getRemoteUserData();
-          }
-        });
-
-        return cubit;
-      },
+      create: (context) => getIt<HomeCubit>()..getRemoteUserData(),
       child: Scaffold(
         backgroundColor: ColorsManager.background,
         appBar: const HomeAppBar(),
