@@ -20,7 +20,6 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<HomeCubit>()..getRemoteUserData(),
       child: Scaffold(
-        backgroundColor: ColorsManager.background,
         appBar: const HomeAppBar(),
         body: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {

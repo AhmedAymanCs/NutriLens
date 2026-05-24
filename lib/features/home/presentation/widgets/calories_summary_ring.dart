@@ -42,7 +42,7 @@ class CalorieSummaryRing extends StatelessWidget {
                   children: [
                     Text(
                       StringManager.remaining,
-                      style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.gray500),
+                      style: AppTextStyle.font11BlackW600,
                     ),
                     Text(
                       '$remaining',

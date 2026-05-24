@@ -19,15 +19,8 @@ class CustomCalendar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.gray500,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          )
-        ],
+       
       ),
       child: TableCalendar(
         firstDay: DateTime.utc(2020, 1, 1),

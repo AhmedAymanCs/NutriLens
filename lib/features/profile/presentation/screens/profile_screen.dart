@@ -5,6 +5,7 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/router/routes.dart';
+import 'package:nutrilens/core/theme/cubit/cubit.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
@@ -134,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                 subtitle: StringManager.darkModeSubtitle,
                 value: state.isDarkMode,
                 onChanged: (value) {
-                  // context.read<ThemeCubit>().toggleTheme();
+                  context.read<ThemeCubit>().toggleTheme();
                 },
                 icon: Icons.dark_mode,
               ),

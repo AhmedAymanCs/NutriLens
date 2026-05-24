@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
@@ -9,6 +10,7 @@ import 'package:nutrilens/features/home/data/model/meal_model.dart';
 abstract class HomeDataSource {
   Future<UserModel?> getLocalUserData();
   Future<UserModel> getRemoteUserData();
+  Future<void> updateUserData(UserModel user);
 }
 
 class HomeDataSourceImpl implements HomeDataSource {
@@ -16,21 +18,29 @@ class HomeDataSourceImpl implements HomeDataSource {
   final FirebaseAuth auth;
   final SecureStorageHelper storage;
 
-  HomeDataSourceImpl({required this.firestore, required this.auth, required this.storage});
+  HomeDataSourceImpl({
+    required this.firestore,
+    required this.auth,
+    required this.storage,
+  });
 
   @override
   Future<UserModel?> getLocalUserData() async {
-    final currentUserData = await storage.getData(key: AppConstants.userSession);
+    final currentUserData = await storage.getData(
+      key: AppConstants.userSession,
+    );
     Map<String, dynamic> userDataSession = jsonDecode(currentUserData!);
     return UserModel.fromFirestore(userDataSession);
   }
 
   @override
   Future<UserModel> getRemoteUserData() async {
-    
-    final currentUid = auth.currentUser!.uid;  
-    final userDoc = await firestore.collection(AppConstants.userCollectionName).doc(currentUid).get();
-    
+    final currentUid = auth.currentUser!.uid;
+    final userDoc = await firestore
+        .collection(AppConstants.userCollectionName)
+        .doc(currentUid)
+        .get();
+
     UserModel user = UserModel.fromFirestore(userDoc.data()!);
 
     DateTime now = DateTime.now();
@@ -39,10 +49,16 @@ class HomeDataSourceImpl implements HomeDataSource {
 
     final mealsQuery = await firestore
         .collection(AppConstants.userCollectionName)
-        .doc(currentUid) 
-        .collection(AppConstants.mealsCollectionName) 
-        .where(AppConstants.timestampKey, isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where(AppConstants.timestampKey, isLessThanOrEqualTo: Timestamp.fromDate(endOfDay))
+        .doc(currentUid)
+        .collection(AppConstants.mealsCollectionName)
+        .where(
+          AppConstants.timestampKey,
+          isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay),
+        )
+        .where(
+          AppConstants.timestampKey,
+          isLessThanOrEqualTo: Timestamp.fromDate(endOfDay),
+        )
         .orderBy(AppConstants.timestampKey, descending: true)
         .get();
 
@@ -50,8 +66,16 @@ class HomeDataSourceImpl implements HomeDataSource {
         .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
         .toList();
 
-    return user.copyWith(
-      todayMeals: todayMeals
-    );
+    return user.copyWith(todayMeals: todayMeals);
+  }
+
+  @override
+  Future<void> updateUserData(UserModel user) async {
+    final userSession = await getLocalUserData();
+
+    await firestore
+        .collection(AppConstants.userCollectionName)
+        .doc(userSession!.uid)
+        .update(user.toJson());
   }
 }

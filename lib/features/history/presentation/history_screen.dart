@@ -62,7 +62,6 @@ class HistoryPage extends StatelessWidget {
         return cubit;
       },
       child: Scaffold(
-        backgroundColor: ColorsManager.background,
         body: BlocBuilder<HistoryCubit, HistoryState>(
           builder: (context, state) {
             if (state.status == HistoryStatus.loading) {

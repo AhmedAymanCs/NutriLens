@@ -12,12 +12,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        backgroundColor: ColorsManager.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: ColorsManager.primary),
-          onPressed: () {},
-        ),
+        
         title: Column(
           children: [
             Text(
@@ -31,12 +27,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none, color: ColorsManager.primary),
-            onPressed: () {},
-          ),
-        ],
+        
       );
   }
 }

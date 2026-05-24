@@ -15,7 +15,7 @@ class HistoryHeader extends StatelessWidget {
         widthSpace(105),
         Text(
           StringManager.history,
-          style: AppTextStyle.font18BlackBold.copyWith(color: ColorsManager.textBlack),
+          style: AppTextStyle.font18BlackBold,
         )
       ],
     );

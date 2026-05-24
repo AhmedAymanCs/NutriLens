@@ -7,6 +7,7 @@ import 'package:nutrilens/features/home/data/data_source/data_source.dart';
 abstract class HomeRepository {
   ServerResponse<UserModel?> getLocalUserData(); 
   ServerResponse<UserModel> getRemoteUserData();
+  ServerResponse<Unit> updateUserData(UserModel user);
 }
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -29,6 +30,18 @@ class HomeRepositoryImpl implements HomeRepository {
     try {
       final user = await _homeDataSource.getRemoteUserData();
       return Right(user);
+    } on FirebaseException catch (e) {
+      return Left(e.message ?? "Firebase exception");
+    } catch (e) {
+      return Left("Unexpected error: ${e.toString()}");
+    }
+  }
+  
+  @override
+  ServerResponse<Unit> updateUserData(UserModel user) async {
+    try {
+      await _homeDataSource.updateUserData(user);
+      return const Right(unit);
     } on FirebaseException catch (e) {
       return Left(e.message ?? "Firebase exception");
     } catch (e) {

@@ -39,7 +39,7 @@ class MealFilters extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? ColorsManager.primary.withValues(alpha: 0.4)
-                      : ColorsManager.gray200,
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(24.r),
                   border: Border.all(
                     color: isSelected

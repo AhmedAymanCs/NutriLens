@@ -43,7 +43,6 @@ class HistoryMealCard extends StatelessWidget {
               margin: EdgeInsets.only(bottom: 16.h),
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: ColorsManager.backgroundWhite,
                 borderRadius: BorderRadius.circular(20.r),
                 border: Border.all(color: ColorsManager.gray200),
               ),
@@ -96,10 +95,9 @@ class HistoryMealCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
+                              overflow: TextOverflow.ellipsis,
                               meal.foodName,
-                              style: AppTextStyle.font18BlackBold.copyWith(
-                                color: ColorsManager.textBlack,
-                              ),
+                              style: AppTextStyle.font18BlackBold,
                             ),
                             MealStatusWidget(isEaten: meal.isEaten),
                           ],

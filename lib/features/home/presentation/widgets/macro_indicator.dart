@@ -26,16 +26,10 @@ class MacroIndicator extends StatelessWidget {
     return Container(
       width: 100.w,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: ColorsManager.backgroundWhite,
+      decoration: const BoxDecoration(
+  
         shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.overlayBlack10.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+      
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

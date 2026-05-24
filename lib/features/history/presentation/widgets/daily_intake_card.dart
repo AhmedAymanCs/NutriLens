@@ -16,15 +16,10 @@ class DailyIntakeCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: ColorsManager.backgroundWhite,
+        // color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.gray500,
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          )
-        ],
+      
+        
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

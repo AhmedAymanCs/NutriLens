@@ -20,7 +20,6 @@ class MealCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
@@ -62,7 +61,7 @@ class MealCard extends StatelessWidget {
               children: [
                 Text(
                   mealModel.mealType,
-                  style: AppTextStyle.font16PrimaryBold.copyWith(color: ColorsManager.textBlack),
+                  style: AppTextStyle.font16PrimaryBold,
                 ),
                 heightSpace(4),
                 Text(
