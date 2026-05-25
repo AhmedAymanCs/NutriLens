@@ -68,7 +68,7 @@ class _AddMealPageState extends State<AddMealPage> {
                 children: [
                   // ── Meal Type ──────────────────────────────────────────────
                   DropdownButtonFormField<String>(
-                    initialValue: state.currentMealType,
+                    initialValue: state.mealTypes.first,
                     items: state.mealTypes
                         .map(
                           (type) =>

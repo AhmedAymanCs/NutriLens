@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/models/food_model.dart';
@@ -79,6 +81,7 @@ class AddMealCubit extends Cubit<AddMealState> {
   }
 
   void updateFoodType(String? type) {
+    log('in updateFoodType() type: $type');
     if (type == null) return;
     emit(state.copyWith(currentMealType: type, status: AddMealStatus.initial));
   }

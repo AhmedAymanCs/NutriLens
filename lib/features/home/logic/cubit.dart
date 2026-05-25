@@ -103,8 +103,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   void calculateDailyCaloriesOfMeals() {
     final todaysMeals = state.userModel?.todayMeals ?? [];
-    if (todaysMeals.isEmpty) return;
-
     final totalCalories = todaysMeals.fold<double>(
       0,
       (sum, meal) => sum + meal.nutrition.calories,
