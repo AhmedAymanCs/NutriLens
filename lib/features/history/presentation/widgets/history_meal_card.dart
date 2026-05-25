@@ -5,8 +5,6 @@ import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
-import 'package:nutrilens/features/history/presentation/widgets/meal_status_widget.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class HistoryMealCard extends StatelessWidget {
   final FoodModel meal;

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilens/core/models/food_model.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class UserModel {
   final String uid, email;

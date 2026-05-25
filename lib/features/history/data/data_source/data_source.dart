@@ -5,7 +5,6 @@ import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/models/user_model.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 abstract class HistoryDataSource {
   Future<UserModel?> getLocalUserData();

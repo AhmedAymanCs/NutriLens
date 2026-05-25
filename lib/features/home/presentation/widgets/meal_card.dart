@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/core/constants/image_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class MealCard extends StatelessWidget {
   final FoodModel mealModel;
