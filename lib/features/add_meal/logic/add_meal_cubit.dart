@@ -128,7 +128,15 @@ class AddMealCubit extends Cubit<AddMealState> {
       (failure) => emit(
         state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
       ),
-      (_) => emit(state.copyWith(status: AddMealStatus.saveSuccess)),
+      (_) {
+        emit(
+          state.copyWith(
+            status: AddMealStatus.saveSuccess,
+            selectedFoodItems: [],
+          ),
+        );
+        calculateNutrition();
+      },
     );
   }
 
