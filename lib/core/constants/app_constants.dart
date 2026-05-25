@@ -30,7 +30,7 @@ class AppConstants {
   static const String proteinKey = 'protein';
   static const String fatKey = 'fat';
   static const String imageUrlKey = 'image_url';
-  static const String timestampKey = 'timestamp';
+  static const String timestampKey = 'created_at';
   static const String dailyCalorieConsumed = 'daily_calorie_consumed';
   static const String carbsConsumed = 'carbs_consumed';
   static const String proteinConsumed = 'protein_consumed';

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class UserModel {
@@ -13,13 +14,12 @@ class UserModel {
   final num carbsGoal;
   final num proteinGoal;
   final num fatGoal;
-
   final num dailyCalorieConsumed;
   final num carbsConsumed;
   final num proteinConsumed;
   final num fatConsumed;
 
-  final List<MealModel> todayMeals;
+  final List<FoodModel> todayMeals;
 
   UserModel({
     required this.uid,
@@ -117,7 +117,7 @@ class UserModel {
     num? carbsConsumed,
     num? proteinConsumed,
     num? fatConsumed,
-    List<MealModel>? todayMeals,
+    List<FoodModel>? todayMeals,
   }) {
     return UserModel(
       uid: uid ?? this.uid,

@@ -4,11 +4,12 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/image_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
 class MealCard extends StatelessWidget {
-  final MealModel mealModel;
+  final FoodModel mealModel;
 
   const MealCard({super.key, required this.mealModel});
 
@@ -28,26 +29,26 @@ class MealCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 80.w,
-            height: 80.h,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                bottomLeft: Radius.circular(24),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: Image.network(
-                mealModel.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(ImageManager.logo, fit: BoxFit.cover);
-                },
-              ),
-            ),
-          ),
+          // Container(
+          //   width: 80.w,
+          //   height: 80.h,
+          //   decoration: const BoxDecoration(
+          //     borderRadius: BorderRadius.only(
+          //       topLeft: Radius.circular(24),
+          //       bottomLeft: Radius.circular(24),
+          //     ),
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 12),
+          //     child: Image.network(
+          //       mealModel.imageUrl,
+          //       fit: BoxFit.cover,
+          //       errorBuilder: (context, error, stackTrace) {
+          //         return Image.asset(ImageManager.logo, fit: BoxFit.cover);
+          //       },
+          //     ),
+          //   ),
+          // ),
           heightSpace(16),
           Expanded(
             child: Column(
@@ -55,19 +56,19 @@ class MealCard extends StatelessWidget {
               children: [
                 Text(mealModel.mealType, style: AppTextStyle.font16PrimaryBold),
                 heightSpace(4),
-                Text(mealModel.foodName, style: AppTextStyle.font13GreyW400),
+                // Text(mealModel.foodName, style: AppTextStyle.font13GreyW400),
                 heightSpace(4),
-                Text(
-                  mealModel.quantity.toString(),
-                  style: AppTextStyle.font13primaryColorW400,
-                ),
+                // Text(
+                //   mealModel.quantity.toString(),
+                //   style: AppTextStyle.font13primaryColorW400,
+                // ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Text(
-              "${mealModel.calories.toString()} ${StringManager.kcal}",
+              "${mealModel.nutrition.calories.toString()} ${StringManager.kcal}",
               style: AppTextStyle.font16PrimaryBold,
             ),
           ),

@@ -107,17 +107,20 @@ class HomeCubit extends Cubit<HomeState> {
 
     final totalCalories = todaysMeals.fold<double>(
       0,
-      (sum, meal) => sum + meal.calories,
+      (sum, meal) => sum + meal.nutrition.calories,
     );
     final totalProtein = todaysMeals.fold<double>(
       0,
-      (sum, meal) => sum + meal.protein,
+      (sum, meal) => sum + meal.nutrition.protein,
     );
     final totalCarbs = todaysMeals.fold<double>(
       0,
-      (sum, meal) => sum + meal.carbs,
+      (sum, meal) => sum + meal.nutrition.carbs,
     );
-    final totalFat = todaysMeals.fold<double>(0, (sum, meal) => sum + meal.fat);
+    final totalFat = todaysMeals.fold<double>(
+      0,
+      (sum, meal) => sum + meal.nutrition.fats,
+    );
 
     final updatedUser = state.userModel!.copyWith(
       dailyCalorieConsumed: totalCalories.round(),

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/features/home/presentation/widgets/meal_card.dart';
-import 'package:nutrilens/features/home/data/model/meal_model.dart';
-
 
 class MealsListView extends StatelessWidget {
   const MealsListView({super.key, required this.data});
 
-  final List<MealModel> data;
+  final List<FoodModel> data;
   // final meals = [
   //   MealModel(
   //     title: 'Breakfast',
@@ -28,10 +27,8 @@ class MealsListView extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: data.length,
-      itemBuilder: (context, index) {    
-        return MealCard(
-          mealModel: data[index],
-        );
+      itemBuilder: (context, index) {
+        return MealCard(mealModel: data[index]);
       },
     );
   }

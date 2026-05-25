@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
 
 class FoodModel {
@@ -17,7 +18,7 @@ class FoodModel {
 
   factory FoodModel.fromJson(Map<String, dynamic> json) => FoodModel(
     id: json['id'] ?? '',
-    createdAt: DateTime.parse(json['created_at']),
+    createdAt: (json['created_at'] as Timestamp).toDate(),
     mealType: json['meal_type'] ?? '',
     nutrition: NutritionModel.fromJson(json['nutrition'] ?? {}),
     ingredients: (json['ingredients'] as List<dynamic>)
@@ -41,7 +42,7 @@ class FoodModel {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'created_at': createdAt.toIso8601String(),
+    'created_at': Timestamp.fromDate(createdAt),
     'meal_type': mealType,
     'nutrition': nutrition.toJson(),
     'ingredients': ingredients.map((e) => e.toJson()).toList(),

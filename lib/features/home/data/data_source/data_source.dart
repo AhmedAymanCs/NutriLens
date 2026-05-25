@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/home/data/model/meal_model.dart';
 
@@ -35,7 +37,9 @@ class HomeDataSourceImpl implements HomeDataSource {
 
   @override
   Future<UserModel> getRemoteUserData() async {
-    final currentUid = auth.currentUser!.uid;
+    // final currentUid = auth.currentUser!.uid;
+    final userSession = await getLocalUserData();
+    final currentUid = userSession!.uid;
     final userDoc = await firestore
         .collection(AppConstants.userCollectionName)
         .doc(currentUid)
@@ -62,10 +66,10 @@ class HomeDataSourceImpl implements HomeDataSource {
         .orderBy(AppConstants.timestampKey, descending: true)
         .get();
 
-    List<MealModel> todayMeals = mealsQuery.docs
-        .map((doc) => MealModel.fromFirestore(doc.data(), doc.id))
+    List<FoodModel> todayMeals = mealsQuery.docs
+        .map((doc) => FoodModel.fromJson(doc.data()))
         .toList();
-
+    log('in getRemoteUserData() todayMeals: ${todayMeals.length}');
     return user.copyWith(todayMeals: todayMeals);
   }
 
