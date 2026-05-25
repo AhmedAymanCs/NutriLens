@@ -1,16 +1,12 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
-import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/add_meal/data/data_source/add_meal_data_source.dart';
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
-import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 
 abstract class AddMealRepository {
   // ServerResponse<List<MealModel>> getMealElements();
