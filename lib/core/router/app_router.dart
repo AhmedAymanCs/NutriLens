@@ -17,7 +17,7 @@ import 'package:nutrilens/features/auth/presentation/register/presentation/scree
 import 'package:nutrilens/features/history/logic/cubit.dart';
 import 'package:nutrilens/features/home/logic/cubit.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
-import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
+import 'package:nutrilens/features/profile/logic/profile_cubit.dart';
 import 'package:nutrilens/features/splash/screens/splash_screen.dart';
 
 class AppRouter {
@@ -78,7 +78,8 @@ class AppRouter {
                 ),
                 BlocProvider<HistoryCubit>(
                   create: (context) =>
-                      getIt<HistoryCubit>()..getRemoteHistoryData(DateTime.now()),
+                      getIt<HistoryCubit>()
+                        ..getRemoteHistoryData(DateTime.now()),
                 ),
                 BlocProvider<AddMealCubit>(
                   create: (context) => getIt<AddMealCubit>()..getFoodItems(),
@@ -94,7 +95,6 @@ class AppRouter {
             return const HomePage();
           },
         );
-      
 
       default:
         return MaterialPageRoute(

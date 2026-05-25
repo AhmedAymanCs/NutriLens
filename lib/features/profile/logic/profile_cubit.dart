@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/models/user_model.dart';
 import 'package:nutrilens/features/profile/data/repository/profile_repository.dart';
-import 'package:nutrilens/features/profile/presentation/logic/profile_state.dart';
+import 'package:nutrilens/features/profile/logic/profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository _profileRepository;

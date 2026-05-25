@@ -22,7 +22,7 @@ import 'package:nutrilens/core/services/local_notification_service.dart';
 import 'package:nutrilens/core/database/local/secure_storage/secure_storage_helper.dart';
 import 'package:nutrilens/features/auth/data/data_source/auth_data_source.dart';
 import 'package:nutrilens/features/auth/data/repository/auth_repository.dart';
-import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
+import 'package:nutrilens/features/profile/logic/profile_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -124,9 +124,7 @@ void _setupHistoryLocator() {
   );
 
   getIt.registerLazySingleton<HistoryRepository>(
-    () => HistoryRepositoryImpl(
-      getIt<HistoryDataSource>(),
-    ),
+    () => HistoryRepositoryImpl(getIt<HistoryDataSource>()),
   );
 
   getIt.registerFactory(() => HistoryCubit(getIt<HistoryRepository>()));

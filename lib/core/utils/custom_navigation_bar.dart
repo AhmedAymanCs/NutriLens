@@ -5,7 +5,7 @@ import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/features/add_meal/presentation/add_meal_screen.dart';
 import 'package:nutrilens/features/history/presentation/history_screen.dart';
 import 'package:nutrilens/features/home/presentation/home_screen.dart';
-import 'package:nutrilens/features/profile/presentation/screens/profile_screen.dart';
+import 'package:nutrilens/features/profile/presentation/profile_screen.dart';
 
 class CustomNavigationBar extends StatefulWidget {
   const CustomNavigationBar({super.key});

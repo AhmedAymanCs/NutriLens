@@ -8,10 +8,9 @@ import 'package:nutrilens/core/router/routes.dart';
 import 'package:nutrilens/core/theme/cubit/cubit.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
-import 'package:nutrilens/features/profile/presentation/logic/profile_cubit.dart';
-import 'package:nutrilens/features/profile/presentation/logic/profile_state.dart';
-import 'package:nutrilens/features/profile/presentation/widgets/custom_list_tile.dart';
-import 'package:nutrilens/features/profile/presentation/widgets/custom_sign_up_button.dart';
+import 'package:nutrilens/features/profile/logic/profile_cubit.dart';
+import 'package:nutrilens/features/profile/logic/profile_state.dart';
+import 'package:nutrilens/features/profile/presentation/shared_widgets.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -25,7 +24,6 @@ class ProfilePage extends StatelessWidget {
         if (state.status == ProfileStatus.failure) {
           customSnackBar(context: context, message: state.errorMessage);
         }
-
         if (state.status == ProfileStatus.signOutSuccess) {
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -34,8 +32,8 @@ class ProfilePage extends StatelessWidget {
           );
         }
       },
-
       builder: (context, state) {
+        final cubit = context.read<ProfileCubit>();
         return Skeletonizer(
           enabled: state.user == null,
           child: ListView(
@@ -45,7 +43,6 @@ class ProfilePage extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(vertical: 24.h),
                 decoration: BoxDecoration(
-                  color: ColorsManager.backgroundWhite,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -62,48 +59,21 @@ class ProfilePage extends StatelessWidget {
                       state.user?.name ?? "",
                       style: AppTextStyle.font18BlackBold,
                     ),
-                    Text(state.user?.email ?? ""),
-                    heightSpace(15),
-                    Wrap(
-                      children: [
-                        Container(
-                          width: 120.w,
-                          height: 25.h,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: ColorsManager.primaryLight,
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          child: Text(
-                            StringManager.profile24DayStreak,
-                            style: AppTextStyle.font13GreyW400,
-                          ),
-                        ),
-                        widthSpace(10),
-                        Container(
-                          width: 100.w,
-                          height: 25.h,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: ColorsManager.gray200,
-                            borderRadius: BorderRadius.circular(50.r),
-                          ),
-                          child: Text(
-                            StringManager.proMember,
-                            style: AppTextStyle.font11BlackW600,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      state.user?.email ?? "",
+                      style: AppTextStyle.font15GreyW500,
                     ),
                     heightSpace(20),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => showDialog(
+                        context: context,
+                        builder: (context) => EditProfileDialog(cubit: cubit),
+                      ),
                       child: Container(
                         width: 220.w,
                         height: 35.h,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: ColorsManager.gray200,
                           borderRadius: BorderRadius.circular(50.r),
                         ),
                         child: Wrap(

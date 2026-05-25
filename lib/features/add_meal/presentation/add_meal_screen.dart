@@ -32,7 +32,7 @@ class _AddMealPageState extends State<AddMealPage> {
     super.initState();
     _nameControllers.add(TextEditingController());
     _gramControllers.add(TextEditingController());
-    context.read<AddMealCubit>().getMealElements();
+    context.read<AddMealCubit>();
   }
 
   @override
