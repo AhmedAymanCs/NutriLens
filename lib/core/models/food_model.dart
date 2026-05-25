@@ -1,5 +1,4 @@
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
-import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 
 class FoodModel {
   final String id;
@@ -46,5 +45,33 @@ class FoodModel {
     'meal_type': mealType,
     'nutrition': nutrition.toJson(),
     'ingredients': ingredients.map((e) => e.toJson()).toList(),
+  };
+}
+
+class NutritionModel {
+  final num calories;
+  final num protein;
+  final num carbs;
+  final num fats;
+
+  const NutritionModel({
+    this.calories = 0,
+    this.protein = 0,
+    this.carbs = 0,
+    this.fats = 0,
+  });
+
+  factory NutritionModel.fromJson(Map<String, dynamic> json) => NutritionModel(
+    calories: json['calories'] ?? 0,
+    protein: json['protein'] ?? 0,
+    carbs: json['carbs'] ?? 0,
+    fats: json['fats'] ?? 0,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'calories': calories,
+    'protein': protein,
+    'carbs': carbs,
+    'fats': fats,
   };
 }

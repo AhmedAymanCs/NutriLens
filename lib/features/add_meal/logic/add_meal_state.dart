@@ -1,20 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_model.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 
-enum AddMealStatus { initial, loading, getSuccess, saveSuccess, failure }
+enum AddMealStatus { initial, loading, success, saveSuccess, failure }
 
 class AddMealState extends Equatable {
   final AddMealStatus status;
-  final List<MealModel> meals;
-  final MealModel? meal;
   final String errorMessage;
-  final NutritionModel estimatedNutrition;
-  final List<IngredientModel> currentIngredients;
+  // final List<MealModel> meals;
+  // final MealModel? meal;
+
+  // final NutritionModel estimatedNutrition;
+  // final List<IngredientModel> currentIngredients;
   final String currentMealName;
   final String? currentMealType;
   //////////////////////////////////////
+  final List<String> mealTypes;
   final List<FoodItemModel> foodItems;
   final List<FoodItemModel> filteredFoodItems;
   final List<FoodItemModel> selectedFoodItems;
@@ -25,11 +27,13 @@ class AddMealState extends Equatable {
 
   const AddMealState({
     this.status = AddMealStatus.initial,
-    this.meals = const [],
-    this.meal,
+    this.mealTypes = const ['Breakfast', 'Lunch', 'Dinner', 'Snack'],
     this.errorMessage = '',
-    this.estimatedNutrition = const NutritionModel(),
-    this.currentIngredients = const [IngredientModel()],
+    // this.meals = const [],
+    // this.meal,
+
+    // this.estimatedNutrition = const NutritionModel(),
+    // this.currentIngredients = const [IngredientModel()],
     this.currentMealName = '',
     this.currentMealType,
     this.foodItems = const [],
@@ -48,11 +52,12 @@ class AddMealState extends Equatable {
 
   AddMealState copyWith({
     AddMealStatus? status,
-    List<MealModel>? meals,
-    MealModel? meal,
     String? errorMessage,
-    NutritionModel? estimatedNutrition,
-    List<IngredientModel>? currentIngredients,
+    // List<MealModel>? meals,
+    // MealModel? meal,
+
+    // NutritionModel? estimatedNutrition,
+    // List<IngredientModel>? currentIngredients,
     String? currentMealName,
     String? currentMealType,
     List<FoodItemModel>? foodItems,
@@ -64,11 +69,12 @@ class AddMealState extends Equatable {
     NutritionModel? nutrition,
   }) => AddMealState(
     status: status ?? this.status,
-    meals: meals ?? this.meals,
-    meal: meal ?? this.meal,
     errorMessage: errorMessage ?? this.errorMessage,
-    estimatedNutrition: estimatedNutrition ?? this.estimatedNutrition,
-    currentIngredients: currentIngredients ?? this.currentIngredients,
+    // meals: meals ?? this.meals,
+    // meal: meal ?? this.meal,
+
+    // estimatedNutrition: estimatedNutrition ?? this.estimatedNutrition,
+    // currentIngredients: currentIngredients ?? this.currentIngredients,
     currentMealName: currentMealName ?? this.currentMealName,
     currentMealType: currentMealType ?? this.currentMealType,
     foodItems: foodItems ?? this.foodItems,
@@ -83,11 +89,12 @@ class AddMealState extends Equatable {
   @override
   List<Object?> get props => [
     status,
-    meals,
-    meal,
     errorMessage,
-    estimatedNutrition,
-    currentIngredients,
+    // meals,
+    // meal,
+
+    // estimatedNutrition,
+    // currentIngredients,
     currentMealName,
     currentMealType,
     foodItems,

@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 import 'package:nutrilens/features/add_meal/data/repository/add_meal_repository.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_state.dart';
+import 'package:uuid/uuid.dart';
 
 class AddMealCubit extends Cubit<AddMealState> {
   final AddMealRepository addMealRepository;
@@ -20,7 +22,7 @@ class AddMealCubit extends Cubit<AddMealState> {
         state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
       ),
       (foodItems) => emit(
-        state.copyWith(status: AddMealStatus.getSuccess, foodItems: foodItems),
+        state.copyWith(status: AddMealStatus.success, foodItems: foodItems),
       ),
     );
   }
@@ -39,8 +41,13 @@ class AddMealCubit extends Cubit<AddMealState> {
   }
 
   void selectFoodItem(FoodItemModel item) {
-    emit(state.copyWith(filteredFoodItems: [], currentFoodItem: item));
-    log(state.currentFoodItem!.name);
+    emit(
+      state.copyWith(
+        filteredFoodItems: [],
+        currentFoodItem: item,
+        status: AddMealStatus.success,
+      ),
+    );
   }
 
   void submitIngredient({required String name, required num grams}) {
@@ -76,7 +83,7 @@ class AddMealCubit extends Cubit<AddMealState> {
 
   void updateFoodType(String? type) {
     if (type == null) return;
-    emit(state.copyWith(currentMealType: type));
+    emit(state.copyWith(currentMealType: type, status: AddMealStatus.initial));
   }
 
   void calculateNutrition() {
@@ -101,10 +108,31 @@ class AddMealCubit extends Cubit<AddMealState> {
     );
   }
 
-  void saveSelectedFoodItem(FoodItemModel item) {
-    if (_isValidIngredient(item.name)) {
-      return;
-    }
+  Future<void> saveSelectedMeal() async {
+    emit(
+      state.copyWith(
+        status: AddMealStatus.loading,
+        selectedMeal: FoodModel(
+          mealType: state.currentMealType ?? 'Unknown',
+          nutrition: NutritionModel(
+            calories: state.nutrition.calories,
+            protein: state.nutrition.protein,
+            carbs: state.nutrition.carbs,
+            fats: state.nutrition.fats,
+          ),
+          id: const Uuid().v4(),
+          createdAt: DateTime.now(),
+          ingredients: state.selectedFoodItems,
+        ),
+      ),
+    );
+    final result = await addMealRepository.saveMeal(state.selectedMeal!);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
+      ),
+      (_) => emit(state.copyWith(status: AddMealStatus.saveSuccess)),
+    );
   }
 
   bool _isValidIngredient(String value) {
@@ -116,17 +144,17 @@ class AddMealCubit extends Cubit<AddMealState> {
   }
 
   //////////////////////////////////////////////////////////////////////////////////
-  Future<void> getMealElements() async {
-    emit(state.copyWith(status: AddMealStatus.loading));
-    final result = await addMealRepository.getMealElements();
-    result.fold(
-      (failure) => emit(
-        state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
-      ),
-      (meals) =>
-          emit(state.copyWith(status: AddMealStatus.initial, meals: meals)),
-    );
-  }
+  // Future<void> getMealElements() async {
+  //   emit(state.copyWith(status: AddMealStatus.loading));
+  //   final result = await addMealRepository.getMealElements();
+  //   result.fold(
+  //     (failure) => emit(
+  //       state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
+  //     ),
+  //     (meals) =>
+  //         emit(state.copyWith(status: AddMealStatus.initial, meals: meals)),
+  //   );
+  // }
 
   void updateMealName(String name) {
     emit(state.copyWith(currentMealName: name));
@@ -136,11 +164,11 @@ class AddMealCubit extends Cubit<AddMealState> {
     emit(state.copyWith(currentMealType: type));
   }
 
-  void updateIngredientName(int index, String name) {
-    final updated = [...state.currentIngredients];
-    updated[index] = updated[index].copyWith(name: name);
-    emit(state.copyWith(currentIngredients: updated));
-  }
+  // void updateIngredientName(int index, String name) {
+  //   final updated = [...state.currentIngredients];
+  //   updated[index] = updated[index].copyWith(name: name);
+  //   emit(state.copyWith(currentIngredients: updated));
+  // }
 
   // void updateIngredientGrams(int index, String gramsText) {
   //   final updated = [...state.currentIngredients];
@@ -153,16 +181,16 @@ class AddMealCubit extends Cubit<AddMealState> {
   //   );
   // }
 
-  void addIngredient() {
-    emit(
-      state.copyWith(
-        currentIngredients: [
-          ...state.currentIngredients,
-          const IngredientModel(),
-        ],
-      ),
-    );
-  }
+  // void addIngredient() {
+  //   emit(
+  //     state.copyWith(
+  //       currentIngredients: [
+  //         ...state.currentIngredients,
+  //         const IngredientModel(),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // void removeIngredient(int index) {
   //   if (state.currentIngredients.length == 1) return;
@@ -175,28 +203,28 @@ class AddMealCubit extends Cubit<AddMealState> {
   //   );
   // }
 
-  Future<void> saveMeal() async {
-    emit(state.copyWith(status: AddMealStatus.loading));
-    final mealModel = MealModel(
-      mealName: state.currentMealName,
-      mealType: state.currentMealType ?? 'Unknown',
-      imageUrl:
-          state.meal?.imageUrl ??
-          "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
-      nutrition: state.estimatedNutrition,
-      ingredients: state.currentIngredients,
-    );
-    final result = await addMealRepository.saveMeal(
-      mealModel: mealModel,
-      mealType: state.currentMealType ?? 'Unknown',
-    );
-    result.fold(
-      (failure) => emit(
-        state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
-      ),
-      (_) => emit(state.copyWith(status: AddMealStatus.saveSuccess)),
-    );
-  }
+  // Future<void> saveMeal() async {
+  //   emit(state.copyWith(status: AddMealStatus.loading));
+  //   final mealModel = MealModel(
+  //     mealName: state.currentMealName,
+  //     mealType: state.currentMealType ?? 'Unknown',
+  //     imageUrl:
+  //         state.meal?.imageUrl ??
+  //         "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
+  //     nutrition: state.estimatedNutrition,
+  //     ingredients: state.currentIngredients,
+  //   );
+  //   final result = await addMealRepository.saveMeal(
+  //     mealModel: mealModel,
+  //     mealType: state.currentMealType ?? 'Unknown',
+  //   );
+  //   result.fold(
+  //     (failure) => emit(
+  //       state.copyWith(status: AddMealStatus.failure, errorMessage: failure),
+  //     ),
+  //     (_) => emit(state.copyWith(status: AddMealStatus.saveSuccess)),
+  //   );
+  // }
 
   // NutritionModel _calculateNutrition(List<IngredientModel> ingredients) {
   //   if (state.meal != null && _matchesSearchedMeal(ingredients)) {

@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
+import 'package:nutrilens/core/functions/get_local_session.dart';
+import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/save_meal_params.dart';
 
 abstract class AddMealRemoteDataSource {
   Future<QuerySnapshot<Map<String, dynamic>>> getMealElements();
-  Future<void> saveMeal({required SaveMealParams params});
+
   Future<List<FoodItemModel>> getFoodItems();
+  Future<void> saveMeal(FoodModel meal);
 }
 
 class AddMealRemoteDataSourceImpl implements AddMealRemoteDataSource {
@@ -23,13 +28,15 @@ class AddMealRemoteDataSourceImpl implements AddMealRemoteDataSource {
   }
 
   @override
-  Future<void> saveMeal({required SaveMealParams params}) async {
+  Future<void> saveMeal(FoodModel meal) async {
+    final userSession = await getLocalUserData();
+    log('in saveMeal() => userSession: ${userSession!.uid}');
     await firestore
         .collection(AppConstants.userCollectionName)
-        .doc(params.userId)
-        .collection('meals')
-        .doc(params.mealModel.mealId)
-        .set({'meal': params.mealModel.toJson(), 'date': params.date});
+        .doc(userSession.uid)
+        .collection(AppConstants.mealsCollectionName)
+        .doc(meal.id)
+        .set(meal.toJson());
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
+import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
@@ -18,7 +19,6 @@ class AddMealPage extends StatefulWidget {
 
 class _AddMealPageState extends State<AddMealPage> {
   final _formKey = GlobalKey<FormState>();
-  final List<String> _mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
   // Controllers
   final TextEditingController _ingredientNameController =
@@ -36,7 +36,18 @@ class _AddMealPageState extends State<AddMealPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddMealCubit, AddMealState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.status == AddMealStatus.saveSuccess) {
+          customSnackBar(
+            context: context,
+            message: 'Meal saved successfully',
+            isErrorMessage: false,
+          );
+        }
+        if (state.status == AddMealStatus.failure) {
+          customSnackBar(context: context, message: state.errorMessage);
+        }
+      },
       builder: (context, state) {
         final cubit = context.read<AddMealCubit>();
         return Scaffold(
@@ -58,7 +69,7 @@ class _AddMealPageState extends State<AddMealPage> {
                   // ── Meal Type ──────────────────────────────────────────────
                   DropdownButtonFormField<String>(
                     initialValue: state.currentMealType,
-                    items: _mealTypes
+                    items: state.mealTypes
                         .map(
                           (type) =>
                               DropdownMenuItem(value: type, child: Text(type)),
@@ -139,7 +150,10 @@ class _AddMealPageState extends State<AddMealPage> {
                   ),
                   heightSpace(36),
                   // ── Save Button ────────────────────────────────────────────
-                  CustomButton(text: 'Save Meal', onPressed: cubit.saveMeal),
+                  CustomButton(
+                    text: 'Save Meal',
+                    onPressed: cubit.saveSelectedMeal,
+                  ),
                 ],
               ),
             ),
