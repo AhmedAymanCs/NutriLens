@@ -9,19 +9,16 @@ class CustomCalendar extends StatelessWidget {
   final Function(DateTime) onDaySelected;
 
   const CustomCalendar({
-    super.key, 
-    required this.selectedDay, 
-    required this.onDaySelected
+    super.key,
+    required this.selectedDay,
+    required this.onDaySelected,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-       
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.r)),
       child: TableCalendar(
         firstDay: DateTime.utc(2020, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
@@ -29,18 +26,18 @@ class CustomCalendar extends StatelessWidget {
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
         onDaySelected: (selected, focused) {
           if (!isSameDay(selectedDay, selected)) {
-            onDaySelected(selected); 
+            onDaySelected(selected);
           }
         },
-        headerStyle: HeaderStyle(
+        headerStyle: const HeaderStyle(
           titleCentered: true,
           formatButtonVisible: false,
         ),
         headerVisible: true,
         calendarStyle: CalendarStyle(
           isTodayHighlighted: true,
-          selectedDecoration: BoxDecoration(
-            color: ColorsManager.primary, 
+          selectedDecoration: const BoxDecoration(
+            color: ColorsManager.primary,
             shape: BoxShape.circle,
           ),
           todayDecoration: BoxDecoration(
@@ -54,7 +51,7 @@ class CustomCalendar extends StatelessWidget {
           weekdayStyle: AppTextStyle.font13GreyW400,
           weekendStyle: AppTextStyle.font13GreyW400,
         ),
-        
+
         availableGestures: AvailableGestures.all,
         calendarFormat: CalendarFormat.month,
       ),

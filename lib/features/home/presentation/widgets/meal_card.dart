@@ -10,10 +10,7 @@ import 'package:nutrilens/features/home/data/model/meal_model.dart';
 class MealCard extends StatelessWidget {
   final MealModel mealModel;
 
-  const MealCard({
-    super.key,
-    required this.mealModel
-  });
+  const MealCard({super.key, required this.mealModel});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +31,8 @@ class MealCard extends StatelessWidget {
           Container(
             width: 80.w,
             height: 80.h,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(24),
                 bottomLeft: Radius.circular(24),
               ),
@@ -46,10 +43,7 @@ class MealCard extends StatelessWidget {
                 mealModel.imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    ImageManager.logo,
-                    fit: BoxFit.cover,
-                  );
+                  return Image.asset(ImageManager.logo, fit: BoxFit.cover);
                 },
               ),
             ),
@@ -59,15 +53,9 @@ class MealCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  mealModel.mealType,
-                  style: AppTextStyle.font16PrimaryBold,
-                ),
+                Text(mealModel.mealType, style: AppTextStyle.font16PrimaryBold),
                 heightSpace(4),
-                Text(
-                  mealModel.foodName,
-                  style: AppTextStyle.font13GreyW400,
-                ),
+                Text(mealModel.foodName, style: AppTextStyle.font13GreyW400),
                 heightSpace(4),
                 Text(
                   mealModel.quantity.toString(),

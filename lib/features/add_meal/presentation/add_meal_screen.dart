@@ -3,11 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
-import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
-import 'package:nutrilens/core/widgets/custom_form_field.dart';
-import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_cubit.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_state.dart';
 import 'package:nutrilens/features/add_meal/presentation/shared_widgets.dart';
@@ -23,94 +20,34 @@ class _AddMealPageState extends State<AddMealPage> {
   final _formKey = GlobalKey<FormState>();
   final List<String> _mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
-  final TextEditingController _mealNameController = TextEditingController();
-  final List<TextEditingController> _nameControllers = [];
-  final List<TextEditingController> _gramControllers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _nameControllers.add(TextEditingController());
-    _gramControllers.add(TextEditingController());
-    context.read<AddMealCubit>();
-  }
+  // Controllers
+  final TextEditingController _ingredientNameController =
+      TextEditingController();
+  final TextEditingController _ingredientGramsController =
+      TextEditingController();
 
   @override
   void dispose() {
-    _mealNameController.dispose();
-    for (final c in _nameControllers) c.dispose();
-    for (final c in _gramControllers) c.dispose();
+    _ingredientNameController.dispose();
+    _ingredientGramsController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: const SizedBox.shrink(),
-        title: Text('Add Meal', style: AppTextStyle.font22PrimaryBold),
-        centerTitle: true,
-      ),
-      body: BlocConsumer<AddMealCubit, AddMealState>(
-        listener: (context, state) {
-          if (state.status == AddMealStatus.saveSuccess) {
-            customSnackBar(
-              context: context,
-              message: 'Meal saved successfully!',
-              isErrorMessage: false,
-            );
-            Navigator.of(context).pop();
-          } else if (state.status == AddMealStatus.failure) {
-            customSnackBar(context: context, message: state.errorMessage);
-          } else if (state.status == AddMealStatus.getSuccess) {
-            // Sync controllers with data from cubit
-            _mealNameController.text = state.currentMealName;
-
-            for (final c in _nameControllers) c.dispose();
-            for (final c in _gramControllers) c.dispose();
-            _nameControllers.clear();
-            _gramControllers.clear();
-
-            for (final ing in state.currentIngredients) {
-              _nameControllers.add(TextEditingController(text: ing.name));
-              _gramControllers.add(
-                TextEditingController(text: ing.grams.toString()),
-              );
-            }
-
-            customSnackBar(
-              context: context,
-              message: 'Loaded recipe details for: ${state.currentMealName}',
-              isErrorMessage: false,
-            );
-          }
-        },
-        builder: (context, state) {
-          final cubit = context.read<AddMealCubit>();
-
-          // Keep controllers list in sync with state ingredients count
-          while (_nameControllers.length < state.currentIngredients.length) {
-            _nameControllers.add(TextEditingController());
-            _gramControllers.add(TextEditingController());
-          }
-          while (_nameControllers.length > state.currentIngredients.length) {
-            _nameControllers.removeLast().dispose();
-            _gramControllers.removeLast().dispose();
-          }
-
-          final currentMealModel = MealModel(
-            mealName: state.currentMealName,
-            mealType: state.currentMealType ?? 'Unknown',
-            imageUrl:
-                state.meal?.imageUrl ??
-                "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
-            nutrition: state.estimatedNutrition,
-            ingredients: state.currentIngredients,
-          );
-
-          return Form(
+    return BlocConsumer<AddMealCubit, AddMealState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final cubit = context.read<AddMealCubit>();
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: const SizedBox.shrink(),
+            title: Text('Add Meal', style: AppTextStyle.font22PrimaryBold),
+            centerTitle: true,
+          ),
+          body: Form(
             key: _formKey,
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -118,51 +55,7 @@ class _AddMealPageState extends State<AddMealPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Meal image
-                  if (state.meal != null) ...[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.r),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(color: ColorsManager.primary),
-                          image: DecorationImage(
-                            image: NetworkImage(state.meal!.imageUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    heightSpace(15),
-                  ],
-
-                  // Meal name
-                  CustomFormField(
-                    hint: 'Meal Name',
-                    controller: _mealNameController,
-                    onChanged: (value) => cubit.updateMealName(value ?? ''),
-                    suffixIcon: GestureDetector(
-                      onTap: () => cubit.searchInMeals(
-                        mealName: _mealNameController.text.trim(),
-                      ),
-                      child: const Icon(
-                        Icons.search,
-                        color: ColorsManager.primary,
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Enter meal name';
-                      }
-                      return null;
-                    },
-                  ),
-
-                  heightSpace(18),
-
-                  // Meal type
+                  // ── Meal Type ──────────────────────────────────────────────
                   DropdownButtonFormField<String>(
                     initialValue: state.currentMealType,
                     items: _mealTypes
@@ -171,38 +64,47 @@ class _AddMealPageState extends State<AddMealPage> {
                               DropdownMenuItem(value: type, child: Text(type)),
                         )
                         .toList(),
-                    onChanged: cubit.updateMealType,
+                    onChanged: (value) => cubit.updateFoodType(value),
                     validator: (value) =>
                         value == null ? 'Select meal type' : null,
+                    decoration: const InputDecoration(hintText: 'Meal Type'),
                   ),
 
                   heightSpace(28),
 
+                  // ── Ingredients Section ────────────────────────────────────
                   Text('Ingredients', style: AppTextStyle.font18BlackBold),
                   heightSpace(16),
 
-                  // Ingredients list
-                  ...List.generate(
-                    state.currentIngredients.length,
-                    (index) => IngredientAutoCompleteField(
-                      controller: _nameControllers[index],
-                      suggestions: state.filteredFoodItems,
-                      onSearch: cubit.searchFoodItems,
-                      onSelected: (item) =>
-                          cubit.updateIngredientName(index, item.name),
-                      isValid: cubit.isValidIngredient,
-                    ),
+                  // Ingredient name field with search
+                  IngredientSearchField(
+                    nameController: _ingredientNameController,
+                    gramsController: _ingredientGramsController,
+                    searchResults: state.filteredFoodItems,
+                    onSearch: cubit.searchFoodItems,
+                    onSelect: (foodItem) {
+                      _ingredientNameController.text = foodItem.name;
+                      cubit.selectFoodItem(foodItem);
+                    },
                   ),
                   heightSpace(12),
-
-                  // Add more
+                  // Add button
                   Center(
                     child: SizedBox(
                       width: 200.w,
                       child: OutlinedButton.icon(
-                        onPressed: cubit.addIngredient,
+                        onPressed: () {
+                          cubit.submitIngredient(
+                            name: _ingredientNameController.text.trim(),
+                            grams: double.tryParse(
+                              _ingredientGramsController.text.trim(),
+                            )!,
+                          );
+                          _ingredientNameController.clear();
+                          _ingredientGramsController.clear();
+                        },
                         icon: const Icon(Icons.add),
-                        label: const Text('Add More'),
+                        label: const Text('Add'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: ColorsManager.primary,
                           side: const BorderSide(color: ColorsManager.primary),
@@ -214,23 +116,36 @@ class _AddMealPageState extends State<AddMealPage> {
                     ),
                   ),
 
-                  heightSpace(24),
-                  NutritionCardWidget(mealModel: currentMealModel),
-                  heightSpace(36),
-                  CustomButton(
-                    text: 'Save Meal',
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        cubit.saveMeal();
-                      }
-                    },
+                  heightSpace(16),
+
+                  // Added ingredients list
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.selectedFoodItems.length,
+                    itemBuilder: (context, index) => IngredientRow(
+                      ingredient: state.selectedFoodItems[index],
+                      onRemove: () => cubit.removeIngredient(index),
+                    ),
                   ),
+                  if (state.selectedFoodItems.isNotEmpty) heightSpace(16),
+                  heightSpace(16),
+                  // ── Nutrition Card ─────────────────────────────────────────
+                  NutritionCard(
+                    calories: state.nutrition.calories,
+                    protein: state.nutrition.protein,
+                    carbs: state.nutrition.carbs,
+                    fats: state.nutrition.fats,
+                  ),
+                  heightSpace(36),
+                  // ── Save Button ────────────────────────────────────────────
+                  CustomButton(text: 'Save Meal', onPressed: cubit.saveMeal),
                 ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

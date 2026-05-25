@@ -41,6 +41,33 @@ class FoodItemModel {
     sugarG: json['sugar_g'] ?? 0,
     sodiumMg: json['sodium_mg'] ?? 0,
   );
+  FoodItemModel copyWith({
+    int? id,
+    String? name,
+    String? nameEn,
+    String? category,
+    num? servingSizeG,
+    num? calories,
+    num? proteinG,
+    num? carbsG,
+    num? fatG,
+    num? fiberG,
+    num? sugarG,
+    num? sodiumMg,
+  }) => FoodItemModel(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    nameEn: nameEn ?? this.nameEn,
+    category: category ?? this.category,
+    servingSizeG: servingSizeG ?? this.servingSizeG,
+    calories: calories ?? this.calories,
+    proteinG: proteinG ?? this.proteinG,
+    carbsG: carbsG ?? this.carbsG,
+    fatG: fatG ?? this.fatG,
+    fiberG: fiberG ?? this.fiberG,
+    sugarG: sugarG ?? this.sugarG,
+    sodiumMg: sodiumMg ?? this.sodiumMg,
+  );
 
   Map<String, dynamic> toJson() => {
     'id': id,

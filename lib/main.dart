@@ -9,7 +9,6 @@ import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/router/app_router.dart';
 import 'package:nutrilens/core/router/routes.dart';
-import 'package:nutrilens/core/services/my_bloc_observer.dart';
 import 'package:nutrilens/core/theme/app_theme.dart';
 import 'package:nutrilens/core/theme/cubit/cubit.dart';
 
@@ -22,7 +21,6 @@ void main() async {
       DeviceOrientation.portraitDown,
     ]),
   ]);
-  Bloc.observer = MyBlocObserver();
   initSetupLocator();
   runApp(const MyApp());
 }

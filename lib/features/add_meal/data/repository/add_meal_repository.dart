@@ -13,11 +13,6 @@ import 'package:nutrilens/features/add_meal/data/models/meal_model.dart';
 import 'package:nutrilens/features/add_meal/data/models/save_meal_params.dart';
 
 abstract class AddMealRepository {
-  ServerResponse<List<MealModel>> searchInMeals({
-    required String mealName,
-    required List<MealModel> meals,
-  });
-
   ServerResponse<List<MealModel>> getMealElements();
   ServerResponse<Unit> saveMeal({
     required MealModel mealModel,
@@ -88,28 +83,6 @@ class AddMealRepositoryImpl implements AddMealRepository {
       return Left(e.message!);
     } catch (e) {
       log('in saveMeal() catch: $e');
-      return Left(e.toString());
-    }
-  }
-
-  @override
-  ServerResponse<List<MealModel>> searchInMeals({
-    required String mealName,
-    required List<MealModel> meals,
-  }) async {
-    try {
-      final result = meals.where((meal) {
-        return meal.mealName.toLowerCase().trim().contains(
-          mealName.toLowerCase().trim(),
-        );
-      }).toList();
-      log('in searchInMeals() ==> result: $result');
-      if (result.isNotEmpty) {
-        return Right(result);
-      }
-      return const Left('No meals found');
-    } catch (e) {
-      log('in searchInMeals() catch: $e');
       return Left(e.toString());
     }
   }

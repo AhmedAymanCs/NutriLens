@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/history/logic/cubit.dart';
@@ -67,13 +66,11 @@ class HistoryPage extends StatelessWidget {
             if (state.status == HistoryStatus.loading) {
               return const Center(child: CircularProgressIndicator());
             }
-      
+
             if (state.status == HistoryStatus.failure) {
-              return Center(
-                child: Text(state.error),
-              );
+              return Center(child: Text(state.error));
             }
-      
+
             if (state.status == HistoryStatus.success) {
               return SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -85,16 +82,18 @@ class HistoryPage extends StatelessWidget {
                     CustomCalendar(
                       selectedDay: state.focusedDay,
                       onDaySelected: (focusedDay) {
-                        context.read<HistoryCubit>().getRemoteHistoryData(focusedDay);
+                        context.read<HistoryCubit>().getRemoteHistoryData(
+                          focusedDay,
+                        );
                       },
                     ),
                     heightSpace(24),
-      
+
                     DailyIntakeCard(
                       consumed: state.userModel?.dailyCalorieConsumed ?? 0,
                       goal: state.userModel?.dailyCalorieGoal ?? 0,
                     ),
-      
+
                     heightSpace(24),
                     MealFilters(
                       selectedFilter: state.selectedFilter,
@@ -102,9 +101,9 @@ class HistoryPage extends StatelessWidget {
                         context.read<HistoryCubit>().updateFilter(filter);
                       },
                     ),
-      
+
                     heightSpace(8),
-                   
+
                     HistoryMealsListView(historyDataModel: state.userModel!),
                   ],
                 ),

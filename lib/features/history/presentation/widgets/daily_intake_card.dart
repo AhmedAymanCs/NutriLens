@@ -9,7 +9,11 @@ class DailyIntakeCard extends StatelessWidget {
   final num consumed;
   final num goal;
 
-  const DailyIntakeCard({super.key, required this.consumed, required this.goal});
+  const DailyIntakeCard({
+    super.key,
+    required this.consumed,
+    required this.goal,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +22,6 @@ class DailyIntakeCard extends StatelessWidget {
       decoration: BoxDecoration(
         // color: ColorsManager.backgroundWhite,
         borderRadius: BorderRadius.circular(24.r),
-      
-        
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,13 +30,24 @@ class DailyIntakeCard extends StatelessWidget {
           heightSpace(8),
           Row(
             children: [
-              Text("$consumed", style: AppTextStyle.font24BlackW700.copyWith(color: ColorsManager.textBlack)),
-              Text(" /$goal ${StringManager.kcal}", style: AppTextStyle.font15GreyW500),
+              Text(
+                "$consumed",
+                style: AppTextStyle.font24BlackW700.copyWith(
+                  color: ColorsManager.textBlack,
+                ),
+              ),
+              Text(
+                " /$goal ${StringManager.kcal}",
+                style: AppTextStyle.font15GreyW500,
+              ),
               const Spacer(),
               CircleAvatar(
                 backgroundColor: ColorsManager.primary.withValues(alpha: 0.2),
-                child: Icon(Icons.local_fire_department, color: ColorsManager.primary),
-              )
+                child: const Icon(
+                  Icons.local_fire_department,
+                  color: ColorsManager.primary,
+                ),
+              ),
             ],
           ),
           heightSpace(12),
@@ -44,7 +57,9 @@ class DailyIntakeCard extends StatelessWidget {
               value: consumed / goal,
               minHeight: 10.h,
               backgroundColor: ColorsManager.gray200,
-              valueColor: AlwaysStoppedAnimation<Color>(ColorsManager.primary),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                ColorsManager.primary,
+              ),
             ),
           ),
         ],

@@ -5,6 +5,7 @@ class AppConstants {
   static const String userSession = 'user_session';
   static const String dateTimeFormat = 'dd-MM-yyyy hh:mm a';
   static const String themeStorageKey = 'theme';
+  static const int jsonServ = 100;
 
   // User Data Model Keys
   static const String uid = 'uid';
