@@ -50,7 +50,7 @@ class CustomFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null) ...[
-          Text(title!, style: AppTextStyle.font16BlackBold),
+          Text(title!, style: AppTextStyle.font16BlackBold(context)),
           heightSpace(5),
         ],
         TextFormField(

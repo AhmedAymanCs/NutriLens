@@ -5,7 +5,6 @@ import 'package:nutrilens/core/constants/app_text_style.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/router/routes.dart';
-import 'package:nutrilens/core/theme/cubit/cubit.dart';
 import 'package:nutrilens/core/utils/custom_snack_bar.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/profile/logic/profile_cubit.dart';
@@ -49,11 +48,11 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       state.user?.name ?? "",
-                      style: AppTextStyle.font18BlackBold,
+                      style: AppTextStyle.font18BlackBold(context),
                     ),
                     Text(
                       state.user?.email ?? "",
-                      style: AppTextStyle.font15GreyW500,
+                      style: AppTextStyle.font15GreyW500(context),
                     ),
                     heightSpace(20),
                     GestureDetector(
@@ -75,7 +74,7 @@ class ProfilePage extends StatelessWidget {
                             widthSpace(10),
                             Text(
                               StringManager.editProfile,
-                              style: AppTextStyle.font16BlackBold,
+                              style: AppTextStyle.font16BlackBold(context),
                             ),
                           ],
                         ),
@@ -87,7 +86,7 @@ class ProfilePage extends StatelessWidget {
               heightSpace(24),
               Text(
                 StringManager.appPreferences,
-                style: AppTextStyle.font18BlackBold,
+                style: AppTextStyle.font18BlackBold(context),
               ),
               CustomListTile(
                 title: StringManager.darkMode,

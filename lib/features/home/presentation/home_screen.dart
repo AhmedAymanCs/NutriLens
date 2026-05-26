@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
-import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 import 'package:nutrilens/core/di/service_locator.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
@@ -50,9 +49,7 @@ class HomePage extends StatelessWidget {
                     heightSpace(40),
                     Text(
                       StringManager.todaysMeals,
-                      style: AppTextStyle.font18BlackBold.copyWith(
-                        color: ColorsManager.textBlack,
-                      ),
+                      style: AppTextStyle.font18BlackBold(context),
                     ),
                     heightSpace(16),
                     MealsListView(data: state.userModel?.todayMeals ?? []),

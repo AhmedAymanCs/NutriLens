@@ -26,19 +26,17 @@ class DailyIntakeCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(StringManager.dailyIntake, style: AppTextStyle.font15GreyW500),
+          Text(
+            StringManager.dailyIntake,
+            style: AppTextStyle.font15GreyW500(context),
+          ),
           heightSpace(8),
           Row(
             children: [
-              Text(
-                "$consumed",
-                style: AppTextStyle.font24BlackW700.copyWith(
-                  color: ColorsManager.textBlack,
-                ),
-              ),
+              Text("$consumed", style: AppTextStyle.font24BlackW700(context)),
               Text(
                 " /$goal ${StringManager.kcal}",
-                style: AppTextStyle.font15GreyW500,
+                style: AppTextStyle.font15GreyW500(context),
               ),
               const Spacer(),
               CircleAvatar(

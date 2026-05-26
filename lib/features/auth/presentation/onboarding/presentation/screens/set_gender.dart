@@ -17,7 +17,10 @@ class SetGender extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(StringManager.genderTitle, style: AppTextStyle.font24BlackW700),
+            Text(
+              StringManager.genderTitle,
+              style: AppTextStyle.font24BlackW700(context),
+            ),
             heightSpace(16),
             const Text(StringManager.genderSubTitle),
             heightSpace(32),

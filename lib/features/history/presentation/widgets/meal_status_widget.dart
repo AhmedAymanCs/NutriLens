@@ -21,7 +21,7 @@ class MealStatusWidget extends StatelessWidget {
       ),
       child: Text(
         isEaten ? StringManager.eaten : StringManager.missed,
-        style: AppTextStyle.font11BlackW600.copyWith(
+        style: AppTextStyle.font11BlackW600(context).copyWith(
           color: isEaten ? ColorsManager.primary : ColorsManager.error,
         ),
       ),

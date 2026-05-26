@@ -48,8 +48,10 @@ class _SetHeightWeightState extends State<SetHeightWeight> {
         final cubit = context.read<OnboardingCubit>();
         return Column(
           children: [
-            Text("Add Your Height & Weight",
-                style: AppTextStyle.font24BlackW700),
+            Text(
+              "Add Your Height & Weight",
+              style: AppTextStyle.font24BlackW700(context),
+            ),
             heightSpace(40),
             HeightWeightInput(
               label: "Height",

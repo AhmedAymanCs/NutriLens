@@ -22,22 +22,17 @@ class MacroIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: 100.w,
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-  
-        shape: BoxShape.circle,
-      
-      ),
+      decoration: const BoxDecoration(shape: BoxShape.circle),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.gray500)),
+              Text(title, style: AppTextStyle.font11BlackW600(context)),
               const SizedBox(width: 4),
               Icon(icon, size: 12, color: color),
             ],
@@ -45,10 +40,20 @@ class MacroIndicator extends StatelessWidget {
           heightSpace(8),
           RichText(
             text: TextSpan(
-              style: AppTextStyle.font11BlackW600,
+              style: AppTextStyle.font11BlackW600(context),
               children: [
-                TextSpan(text: '$current', style: AppTextStyle.font18BlackBold.copyWith(color: ColorsManager.textBlack)),
-                TextSpan(text: ' / ${total}g', style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.textMuted)),
+                TextSpan(
+                  text: '$current',
+                  style: AppTextStyle.font18BlackBold(
+                    context,
+                  ).copyWith(color: color),
+                ),
+                TextSpan(
+                  text: ' / ${total}g',
+                  style: AppTextStyle.font11BlackW600(
+                    context,
+                  ).copyWith(color: ColorsManager.gray500),
+                ),
               ],
             ),
           ),

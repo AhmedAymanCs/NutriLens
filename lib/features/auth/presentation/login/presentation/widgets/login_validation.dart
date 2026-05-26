@@ -120,7 +120,7 @@ class _LoginValidationState extends State<LoginValidation> {
 
                           Text(
                             StringManager.rememberMe,
-                            style: AppTextStyle.font13GreyW400,
+                            style: AppTextStyle.font13GreyW400(context),
                           ),
                         ],
                       ),
@@ -135,7 +135,7 @@ class _LoginValidationState extends State<LoginValidation> {
                       ),
                       child: Text(
                         StringManager.forgotPassword,
-                        style: AppTextStyle.font13GreyW400,
+                        style: AppTextStyle.font13GreyW400(context),
                       ),
                     ),
                   ],

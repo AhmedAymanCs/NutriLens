@@ -13,7 +13,10 @@ class HistoryHeader extends StatelessWidget {
       children: [
         const Icon(Icons.arrow_back_ios, color: ColorsManager.textBlack),
         widthSpace(105),
-        Text(StringManager.history, style: AppTextStyle.font18BlackBold),
+        Text(
+          StringManager.history,
+          style: AppTextStyle.font18BlackBold(context),
+        ),
       ],
     );
   }

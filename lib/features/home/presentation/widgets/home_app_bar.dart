@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
-import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -17,15 +16,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             StringManager.appName,
-            style: AppTextStyle.font24BlackW700.copyWith(
-              color: ColorsManager.primary,
-            ),
+            style: AppTextStyle.font24BlackW700(context),
           ),
           Text(
             StringManager.homeSubTitle,
-            style: AppTextStyle.font11BlackW600.copyWith(
-              color: ColorsManager.gray500,
-            ),
+            style: AppTextStyle.font11BlackW600(context),
           ),
         ],
       ),

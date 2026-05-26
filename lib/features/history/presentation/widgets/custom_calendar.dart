@@ -44,12 +44,12 @@ class CustomCalendar extends StatelessWidget {
             color: ColorsManager.primary.withValues(alpha: 0.3),
             shape: BoxShape.circle,
           ),
-          defaultTextStyle: AppTextStyle.font15GreyW500,
-          weekendTextStyle: AppTextStyle.font15GreyW500,
+          defaultTextStyle: AppTextStyle.font15GreyW500(context),
+          weekendTextStyle: AppTextStyle.font15GreyW500(context),
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
-          weekdayStyle: AppTextStyle.font13GreyW400,
-          weekendStyle: AppTextStyle.font13GreyW400,
+          weekdayStyle: AppTextStyle.font13GreyW400(context),
+          weekendStyle: AppTextStyle.font13GreyW400(context),
         ),
 
         availableGestures: AvailableGestures.all,

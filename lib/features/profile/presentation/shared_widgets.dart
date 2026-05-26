@@ -178,8 +178,8 @@ class CustomListTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.r),
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
-          title: Text(title, style: AppTextStyle.font16BlackBold),
-          subtitle: Text(subtitle, style: AppTextStyle.font13GreyW400),
+          title: Text(title, style: AppTextStyle.font16BlackBold(context)),
+          subtitle: Text(subtitle, style: AppTextStyle.font13GreyW400(context)),
 
           value: value,
           onChanged: onChanged,

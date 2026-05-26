@@ -18,7 +18,10 @@ class SetAge extends StatelessWidget {
         final cubit = context.read<OnboardingCubit>();
         return Column(
           children: [
-            Text(StringManager.ageTitle, style: AppTextStyle.font24BlackW700),
+            Text(
+              StringManager.ageTitle,
+              style: AppTextStyle.font24BlackW700(context),
+            ),
             heightSpace(16),
             const Text(StringManager.ageSubTitle1),
             const Text(StringManager.ageSubTitle2),
@@ -42,7 +45,10 @@ class SetAge extends StatelessWidget {
               ),
             ),
             heightSpace(32),
-            Text(StringManager.years, style: AppTextStyle.font24BlackW700),
+            Text(
+              StringManager.years,
+              style: AppTextStyle.font24BlackW700(context),
+            ),
           ],
         );
       },

@@ -145,11 +145,11 @@ class NutritionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.07),
+            color: Colors.black.withValues(alpha: 0.07),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -158,35 +158,44 @@ class NutritionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Nutrition Info', style: AppTextStyle.font18BlackBold),
+          Text('Nutrition Info', style: AppTextStyle.font18BlackBold(context)),
           heightSpace(12),
-          Table(
-            columnWidths: const {0: FlexColumnWidth(2), 1: FlexColumnWidth(1)},
-            children: [
-              _nutritionRow('Calories', calories, 'kcal'),
-              _nutritionRow('Protein', protein, 'g'),
-              _nutritionRow('Carbohydrates', carbs, 'g'),
-              _nutritionRow('Fats', fats, 'g'),
-            ],
-          ),
+          _NutritionRow(label: 'Calories', value: calories, unit: 'kcal'),
+          _NutritionRow(label: 'Protein', value: protein, unit: 'g'),
+          _NutritionRow(label: 'Carbohydrates', value: carbs, unit: 'g'),
+          _NutritionRow(label: 'Fats', value: fats, unit: 'g'),
         ],
       ),
     );
   }
+}
 
-  TableRow _nutritionRow(String label, num value, String unit) {
-    return TableRow(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 6.h),
-          child: Text(
+class _NutritionRow extends StatelessWidget {
+  final String label;
+  final num value;
+  final String unit;
+
+  const _NutritionRow({
+    required this.label,
+    required this.value,
+    required this.unit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
             label,
-            style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 6.h),
-          child: Text(
+          Text(
             '${value.toStringAsFixed(1)} $unit',
             style: TextStyle(
               fontSize: 14.sp,
@@ -194,8 +203,8 @@ class NutritionCard extends StatelessWidget {
               color: ColorsManager.primary,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

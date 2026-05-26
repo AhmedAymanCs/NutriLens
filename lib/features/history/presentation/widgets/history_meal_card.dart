@@ -18,16 +18,6 @@ class HistoryMealCard extends StatelessWidget {
         children: [
           const Column(
             children: [
-              // Container(
-              //   width: 12.w,
-              //   height: 12.w,
-              //   decoration: BoxDecoration(
-              //     color: meal.isEaten
-              //         ? ColorsManager.primary
-              //         : ColorsManager.gray500.withValues(alpha: 0.5),
-              //     shape: BoxShape.circle,
-              //   ),
-              // ),
               Expanded(
                 child: VerticalDivider(
                   thickness: 2,
@@ -96,14 +86,14 @@ class HistoryMealCard extends StatelessWidget {
                             Text(
                               overflow: TextOverflow.ellipsis,
                               meal.mealType,
-                              style: AppTextStyle.font18BlackBold,
+                              style: AppTextStyle.font18BlackBold(context),
                             ),
                             // MealStatusWidget(isEaten: meal.isEaten),
                           ],
                         ),
                         Text(
                           "${meal.mealType} • ${meal.createdAt}",
-                          style: AppTextStyle.font13GreyW400,
+                          style: AppTextStyle.font13GreyW400(context),
                         ),
                         heightSpace(4),
                         Text(

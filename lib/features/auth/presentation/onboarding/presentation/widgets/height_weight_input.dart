@@ -28,7 +28,7 @@ class HeightWeightInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyle.font18BlackBold),
+        Text(label, style: AppTextStyle.font18BlackBold(context)),
 
         heightSpace(6),
 

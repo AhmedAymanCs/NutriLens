@@ -84,7 +84,10 @@ class _AddMealPageState extends State<AddMealPage> {
                   heightSpace(28),
 
                   // ── Ingredients Section ────────────────────────────────────
-                  Text('Ingredients', style: AppTextStyle.font18BlackBold),
+                  Text(
+                    'Ingredients',
+                    style: AppTextStyle.font18BlackBold(context),
+                  ),
                   heightSpace(16),
 
                   // Ingredient name field with search

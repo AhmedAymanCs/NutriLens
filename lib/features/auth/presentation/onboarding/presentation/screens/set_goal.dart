@@ -18,7 +18,10 @@ class SetGoal extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(StringManager.goalTitle, style: AppTextStyle.font24BlackW700),
+              Text(
+                StringManager.goalTitle,
+                style: AppTextStyle.font24BlackW700(context),
+              ),
               heightSpace(16),
               const Text(StringManager.goalSubTitle),
               heightSpace(32),

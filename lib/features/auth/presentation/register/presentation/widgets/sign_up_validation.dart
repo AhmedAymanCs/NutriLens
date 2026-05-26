@@ -9,8 +9,6 @@ import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
 import 'package:nutrilens/features/auth/data/models/user_params_models.dart';
 import 'package:nutrilens/features/auth/presentation/register/logic/cubit.dart';
-import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
-import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_validation.dart';
 
 class SignUpValidation extends StatefulWidget {
   const SignUpValidation({super.key});
@@ -20,13 +18,6 @@ class SignUpValidation extends StatefulWidget {
 }
 
 class _SignUpValidationState extends State<SignUpValidation> {
-  bool hasUpperLetter = false;
-  bool hasLowerLetter = false;
-  bool hasANumber = false;
-  bool hasSpecialCharacter = false;
-  bool hasCharacterLength = false;
-  bool hasMatchedPassword = false;
-  // signUp Controllers
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
@@ -40,38 +31,6 @@ class _SignUpValidationState extends State<SignUpValidation> {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
-
-    _passwordController.addListener(() {
-      setState(() {
-        hasUpperLetter = PasswordAndEmailValidations.hasUpperLetter(
-          _passwordController.text,
-        );
-        hasLowerLetter = PasswordAndEmailValidations.hasLowerLetter(
-          _passwordController.text,
-        );
-        hasANumber = PasswordAndEmailValidations.hasANumber(
-          _passwordController.text,
-        );
-        hasSpecialCharacter = PasswordAndEmailValidations.hasSpecialCharacter(
-          _passwordController.text,
-        );
-        hasCharacterLength = PasswordAndEmailValidations.hasMinimumLength(
-          _passwordController.text,
-        );
-        hasMatchedPassword = PasswordAndEmailValidations.hasMatchedPassword(
-          _passwordController.text,
-          _confirmPasswordController.text,
-        );
-      });
-    });
-    _confirmPasswordController.addListener(() {
-      setState(() {
-        hasMatchedPassword = PasswordAndEmailValidations.hasMatchedPassword(
-          _passwordController.text,
-          _confirmPasswordController.text,
-        );
-      });
-    });
   }
 
   @override
@@ -110,9 +69,6 @@ class _SignUpValidationState extends State<SignUpValidation> {
                   if (email == null || email.isEmpty) {
                     return StringManager.emailEmpty;
                   }
-                  if (!PasswordAndEmailValidations.isValidEmail(email: email)) {
-                    return StringManager.emailInvalid;
-                  }
                   return null;
                 },
                 hint: StringManager.emailHint,
@@ -123,11 +79,8 @@ class _SignUpValidationState extends State<SignUpValidation> {
               CustomFormField(
                 controller: _passwordController,
                 validator: (password) {
-                  if (password == null || password.isEmpty) {
+                  if (password == null || password.trim().isEmpty) {
                     return StringManager.passwordEmpty;
-                  }
-                  if (!PasswordAndEmailValidations.isPasswordValid(password)) {
-                    return StringManager.passwordInvalid;
                   }
                   return null;
                 },
@@ -143,14 +96,9 @@ class _SignUpValidationState extends State<SignUpValidation> {
               CustomFormField(
                 controller: _confirmPasswordController,
                 validator: (confirmPassword) {
-                  if (confirmPassword == null || confirmPassword.isEmpty) {
+                  if (confirmPassword == null ||
+                      confirmPassword.trim().isEmpty) {
                     return StringManager.passwordEmpty;
-                  }
-                  if (!PasswordAndEmailValidations.hasMatchedPassword(
-                    _passwordController.text,
-                    confirmPassword,
-                  )) {
-                    return StringManager.passwordNotMatch;
                   }
                   return null;
                 },
@@ -162,19 +110,17 @@ class _SignUpValidationState extends State<SignUpValidation> {
                 preIcon: Icons.lock_outline,
                 preIconColor: ColorsManager.primary,
               ),
-              heightSpace(15),
-              PasswordValidation(
-                hasANumber: hasANumber,
-                hasCharacterLength: hasCharacterLength,
-                hasLowerLetter: hasLowerLetter,
-                hasSpecialCharacter: hasSpecialCharacter,
-                hasUpperLetter: hasUpperLetter,
-                isSignUpScreen: true,
-                hasMatchedPassword: hasMatchedPassword,
-              ),
               heightSpace(10),
               CustomButton(
                 onPressed: () {
+                  if (_passwordController.text.trim() !=
+                      _confirmPasswordController.text.trim()) {
+                    customSnackBar(
+                      context: context,
+                      message: StringManager.passwordNotMatch,
+                    );
+                    return;
+                  }
                   RegisterParamsModels params = RegisterParamsModels(
                     name: _nameController.text.trim(),
                     email: _emailController.text.trim(),

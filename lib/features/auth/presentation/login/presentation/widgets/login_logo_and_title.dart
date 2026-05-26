@@ -22,22 +22,22 @@ class LoginLogoAndTitle extends StatelessWidget {
         isRegisterPage
             ? Text(
                 StringManager.subTitleLoginPage1,
-                style: AppTextStyle.font15GreyW500,
+                style: AppTextStyle.font15GreyW500(context),
               )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     StringManager.subTitleLoginPage1,
-                    style: AppTextStyle.font13GreyW400,
+                    style: AppTextStyle.font13GreyW400(context),
                   ),
                   Text(
                     StringManager.subTitleLoginPage2,
-                    style: AppTextStyle.font13GreyW400,
+                    style: AppTextStyle.font13GreyW400(context),
                   ),
                   Text(
                     StringManager.subTitleLoginPage3,
-                    style: AppTextStyle.font15GreyW500,
+                    style: AppTextStyle.font15GreyW500(context),
                   ),
                 ],
               ),

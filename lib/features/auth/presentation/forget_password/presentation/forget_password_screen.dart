@@ -11,7 +11,6 @@ import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/core/widgets/custom_button.dart';
 import 'package:nutrilens/core/widgets/custom_form_field.dart';
 import 'package:nutrilens/features/auth/presentation/forget_password/logic/cubit.dart';
-import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/password_and_email_validations.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key, required this.email});
@@ -75,20 +74,20 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             heightSpace(50),
             Text(
               StringManager.forgotPassword,
-              style: AppTextStyle.font24BlackW700,
+              style: AppTextStyle.font24BlackW700(context),
             ),
             heightSpace(20),
             Text(
               StringManager.forgotPasswordSubTitle1,
-              style: AppTextStyle.font15GreyW500,
+              style: AppTextStyle.font15GreyW500(context),
             ),
             Text(
               StringManager.forgotPasswordSubTitle2,
-              style: AppTextStyle.font15GreyW500,
+              style: AppTextStyle.font15GreyW500(context),
             ),
             Text(
               StringManager.forgotPasswordSubTitle3,
-              style: AppTextStyle.font15GreyW500,
+              style: AppTextStyle.font15GreyW500(context),
             ),
             heightSpace(50),
             Form(
@@ -99,9 +98,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 validator: (email) {
                   if (email == null || email.isEmpty) {
                     return StringManager.emailEmpty;
-                  }
-                  if (!PasswordAndEmailValidations.isValidEmail(email: email)) {
-                    return StringManager.emailInvalid;
                   }
                   return null;
                 },
