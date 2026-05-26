@@ -17,7 +17,7 @@ class SignupCardFields extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       decoration: BoxDecoration(
-        color: ColorsManager.backgroundWhite,
+        color: ColorsManager.adaptiveCard(context),
         borderRadius: BorderRadius.circular(50.r),
         boxShadow: const [
           BoxShadow(

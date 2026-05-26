@@ -180,7 +180,6 @@ class CustomListTile extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
           title: Text(title, style: AppTextStyle.font16BlackBold(context)),
           subtitle: Text(subtitle, style: AppTextStyle.font13GreyW400(context)),
-
           value: value,
           onChanged: onChanged,
           activeThumbColor: ColorsManager.primary,

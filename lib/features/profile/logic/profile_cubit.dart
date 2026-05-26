@@ -18,9 +18,12 @@ class ProfileCubit extends Cubit<ProfileState> {
           state.copyWith(status: ProfileStatus.failure, errorMessage: failure),
         );
       },
-      (isDarkMode) {
+      (isLightMode) {
         emit(
-          state.copyWith(status: ProfileStatus.success, isDarkMode: isDarkMode),
+          state.copyWith(
+            status: ProfileStatus.success,
+            isDarkMode: !isLightMode,
+          ),
         );
       },
     );

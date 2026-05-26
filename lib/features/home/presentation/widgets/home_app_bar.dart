@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilens/core/constants/app_text_style.dart';
+import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/constants/string_manager.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,6 +13,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
+      backgroundColor: ColorsManager.adaptiveBackground(context),
       title: Column(
         children: [
           Text(

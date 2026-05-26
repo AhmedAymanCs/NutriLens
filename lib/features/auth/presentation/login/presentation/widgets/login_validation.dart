@@ -102,30 +102,6 @@ class _LoginValidationState extends State<LoginValidation> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Transform.translate(
-                      offset: const Offset(-4, 0),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: state.rememberMe,
-                            side: const BorderSide(
-                              color: ColorsManager.primary,
-                            ),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity.compact,
-                            onChanged: (value) =>
-                                context.read<LoginCubit>().changeRememberMe(),
-                          ),
-
-                          Text(
-                            StringManager.rememberMe,
-                            style: AppTextStyle.font13GreyW400(context),
-                          ),
-                        ],
-                      ),
-                    ),
-
                     const Spacer(),
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(

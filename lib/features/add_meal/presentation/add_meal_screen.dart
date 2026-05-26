@@ -54,6 +54,7 @@ class _AddMealPageState extends State<AddMealPage> {
           appBar: AppBar(
             elevation: 0,
             scrolledUnderElevation: 0,
+            backgroundColor: ColorsManager.adaptiveBackground(context),
             leading: const SizedBox.shrink(),
             title: Text('Add Meal', style: AppTextStyle.font22PrimaryBold),
             centerTitle: true,

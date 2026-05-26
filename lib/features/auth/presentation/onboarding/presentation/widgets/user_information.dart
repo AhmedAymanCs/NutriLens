@@ -24,12 +24,11 @@ class UserInformation extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: isSelected ? 50 : 0,
         shadowColor: ColorsManager.primaryLight,
         margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         color: isSelected
             ? ColorsManager.primary
-            : ColorsManager.backgroundWhite,
+            : ColorsManager.adaptiveCard(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.r),
           side: const BorderSide(color: ColorsManager.primary),

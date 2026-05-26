@@ -79,9 +79,9 @@ class _OnboardingAfterRegisterState extends State<OnboardingAfterRegister> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsManager.backgroundWhite,
+      backgroundColor: ColorsManager.adaptiveBackground(context),
       appBar: AppBar(
-        backgroundColor: ColorsManager.backgroundWhite,
+        backgroundColor: ColorsManager.adaptiveBackground(context),
         leading: Row(
           children: [
             widthSpace(10),
