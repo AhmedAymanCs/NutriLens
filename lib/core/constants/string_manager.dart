@@ -1,6 +1,6 @@
 class StringManager {
   static const String appName = 'NutriLens';
-  static const String appDescription = 'App Description';
+  static const String appDescription = 'Count Every Calorie';
 
   //Auth pages
 
