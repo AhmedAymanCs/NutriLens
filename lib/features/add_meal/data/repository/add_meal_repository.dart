@@ -6,7 +6,7 @@ import 'package:nutrilens/core/database/local/secure_storage/secure_storage_help
 import 'package:nutrilens/core/models/food_model.dart';
 import 'package:nutrilens/core/utils/typedef.dart';
 import 'package:nutrilens/features/add_meal/data/data_source/add_meal_data_source.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
+import 'package:nutrilens/core/models/food_item_model.dart';
 
 abstract class AddMealRepository {
   // ServerResponse<List<MealModel>> getMealElements();

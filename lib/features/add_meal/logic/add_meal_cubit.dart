@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/models/food_model.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
+import 'package:nutrilens/core/models/food_item_model.dart';
 import 'package:nutrilens/features/add_meal/data/repository/add_meal_repository.dart';
 import 'package:nutrilens/features/add_meal/logic/add_meal_state.dart';
 import 'package:uuid/uuid.dart';

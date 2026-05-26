@@ -4,7 +4,6 @@ import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/have_an_account.dart';
 import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/login_validation.dart';
-import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/login_with_social_media.dart';
 
 class LoginCardFields extends StatelessWidget {
   const LoginCardFields({super.key});
@@ -30,8 +29,6 @@ class LoginCardFields extends StatelessWidget {
         children: [
           heightSpace(10),
           const LoginValidation(),
-          heightSpace(10),
-          const LoginWithSocialMedia(),
           heightSpace(10),
           const HaveAnAccount(),
         ],

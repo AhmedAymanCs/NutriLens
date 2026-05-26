@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
+import 'package:nutrilens/core/models/food_item_model.dart';
 import 'package:nutrilens/core/models/food_model.dart';
 
 enum AddMealStatus { initial, loading, success, saveSuccess, failure }

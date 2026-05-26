@@ -14,7 +14,7 @@ class CustomNavigationBar extends StatefulWidget {
 }
 
 class _CustomNavigationBarState extends State<CustomNavigationBar> {
-  late PageController controller;
+  int currentIndex = 0;
 
   List<BottomNavigationBarItem> items = [
     const BottomNavigationBarItem(
@@ -35,18 +35,19 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     ),
   ];
 
-  List<Widget> pages = [
-    const HomePage(),
-    const HistoryPage(),
-    const AddMealPage(),
-    const ProfilePage(),
-  ];
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    controller = PageController(initialPage: currentIndex);
-    super.initState();
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return const HomePage();
+      case 1:
+        return const HistoryPage();
+      case 2:
+        return const AddMealPage();
+      case 3:
+        return const ProfilePage();
+      default:
+        return const HomePage();
+    }
   }
 
   @override
@@ -85,14 +86,15 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           onTap: (index) {
             setState(() {
               currentIndex = index;
-              // controller.jumpToPage(index);
             });
           },
         ),
       ),
-
       body: SafeArea(
-        child: IndexedStack(index: currentIndex, children: pages),
+        child: KeyedSubtree(
+          key: ValueKey(currentIndex),
+          child: _buildPage(currentIndex),
+        ),
       ),
     );
   }

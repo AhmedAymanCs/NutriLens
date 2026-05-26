@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
+import 'package:nutrilens/core/models/food_item_model.dart';
 
 class FoodModel {
   final String id;

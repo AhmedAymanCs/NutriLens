@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilens/core/constants/app_constants.dart';
 import 'package:nutrilens/core/functions/get_local_session.dart';
 import 'package:nutrilens/core/models/food_model.dart';
-import 'package:nutrilens/features/add_meal/data/models/food_item_model.dart';
+import 'package:nutrilens/core/models/food_item_model.dart';
 
 abstract class AddMealRemoteDataSource {
   Future<QuerySnapshot<Map<String, dynamic>>> getMealElements();

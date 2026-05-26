@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nutrilens/core/constants/color_manager.dart';
 import 'package:nutrilens/core/utils/spacer.dart';
 import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/have_an_account.dart';
-import 'package:nutrilens/features/auth/presentation/login/presentation/widgets/login_with_social_media.dart';
 import 'package:nutrilens/features/auth/presentation/register/presentation/widgets/sign_up_validation.dart';
 
 class SignupCardFields extends StatelessWidget {
@@ -32,8 +31,6 @@ class SignupCardFields extends StatelessWidget {
           children: [
             heightSpace(10),
             const SignUpValidation(),
-            heightSpace(10),
-            const LoginWithSocialMedia(),
             heightSpace(10),
             const HaveAnAccount(haveAccount: true),
           ],
