@@ -10,6 +10,7 @@ abstract class ProfileDataSource {
   Future<UserModel> getUserProfile();
   Future<void> logout();
   Future<void> editProfile(UserModel user);
+  Future<bool> getThemeSettings();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -28,6 +29,14 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     final userData = await storage.getData(key: AppConstants.userSession);
     Map<String, dynamic> userDataJson = jsonDecode(userData!);
     return UserModel.fromFirestore(userDataJson);
+  }
+
+  @override
+  Future<bool> getThemeSettings() async {
+    final themeSettings = await storage.getData(
+      key: AppConstants.themeStorageKey,
+    );
+    return themeSettings == 'light' || themeSettings == null;
   }
 
   @override

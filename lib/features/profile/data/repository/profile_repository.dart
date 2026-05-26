@@ -10,6 +10,7 @@ abstract class ProfileRepository {
   ServerResponse<Unit> editProfile(UserModel user);
   ServerResponse<Unit> logout();
   ServerResponse<UserModel> getUserProfile();
+  ServerResponse<bool> getThemeSettings();
 }
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -55,6 +56,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return Left(e.message!);
     } catch (e) {
       log("Logout Catch error ${e.toString()}");
+      return Left(e.toString());
+    }
+  }
+
+  @override
+  ServerResponse<bool> getThemeSettings() async {
+    try {
+      final themeSettings = await _dataSource.getThemeSettings();
+      return Right(themeSettings);
+    } catch (e) {
+      log("Get theme settings Catch error ${e.toString()}");
       return Left(e.toString());
     }
   }

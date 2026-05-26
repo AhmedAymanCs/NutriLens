@@ -47,14 +47,6 @@ class ProfilePage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        state.user?.photoURL ??
-                            "https://cutiedp.com/wp-content/uploads/2025/08/no-dp-image-5.webp",
-                      ),
-                      radius: 50.r,
-                    ),
-                    heightSpace(24),
                     Text(
                       state.user?.name ?? "",
                       style: AppTextStyle.font18BlackBold,
@@ -73,9 +65,6 @@ class ProfilePage extends StatelessWidget {
                         width: 220.w,
                         height: 35.h,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.r),
-                        ),
                         child: Wrap(
                           children: [
                             Icon(
@@ -104,19 +93,10 @@ class ProfilePage extends StatelessWidget {
                 title: StringManager.darkMode,
                 subtitle: StringManager.darkModeSubtitle,
                 value: state.isDarkMode,
-                onChanged: (value) {
-                  context.read<ThemeCubit>().toggleTheme();
-                },
+                onChanged: (value) =>
+                    context.read<ProfileCubit>().toggleDarkMode(context),
+
                 icon: Icons.dark_mode,
-              ),
-              CustomListTile(
-                title: StringManager.notifications,
-                subtitle: StringManager.notificationsSubtitle,
-                value: state.isNotificationEnabled,
-                onChanged: (value) {
-                  context.read<ProfileCubit>().toggleNotification();
-                },
-                icon: Icons.notifications_active_outlined,
               ),
               heightSpace(32),
               CustomSignOutButton(

@@ -12,22 +12,24 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        elevation: 0,
-        
-        title: Column(
-          children: [
-            Text(
-              StringManager.appName,
-              style: AppTextStyle.font24BlackW700.copyWith(color: ColorsManager.primary),
+      elevation: 0,
+      title: Column(
+        children: [
+          Text(
+            StringManager.appName,
+            style: AppTextStyle.font24BlackW700.copyWith(
+              color: ColorsManager.primary,
             ),
-            Text(
-              StringManager.homeSubTitle,
-              style: AppTextStyle.font11BlackW600.copyWith(color: ColorsManager.gray500),
+          ),
+          Text(
+            StringManager.homeSubTitle,
+            style: AppTextStyle.font11BlackW600.copyWith(
+              color: ColorsManager.gray500,
             ),
-          ],
-        ),
-        centerTitle: true,
-        
-      );
+          ),
+        ],
+      ),
+      centerTitle: true,
+    );
   }
 }
